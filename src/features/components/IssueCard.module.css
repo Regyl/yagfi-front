@@ -1,0 +1,44 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.1);
+}
+
+
+.header {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+
+.repo {
+    font-size: 14px;
+    color: #475569;
+    margin-bottom: 12px;
+}
+
+
+.meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+}
+
+
+.date {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-left: auto;
+}

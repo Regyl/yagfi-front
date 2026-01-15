@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {Alert, Box, Button, CircularProgress, Container, SelectChangeEvent, Stack, Typography,} from '@mui/material';
-import {Shuffle as ShuffleIcon} from '@mui/icons-material';
+import {Label as LabelIcon, Shuffle as ShuffleIcon} from '@mui/icons-material';
 import {useInfiniteIssues} from '../hooks/useInfiniteIssues';
 import {IssuesList} from '../components/IssuesList';
 import {InfiniteScrollTrigger} from '../components/InfiniteScrollTrigger';
@@ -25,7 +25,7 @@ export function IssuesPage() {
 
   const baseRequest = useMemo((): Omit<IssuesRequest, 'offset'> => {
     const filter: IssuesRequest['filter'] = {};
-    
+
     if (selectedLanguages.length > 0) {
       filter.languages = {
         values: selectedLanguages,
@@ -130,34 +130,34 @@ export function IssuesPage() {
       // We'll try up to 5 times with different random offsets
       const maxAttempts = 5;
       const maxOffset = 100; // Reasonable upper bound for random offset
-      
-      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const randomOffset = Math.floor(Math.random() * maxOffset);
-        
-        const request: IssuesRequest = {
+
+            const request: IssuesRequest = {
           ...baseRequest,
           limit: 1,
           offset: randomOffset,
         };
 
         const response = await fetchIssues(request);
-        
-        if (response.issues && response.issues.length > 0) {
+
+            if (response.issues && response.issues.length > 0) {
           const randomIssue = response.issues[0];
           window.open(randomIssue.issueUrl, '_blank', 'noopener,noreferrer');
           setPickingRandom(false);
           return;
         }
       }
-      
-      // If all attempts failed, try with offset 0
+
+        // If all attempts failed, try with offset 0
       const request: IssuesRequest = {
         ...baseRequest,
         limit: 1,
         offset: 0,
       };
-      
-      const response = await fetchIssues(request);
+
+        const response = await fetchIssues(request);
       if (response.issues && response.issues.length > 0) {
         const randomIssue = response.issues[0];
         window.open(randomIssue.issueUrl, '_blank', 'noopener,noreferrer');
@@ -175,10 +175,18 @@ export function IssuesPage() {
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-          <Typography variant="h1" sx={{ fontSize: '2rem', fontWeight: 700 }}>
-            Good First Issues
-          </Typography>
+          <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={2} sx={{mb: 3}}>
+              <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<LabelIcon/>}
+                  href="https://github.com/Regyl/yagfi-back/blob/master/docs/CONTRIBUTING.md#suggest-labels"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{minWidth: 150}}
+              >
+                  Suggest a Label
+              </Button>
           <Button
             variant="contained"
             color="primary"

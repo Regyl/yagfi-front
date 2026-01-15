@@ -1,13 +1,19 @@
 import React from 'react';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { theme } from '../theme/theme';
-import { IssuesPage } from '../features/pages/IssuesPage';
+import {Box, CssBaseline, ThemeProvider} from '@mui/material';
+import {theme} from '../theme/theme';
+import {Header} from '../shared/ui/Header/Header';
+import {IssuesPage} from '../features/pages/IssuesPage';
 
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <IssuesPage />
+        <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
+            <Header/>
+            <Box component="main" sx={{flex: 1}}>
+                <IssuesPage/>
+            </Box>
+        </Box>
     </ThemeProvider>
   );
 }

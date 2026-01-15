@@ -1,27 +1,28 @@
-import { createTheme } from '@mui/material/styles';
+import {createTheme} from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#6366f1', // Indigo accent
-      light: '#818cf8',
-      dark: '#4f46e5',
+        main: '#9EFF00', // Lime green accent (App Wish style)
+        light: '#BFFF00',
+        dark: '#7ECC00',
+        contrastText: '#000000', // Black text on lime green for better contrast
     },
     secondary: {
-      main: '#8b5cf6', // Purple accent
-      light: '#a78bfa',
-      dark: '#7c3aed',
+        main: '#9EFF00', // Use lime green for secondary as well
+        light: '#BFFF00',
+        dark: '#7ECC00',
     },
     background: {
-      default: '#0f172a', // Slate 900
-      paper: '#1e293b', // Slate 800
+        default: '#0a0a0a', // Very dark background (App Wish style)
+        paper: '#1a1a1a', // Slightly lighter for cards
     },
     text: {
-      primary: '#f1f5f9', // Slate 100
-      secondary: '#cbd5e1', // Slate 300
+        primary: '#ffffff', // White text
+        secondary: '#b0b0b0', // Light grey for secondary text
     },
-    divider: '#334155', // Slate 700
+      divider: '#2a2a2a', // Dark divider
   },
   typography: {
     fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif',
@@ -71,6 +72,14 @@ export const theme = createTheme({
           textTransform: 'none',
           fontWeight: 500,
           borderRadius: 8,
+            '&.MuiButton-contained': {
+                '&.MuiButton-colorPrimary': {
+                    color: '#000000',
+                    '&:hover': {
+                        backgroundColor: '#BFFF00',
+                    },
+                },
+            },
         },
       },
     },
@@ -79,6 +88,20 @@ export const theme = createTheme({
         root: {
           borderRadius: 6,
           fontWeight: 500,
+            '&.MuiChip-colorPrimary': {
+                backgroundColor: '#9EFF00',
+                color: '#000000',
+                '&:hover': {
+                    backgroundColor: '#BFFF00',
+                },
+            },
+            '&.MuiChip-colorSecondary': {
+                backgroundColor: '#9EFF00',
+                color: '#000000',
+                '&:hover': {
+                    backgroundColor: '#BFFF00',
+                },
+            },
         },
       },
     },
@@ -86,20 +109,47 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiPaginationItem-root': {
-            color: '#cbd5e1',
+              color: '#b0b0b0',
             '&.Mui-selected': {
-              backgroundColor: '#6366f1',
-              color: '#ffffff',
+                backgroundColor: '#9EFF00',
+                color: '#000000',
               '&:hover': {
-                backgroundColor: '#4f46e5',
+                  backgroundColor: '#BFFF00',
               },
             },
             '&:hover': {
-              backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                backgroundColor: 'rgba(158, 255, 0, 0.1)',
             },
           },
         },
       },
     },
+      MuiSelect: {
+          styleOverrides: {
+              root: {
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#9EFF00',
+                  },
+              },
+          },
+      },
+      MuiOutlinedInput: {
+          styleOverrides: {
+              root: {
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#9EFF00',
+                  },
+              },
+          },
+      },
+      MuiTextField: {
+          styleOverrides: {
+              root: {
+                  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#9EFF00',
+                  },
+              },
+          },
+      },
   },
 });

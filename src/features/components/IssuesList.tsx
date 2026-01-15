@@ -22,7 +22,7 @@ export function IssuesList({ issues }: IssuesListProps) {
       }}
     >
       {issues.map((issue) => (
-        <Box key={issue.issueId}>
+          <Box key={issue.issueId} sx={{display: 'flex', minHeight: 0, minWidth: 0}}>
           <IssueCard issue={issue} />
         </Box>
       ))}

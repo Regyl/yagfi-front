@@ -34,13 +34,27 @@ export function IssueCard({ issue }: IssueCardProps) {
       rel="noopener noreferrer"
       sx={{
         textDecoration: 'none',
-        display: 'block',
+          display: 'flex',
+          flexDirection: 'column',
         height: '100%',
+          width: '100%',
+          minHeight: 200,
         cursor: 'pointer',
+          overflow: 'hidden',
       }}
     >
-      <CardContent sx={{ p: 2.5 }}>
-        <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{ mb: 1 }}>
+        <CardContent
+            sx={{
+                p: 2.5,
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                height: '100%',
+                minWidth: 0,
+                overflow: 'hidden',
+            }}
+        >
+            <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{mb: 1, minWidth: 0}}>
           {avatarUrl && (
             <Box
               component="img"
@@ -73,6 +87,7 @@ export function IssueCard({ issue }: IssueCardProps) {
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
               flex: 1,
+                minWidth: 0,
             }}
           >
             {issueTitle}
@@ -116,7 +131,7 @@ export function IssueCard({ issue }: IssueCardProps) {
           spacing={1}
           alignItems="center"
           flexWrap="wrap"
-          sx={{ mt: 'auto' }}
+          sx={{mt: 'auto', pt: 1}}
         >
           {repositoryLanguage && (
             <Badge color="primary">{repositoryLanguage}</Badge>

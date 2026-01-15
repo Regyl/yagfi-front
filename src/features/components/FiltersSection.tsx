@@ -14,57 +14,27 @@ import {
 } from '@mui/material';
 import {Add as AddIcon, Close as CloseIcon} from '@mui/icons-material';
 import {StarsFilter} from '../../types';
-
-const LANGUAGES = [
-  'JavaScript',
-  'TypeScript',
-  'Python',
-  'Java',
-  'C++',
-  'C#',
-  'Go',
-  'Rust',
-  'Ruby',
-  'PHP',
-  'Swift',
-  'Kotlin',
-  'Dart',
-  'Perl',
-  'Scala',
-  'R',
-  'Shell',
-  'HTML',
-  'CSS',
-];
-
-const STARS_OPERATORS = [
-  { value: 'GREATER', label: 'Greater than (>)' },
-  { value: 'LESS', label: 'Less than (<)' },
-] as const;
+import {LANGUAGES, STARS_OPERATORS} from '../../shared/constants';
 
 interface FiltersSectionProps {
   selectedLanguages: string[];
-  onLanguagesChange: (languages: string[]) => void;
+    onLanguagesChange: (event: SelectChangeEvent<string[]>) => void;
   starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
-  onStarsFilterChange: (value: number | null, operator: StarsFilter['operator']) => void;
   onStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onStarsOperatorChange: (event: SelectChangeEvent<StarsFilter['operator']>) => void;
   onRemoveStarsFilter: () => void;
+    onAddStarsFilter: () => void;
 }
 
 export function FiltersSection({
   selectedLanguages,
   onLanguagesChange,
   starsFilter,
-  onStarsFilterChange,
   onStarsValueChange,
   onStarsOperatorChange,
   onRemoveStarsFilter,
+                                   onAddStarsFilter,
 }: FiltersSectionProps) {
-  const handleLanguageChange = (event: SelectChangeEvent<string[]>) => {
-    const value = event.target.value;
-    onLanguagesChange(typeof value === 'string' ? value.split(',') : value);
-  };
 
   return (
     <Stack spacing={3}>
@@ -75,7 +45,7 @@ export function FiltersSection({
           multiple
           value={selectedLanguages}
           label="Languages"
-          onChange={handleLanguageChange}
+          onChange={onLanguagesChange}
           renderValue={(selected) => 
             selected.length === 0 ? 'All' : selected.join(', ')
           }
@@ -129,7 +99,7 @@ export function FiltersSection({
           <Button
             size="small"
             startIcon={<AddIcon />}
-            onClick={() => onStarsFilterChange(100, 'GREATER')}
+            onClick={onAddStarsFilter}
             variant="outlined"
           >
             Add Stars Filter

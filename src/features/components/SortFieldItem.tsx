@@ -12,19 +12,7 @@ import {
 } from '@mui/material';
 import {Delete as DeleteIcon} from '@mui/icons-material';
 import {Order} from '../../types';
-
-const SORT_FIELDS = [
-    { value: 'er.stars', label: 'Stars' },
-    { value: 'ei.created_at', label: 'Issue created' },
-    { value: 'ei.updated_at', label: 'Issue updated' },
-    { value: 'er.created_at', label: 'Repository created' },
-    { value: 'er.updated_at', label: 'Repository updated' },
-] as const;
-
-const SORT_TYPES = [
-  { value: 'desc', label: 'Descending' },
-  { value: 'asc', label: 'Ascending' },
-] as const;
+import {SORT_FIELDS, SORT_TYPES} from '../../shared/constants';
 
 interface SortFieldItemProps {
   order: Order;

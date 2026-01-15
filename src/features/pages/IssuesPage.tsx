@@ -1,51 +1,27 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {Alert, Box, Button, CircularProgress, Container, SelectChangeEvent, Stack, Typography,} from '@mui/material';
-import {Label as LabelIcon, Shuffle as ShuffleIcon} from '@mui/icons-material';
+import React, {useCallback} from 'react';
+import {Alert, Box, Container, Stack, Typography} from '@mui/material';
 import {useInfiniteIssues} from '../hooks/useInfiniteIssues';
+import {useFilters} from '../hooks/useFilters';
+import {useSorting} from '../hooks/useSorting';
+import {useRandomIssue} from '../hooks/useRandomIssue';
+import {useIssuesRequest} from '../hooks/useIssuesRequest';
 import {IssuesList} from '../components/IssuesList';
 import {InfiniteScrollTrigger} from '../components/InfiniteScrollTrigger';
 import {FiltersSection} from '../components/FiltersSection';
-import {DEFAULT_SORT_FIELD, SortSection} from '../components/SortSection';
+import {SortSection} from '../components/SortSection';
+import {ActionButtons} from '../components/ActionButtons';
 import {Loader} from '../../shared/ui/Loader/Loader';
-import {fetchIssues} from '../../api/issuesApi';
-import {IssuesRequest, Order, StarsFilter} from '../../types';
-
-const PAGE_SIZE = 20;
+import {DEFAULT_STARS_FILTER} from '../../shared/constants';
 
 export function IssuesPage() {
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [starsFilter, setStarsFilter] = useState<{ value: number; operator: StarsFilter['operator'] } | null>({
-    value: 10,
-    operator: 'GREATER',
-  });
-  const [sortOrders, setSortOrders] = useState<Order[]>([
-    { field: DEFAULT_SORT_FIELD, type: 'desc' },
-  ]);
-  const [pickingRandom, setPickingRandom] = useState(false);
+    const filters = useFilters(DEFAULT_STARS_FILTER);
+    const sorting = useSorting();
 
-  const baseRequest = useMemo((): Omit<IssuesRequest, 'offset'> => {
-    const filter: IssuesRequest['filter'] = {};
-
-    if (selectedLanguages.length > 0) {
-      filter.languages = {
-        values: selectedLanguages,
-        operator: 'IN',
-      };
-    }
-
-    if (starsFilter && starsFilter.value !== null && starsFilter.value !== undefined) {
-      filter.stars = {
-        value: starsFilter.value,
-        operator: starsFilter.operator,
-      };
-    }
-
-    return {
-      limit: PAGE_SIZE,
-      filter: Object.keys(filter).length > 0 ? filter : undefined,
-      orders: sortOrders.length > 0 ? sortOrders : undefined,
-    };
-  }, [selectedLanguages, starsFilter, sortOrders]);
+    const baseRequest = useIssuesRequest({
+        selectedLanguages: filters.selectedLanguages,
+        starsFilter: filters.starsFilter,
+        sortOrders: sorting.sortOrders,
+    });
 
   const {
     issues,
@@ -56,166 +32,42 @@ export function IssuesPage() {
     loadMore,
   } = useInfiniteIssues(baseRequest);
 
+    const {pickingRandom, pickRandom} = useRandomIssue();
+
   const handleLoadMore = useCallback(() => {
     if (hasMore && !loadingMore) {
       loadMore();
     }
   }, [hasMore, loadingMore, loadMore]);
 
-  const handleLanguagesChange = (languages: string[]) => {
-    setSelectedLanguages(languages);
-  };
-
-  const handleStarsFilterChange = (value: number | null, operator: StarsFilter['operator']) => {
-    if (value !== null && value !== undefined && !isNaN(value) && value >= 0) {
-      setStarsFilter({ value, operator });
-    } else {
-      setStarsFilter(null);
-    }
-  };
-
-  const handleStarsValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    if (inputValue === '') {
-      setStarsFilter(null);
-      return;
-    }
-    const value = parseInt(inputValue, 10);
-    if (starsFilter) {
-      handleStarsFilterChange(isNaN(value) ? null : value, starsFilter.operator);
-    } else {
-      handleStarsFilterChange(isNaN(value) ? null : value, 'GREATER');
-    }
-  };
-
-  const handleStarsOperatorChange = (event: SelectChangeEvent<StarsFilter['operator']>) => {
-    const operator = event.target.value as StarsFilter['operator'];
-    if (starsFilter) {
-      setStarsFilter({ ...starsFilter, operator });
-    } else {
-      setStarsFilter({ value: 0, operator });
-    }
-  };
-
-  const handleRemoveStarsFilter = () => {
-    setStarsFilter(null);
-  };
-
-  const handleAddSortField = () => {
-    setSortOrders([...sortOrders, { field: DEFAULT_SORT_FIELD, type: 'desc' }]);
-  };
-
-  const handleRemoveSortField = (index: number) => {
-    if (sortOrders.length > 1) {
-      setSortOrders(sortOrders.filter((_, i) => i !== index));
-    }
-  };
-
-  const handleSortFieldChange = (index: number, field: string) => {
-    setSortOrders(
-      sortOrders.map((order, i) => (i === index ? { ...order, field } : order))
-    );
-  };
-
-  const handleSortTypeChange = (index: number, type: 'asc' | 'desc') => {
-    setSortOrders(
-      sortOrders.map((order, i) => (i === index ? { ...order, type } : order))
-    );
-  };
-
-  const handlePickRandom = useCallback(async () => {
-    setPickingRandom(true);
-    try {
-      // Try to get a random issue by requesting with random offset
-      // We'll try up to 5 times with different random offsets
-      const maxAttempts = 5;
-      const maxOffset = 100; // Reasonable upper bound for random offset
-
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        const randomOffset = Math.floor(Math.random() * maxOffset);
-
-            const request: IssuesRequest = {
-          ...baseRequest,
-          limit: 1,
-          offset: randomOffset,
-        };
-
-        const response = await fetchIssues(request);
-
-            if (response.issues && response.issues.length > 0) {
-          const randomIssue = response.issues[0];
-          window.open(randomIssue.issueUrl, '_blank', 'noopener,noreferrer');
-          setPickingRandom(false);
-          return;
-        }
-      }
-
-        // If all attempts failed, try with offset 0
-      const request: IssuesRequest = {
-        ...baseRequest,
-        limit: 1,
-        offset: 0,
-      };
-
-        const response = await fetchIssues(request);
-      if (response.issues && response.issues.length > 0) {
-        const randomIssue = response.issues[0];
-        window.open(randomIssue.issueUrl, '_blank', 'noopener,noreferrer');
-      } else {
-        alert('No issues found with current filters. Try adjusting your filters.');
-      }
-    } catch (err) {
-      console.error('Failed to pick random issue:', err);
-      alert('Failed to pick random issue. Please try again.');
-    } finally {
-      setPickingRandom(false);
-    }
-  }, [baseRequest]);
+    const handlePickRandom = useCallback(() => {
+        pickRandom(baseRequest);
+    }, [baseRequest, pickRandom]);
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={2} sx={{mb: 3}}>
-              <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<LabelIcon/>}
-                  href="https://github.com/Regyl/yagfi-back/blob/master/docs/CONTRIBUTING.md#suggest-labels"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{minWidth: 150}}
-              >
-                  Suggest a Label
-              </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={pickingRandom ? <CircularProgress size={16} sx={{ color: 'inherit' }} /> : <ShuffleIcon />}
-            onClick={handlePickRandom}
-            disabled={pickingRandom}
-            sx={{ minWidth: 150 }}
-          >
-            {pickingRandom ? 'Picking...' : 'Pick Random'}
-          </Button>
-        </Stack>
+          <Box sx={{mb: 3}}>
+              <ActionButtons pickingRandom={pickingRandom} onPickRandom={handlePickRandom}/>
+          </Box>
 
         <Stack spacing={3} sx={{ mb: 3 }}>
           <FiltersSection
-            selectedLanguages={selectedLanguages}
-            onLanguagesChange={handleLanguagesChange}
-            starsFilter={starsFilter}
-            onStarsFilterChange={handleStarsFilterChange}
-            onStarsValueChange={handleStarsValueChange}
-            onStarsOperatorChange={handleStarsOperatorChange}
-            onRemoveStarsFilter={handleRemoveStarsFilter}
+              selectedLanguages={filters.selectedLanguages}
+              onLanguagesChange={filters.handleLanguageChange}
+              starsFilter={filters.starsFilter}
+              onStarsValueChange={filters.handleStarsValueChange}
+              onStarsOperatorChange={filters.handleStarsOperatorChange}
+              onRemoveStarsFilter={filters.handleRemoveStarsFilter}
+              onAddStarsFilter={filters.handleAddStarsFilter}
           />
 
           <SortSection
-            sortOrders={sortOrders}
-            onAddSortField={handleAddSortField}
-            onRemoveSortField={handleRemoveSortField}
-            onSortFieldChange={handleSortFieldChange}
-            onSortTypeChange={handleSortTypeChange}
+              sortOrders={sorting.sortOrders}
+              onAddSortField={sorting.handleAddSortField}
+              onRemoveSortField={sorting.handleRemoveSortField}
+              onSortFieldChange={sorting.handleSortFieldChange}
+              onSortTypeChange={sorting.handleSortTypeChange}
           />
         </Stack>
 

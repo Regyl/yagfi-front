@@ -1,8 +1,7 @@
 import React from 'react';
 import {AppBar, Box, Link, Toolbar, Typography,} from '@mui/material';
 import {GitHub as GitHubIcon} from '@mui/icons-material';
-
-const GITHUB_REPO_URL = 'https://github.com/Regyl/yagfi-back';
+import {GITHUB_REPO_URL} from '../../constants';
 
 export function Header() {
     return (

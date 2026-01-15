@@ -4,8 +4,6 @@ import {Add as AddIcon} from '@mui/icons-material';
 import {Order} from '../../types';
 import {SortFieldItem} from './SortFieldItem';
 
-const DEFAULT_SORT_FIELD = 'ei.created_at';
-
 interface SortSectionProps {
   sortOrders: Order[];
   onAddSortField: () => void;
@@ -60,5 +58,3 @@ export function SortSection({
   );
 }
 
-// Export default sort field for use in parent component
-export { DEFAULT_SORT_FIELD };

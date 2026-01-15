@@ -1,6 +1,5 @@
-import { IssuesRequest, IssuesResponse } from '../types';
-
-const API_BASE_URL = 'http://localhost:8080/api/issues';
+import {IssuesRequest, IssuesResponse} from '../types';
+import {API_BASE_URL} from '../shared/constants';
 
 export async function fetchIssues(payload: IssuesRequest): Promise<IssuesResponse> {
   const response = await fetch(API_BASE_URL, {

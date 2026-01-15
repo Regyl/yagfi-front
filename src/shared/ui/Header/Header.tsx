@@ -11,7 +11,7 @@ export function Header() {
             sx={{
                 top: 0,
                 zIndex: 1100,
-                backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                backgroundColor: 'background.default',
                 backdropFilter: 'blur(8px)',
                 borderBottom: '1px solid',
                 borderColor: 'divider',
@@ -24,7 +24,7 @@ export function Header() {
                     component="div"
                     sx={{
                         fontWeight: 700,
-                        color: 'text.primary',
+                        color: 'primary.main',
                         fontSize: '1.25rem',
                     }}
                 >

@@ -15,7 +15,7 @@ export const theme = createTheme({
         dark: '#7ECC00',
     },
     background: {
-        default: '#0a0a0a', // Very dark background (App Wish style)
+        default: '#060e08', // Very dark background (App Wish style)
         paper: '#1a1a1a', // Slightly lighter for cards
     },
     text: {

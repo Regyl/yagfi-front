@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { fetchIssues } from '../../api/issuesApi';
-import { IssuesResponse, IssuesRequest, Issue } from '../../types';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {fetchIssues} from '../../api/issuesApi';
+import {Issue, IssuesRequest} from '../../types';
 
 interface UseInfiniteIssuesReturn {
   issues: Issue[];
@@ -14,16 +14,15 @@ interface UseInfiniteIssuesReturn {
 }
 
 export function useInfiniteIssues(
-  baseRequest: Omit<IssuesRequest, 'page'>
+  baseRequest: Omit<IssuesRequest, 'offset'>
 ): UseInfiniteIssuesReturn {
   const [issues, setIssues] = useState<Issue[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentOffset, setCurrentOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [totalElements, setTotalElements] = useState(0);
-  const [lastResponse, setLastResponse] = useState<IssuesResponse | null>(null);
   
   const baseRequestRef = useRef(baseRequest);
   const isLoadingRef = useRef(false);
@@ -33,15 +32,18 @@ export function useInfiniteIssues(
     baseRequestRef.current = baseRequest;
   }, [baseRequest]);
 
+  // Memoize filter and orders for dependency tracking
+  const filterKey = useMemo(() => JSON.stringify(baseRequest.filter), [baseRequest.filter]);
+  const ordersKey = useMemo(() => JSON.stringify(baseRequest.orders), [baseRequest.orders]);
+
   // Reset and load initial data when filters change
   useEffect(() => {
     let cancelled = false;
     isLoadingRef.current = true;
-    setCurrentPage(0);
+    setCurrentOffset(0);
     setIssues([]);
     setHasMore(true);
     setError(null);
-    setLastResponse(null);
     setLoading(true);
     setLoadingMore(false);
 
@@ -49,16 +51,16 @@ export function useInfiniteIssues(
       try {
         const request: IssuesRequest = {
           ...baseRequestRef.current,
-          page: 0,
+          offset: 0,
         };
         const response = await fetchIssues(request);
         
         if (!cancelled) {
-          setIssues(response.content);
-          setTotalElements(response.totalElements);
-          setHasMore(!response.last);
-          setLastResponse(response);
-          setCurrentPage(0);
+          setIssues(response.issues);
+          // If we got fewer issues than requested, there are no more
+          setHasMore(response.issues.length === baseRequestRef.current.limit);
+          setTotalElements(response.issues.length); // We don't have total count, so we track loaded count
+          setCurrentOffset(0);
         }
       } catch (err) {
         if (!cancelled) {
@@ -78,18 +80,14 @@ export function useInfiniteIssues(
       cancelled = true;
       isLoadingRef.current = false;
     };
-  }, [
-    baseRequest.filter?.language,
-    baseRequest.order?.field,
-    baseRequest.order?.type,
-  ]);
+  }, [filterKey, ordersKey]);
 
-  const currentPageRef = useRef(0);
+  const currentOffsetRef = useRef(0);
 
   // Sync ref with state
   useEffect(() => {
-    currentPageRef.current = currentPage;
-  }, [currentPage]);
+    currentOffsetRef.current = currentOffset;
+  }, [currentOffset]);
 
   const loadMore = useCallback(() => {
     if (loadingMore || !hasMore || isLoadingRef.current) {
@@ -103,19 +101,20 @@ export function useInfiniteIssues(
 
     const loadData = async () => {
       try {
-        const nextPage = currentPageRef.current + 1;
+        const nextOffset = currentOffsetRef.current + baseRequestRef.current.limit;
         const request: IssuesRequest = {
           ...baseRequestRef.current,
-          page: nextPage,
+          offset: nextOffset,
         };
         const response = await fetchIssues(request);
 
         if (!cancelled) {
-          setIssues((prev) => [...prev, ...response.content]);
-          setTotalElements(response.totalElements);
-          setHasMore(!response.last);
-          setLastResponse(response);
-          setCurrentPage(nextPage);
+          const newIssues = response.issues;
+          setIssues((prev) => [...prev, ...newIssues]);
+          // If we got fewer issues than requested, there are no more
+          setHasMore(newIssues.length === baseRequestRef.current.limit);
+          setTotalElements((prev) => prev + newIssues.length);
+          setCurrentOffset(nextOffset);
         }
       } catch (err) {
         if (!cancelled) {
@@ -138,11 +137,11 @@ export function useInfiniteIssues(
   }, [hasMore, loadingMore]);
 
   const reset = useCallback(() => {
-    setCurrentPage(0);
+    setCurrentOffset(0);
     setIssues([]);
     setHasMore(true);
     setError(null);
-    setLastResponse(null);
+    setTotalElements(0);
     isLoadingRef.current = false;
   }, []);
 

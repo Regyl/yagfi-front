@@ -1,26 +1,35 @@
-import React from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  Link,
-} from '@mui/material';
-import { Badge } from '../../shared/ui/Badge/Badge';
-import { formatDate } from '../../shared/utils/formatDate';
-import { Issue } from '../../types';
+import React, {useMemo} from 'react';
+import {Box, Card, CardContent, Link, Stack, Typography,} from '@mui/material';
+import {Badge} from '../../shared/ui/Badge/Badge';
+import {formatDate} from '../../shared/utils/formatDate';
+import {getGitHubAvatar} from '../../shared/utils/getGitHubAvatar';
+import {Issue} from '../../types';
 
 interface IssueCardProps {
   issue: Issue;
 }
 
 export function IssueCard({ issue }: IssueCardProps) {
-  const { title, url, createdAt, repository } = issue;
+  const {
+    issueTitle,
+    issueUrl,
+    issueCreated,
+    repositoryTitle,
+    repositoryDescription,
+    repositoryLanguage,
+    repositoryStars,
+    repositoryOwnerAvatar,
+  } = issue;
+
+  // Get avatar URL from GitHub if not provided in data
+  const avatarUrl = useMemo(() => {
+    return repositoryOwnerAvatar || getGitHubAvatar(repositoryTitle);
+  }, [repositoryOwnerAvatar, repositoryTitle]);
 
   return (
     <Card
       component={Link}
-      href={url}
+      href={issueUrl}
       target="_blank"
       rel="noopener noreferrer"
       sx={{
@@ -31,22 +40,44 @@ export function IssueCard({ issue }: IssueCardProps) {
       }}
     >
       <CardContent sx={{ p: 2.5 }}>
-        <Typography
-          variant="h3"
-          sx={{
-            mb: 1,
-            fontSize: '1rem',
-            fontWeight: 600,
-            color: 'text.primary',
-            lineHeight: 1.4,
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-          }}
-        >
-          {title}
-        </Typography>
+        <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{ mb: 1 }}>
+          {avatarUrl && (
+            <Box
+              component="img"
+              src={avatarUrl}
+              alt="Repository owner"
+              onError={(e) => {
+                // Hide image if it fails to load
+                e.currentTarget.style.display = 'none';
+              }}
+              sx={{
+                width: 32,
+                height: 32,
+                flexShrink: 0,
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+                objectFit: 'cover',
+              }}
+            />
+          )}
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: '1rem',
+              fontWeight: 600,
+              color: 'text.primary',
+              lineHeight: 1.4,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              flex: 1,
+            }}
+          >
+            {issueTitle}
+          </Typography>
+        </Stack>
 
         <Typography
           variant="body2"
@@ -60,10 +91,10 @@ export function IssueCard({ issue }: IssueCardProps) {
             overflow: 'hidden',
           }}
         >
-          {repository.title}
+          {repositoryTitle}
         </Typography>
 
-        {repository.description && (
+        {repositoryDescription && (
           <Typography
             variant="body2"
             sx={{
@@ -76,7 +107,7 @@ export function IssueCard({ issue }: IssueCardProps) {
               overflow: 'hidden',
             }}
           >
-            {repository.description}
+            {repositoryDescription}
           </Typography>
         )}
 
@@ -87,11 +118,11 @@ export function IssueCard({ issue }: IssueCardProps) {
           flexWrap="wrap"
           sx={{ mt: 'auto' }}
         >
-          {repository.language && (
-            <Badge color="primary">{repository.language}</Badge>
+          {repositoryLanguage && (
+            <Badge color="primary">{repositoryLanguage}</Badge>
           )}
           <Badge color="secondary">
-            {repository.stars} ★
+            {repositoryStars} ★
           </Badge>
           <Typography
             variant="caption"
@@ -101,7 +132,7 @@ export function IssueCard({ issue }: IssueCardProps) {
               fontSize: '0.75rem',
             }}
           >
-            {formatDate(createdAt)}
+            {formatDate(issueCreated)}
           </Typography>
         </Stack>
       </CardContent>

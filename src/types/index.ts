@@ -1,55 +1,44 @@
-export interface Repository {
-  id: number;
-  title: string;
-  description: string;
-  url: string;
-  language: string;
-  stars: number;
-  sourceId: string;
-  created: string;
-}
-
 export interface Issue {
-  id: number;
-  title: string;
-  url: string;
-  createdAt: string;
-  updatedAt: string;
-  created: string;
-  repositoryId: number;
-  sourceId: string;
-  repository: Repository;
+  issueId: number;
+  issueTitle: string;
+  issueUrl: string;
+  issueUpdated: string;
+  issueCreated: string;
+  repositoryTitle: string;
+  repositoryUrl: string;
+  repositoryStars: number;
+  repositoryDescription: string | null;
+  repositoryLanguage: string;
+  repositoryOwnerAvatar?: string;
 }
 
 export interface IssuesResponse {
-  content: Issue[];
-  empty: boolean;
-  first: boolean;
-  last: boolean;
-  number: number;
-  numberOfElements: number;
-  pageable: {
-    offset: number;
-    pageNumber: number;
-    pageSize: number;
-    paged: boolean;
-    sort: any[];
-    unpaged: boolean;
-  };
-  size: number;
-  sort: any[];
-  totalElements: number;
-  totalPages: number;
+  issues: Issue[];
+}
+
+export interface LanguageFilter {
+  values: string[];
+  operator: 'IN' | 'NOT_IN';
+}
+
+export interface StarsFilter {
+  value: number;
+  operator: 'GREATER' | 'LESS';
+}
+
+export interface IssuesFilter {
+  languages?: LanguageFilter;
+  stars?: StarsFilter;
+}
+
+export interface Order {
+  field: string;
+  type: 'asc' | 'desc';
 }
 
 export interface IssuesRequest {
-  page: number;
-  size: number;
-  filter?: {
-    language?: string;
-  };
-  order?: {
-    field: 'stars' | 'createdAt' | 'updatedAt';
-    type: 'asc' | 'desc';
-  };
+  limit: number;
+  offset: number;
+  filter?: IssuesFilter;
+  orders?: Order[];
 }

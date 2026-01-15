@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { IssueCard } from './IssueCard';
-import { Issue } from '../../types';
+import {Box} from '@mui/material';
+import {IssueCard} from './IssueCard';
+import {Issue} from '../../types';
 
 interface IssuesListProps {
   issues: Issue[];
@@ -22,7 +22,7 @@ export function IssuesList({ issues }: IssuesListProps) {
       }}
     >
       {issues.map((issue) => (
-        <Box key={issue.id}>
+        <Box key={issue.issueId}>
           <IssueCard issue={issue} />
         </Box>
       ))}

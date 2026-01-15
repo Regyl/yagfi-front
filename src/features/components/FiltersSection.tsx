@@ -1,7 +1,9 @@
 import React from 'react';
 import {
+    Autocomplete,
     Box,
     Button,
+    CircularProgress,
     FormControl,
     IconButton,
     InputLabel,
@@ -14,11 +16,12 @@ import {
 } from '@mui/material';
 import {Add as AddIcon, Close as CloseIcon} from '@mui/icons-material';
 import {StarsFilter} from '../../types';
-import {LANGUAGES, STARS_OPERATORS} from '../../shared/constants';
+import {STARS_OPERATORS} from '../../shared/constants';
+import {useLanguages} from '../hooks';
 
 interface FiltersSectionProps {
   selectedLanguages: string[];
-    onLanguagesChange: (event: SelectChangeEvent<string[]>) => void;
+    onLanguagesChange: (languages: string[]) => void;
   starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
   onStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onStarsOperatorChange: (event: SelectChangeEvent<StarsFilter['operator']>) => void;
@@ -35,28 +38,53 @@ export function FiltersSection({
   onRemoveStarsFilter,
                                    onAddStarsFilter,
 }: FiltersSectionProps) {
+    const {languages, loading: languagesLoading} = useLanguages();
 
   return (
     <Stack spacing={3}>
-      <FormControl size="small" sx={{ minWidth: 200 }}>
-        <InputLabel id="language-label">Languages</InputLabel>
-        <Select
-          labelId="language-label"
-          multiple
-          value={selectedLanguages}
-          label="Languages"
-          onChange={onLanguagesChange}
-          renderValue={(selected) => 
-            selected.length === 0 ? 'All' : selected.join(', ')
-          }
-        >
-          {LANGUAGES.map((lang) => (
-            <MenuItem key={lang} value={lang}>
-              {lang}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+        <Autocomplete
+            multiple
+            options={languages.filter((lang) => lang != null && lang.trim() !== '')}
+            value={selectedLanguages}
+            onChange={(_, newValue) => {
+                onLanguagesChange(newValue);
+            }}
+            loading={languagesLoading}
+            filterSelectedOptions
+            getOptionLabel={(option) => option || ''}
+            filterOptions={(options, {inputValue}) => {
+                const input = inputValue.toLowerCase().trim();
+                if (!input) {
+                    return options;
+                }
+                return options.filter((option) =>
+                    option && option.toLowerCase().startsWith(input)
+                );
+            }}
+            size="small"
+            sx={{minWidth: 200}}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    label="Languages"
+                    placeholder={selectedLanguages.length === 0 ? 'All languages' : 'Select languages'}
+                    InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                            <>
+                                {languagesLoading ? <CircularProgress color="inherit" size={20}/> : null}
+                                {params.InputProps.endAdornment}
+                            </>
+                        ),
+                    }}
+                />
+            )}
+            ListboxProps={{
+                style: {
+                    maxHeight: 300,
+                },
+            }}
+        />
 
       <Box>
         <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>

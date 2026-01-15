@@ -6,7 +6,7 @@ import {DEFAULT_STARS_FILTER} from '../../shared/constants';
 export interface UseFiltersReturn {
     selectedLanguages: string[];
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
-    handleLanguageChange: (event: SelectChangeEvent<string[]>) => void;
+    handleLanguageChange: (languages: string[]) => void;
     handleStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleStarsOperatorChange: (event: SelectChangeEvent<StarsFilter['operator']>) => void;
     handleRemoveStarsFilter: () => void;
@@ -21,9 +21,8 @@ export function useFilters(
         initialStarsFilter
     );
 
-    const handleLanguageChange = useCallback((event: SelectChangeEvent<string[]>) => {
-        const value = event.target.value;
-        setSelectedLanguages(typeof value === 'string' ? value.split(',') : value);
+    const handleLanguageChange = useCallback((languages: string[]) => {
+        setSelectedLanguages(languages);
     }, []);
 
     const handleStarsValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

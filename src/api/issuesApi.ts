@@ -14,3 +14,16 @@ export async function fetchIssues(payload: IssuesRequest): Promise<IssuesRespons
 
   return response.json();
 }
+
+export async function fetchLanguages(): Promise<string[]> {
+    const response = await fetch(`${API_BASE_URL}/languages`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch languages');
+    }
+
+    return response.json();
+}

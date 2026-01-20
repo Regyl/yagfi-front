@@ -1,7 +1,8 @@
+import {getEnv} from "../utils/env";
+
 export const PAGE_SIZE = 20;
 
-// API URL can be configured via environment variable REACT_APP_API_URL
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/issues';
+export const API_BASE_URL = getEnv('REACT_APP_API_URL');
 
 export const RANDOM_ISSUE_CONFIG = {
     maxAttempts: 5,

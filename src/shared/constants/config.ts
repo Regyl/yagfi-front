@@ -1,6 +1,7 @@
 export const PAGE_SIZE = 20;
 
-export const API_BASE_URL = 'http://localhost:8080/api/issues';
+// API URL can be configured via environment variable REACT_APP_API_URL
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/issues';
 
 export const RANDOM_ISSUE_CONFIG = {
     maxAttempts: 5,

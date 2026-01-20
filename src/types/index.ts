@@ -42,3 +42,12 @@ export interface IssuesRequest {
   filter?: IssuesFilter;
   orders?: Order[];
 }
+
+// Runtime environment configuration (injected by entrypoint.sh in production)
+declare global {
+    interface Window {
+        __ENV__?: {
+            [key: string]: string;
+        };
+    }
+}

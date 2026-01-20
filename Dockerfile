@@ -20,8 +20,15 @@ RUN npm run build
 # Stage 2: Serve with nginx
 FROM nginx:alpine
 
+# Install sed for entrypoint script (usually already available in alpine)
+# Add any other runtime dependencies if needed
+
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy entrypoint script for runtime environment variable injection
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Copy built application from builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
@@ -29,5 +36,5 @@ COPY --from=builder /app/build /usr/share/nginx/html
 # Expose port 80
 EXPOSE 80
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Use entrypoint script to inject environment variables at runtime
+ENTRYPOINT ["/entrypoint.sh"]

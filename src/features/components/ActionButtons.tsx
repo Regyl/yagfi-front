@@ -10,7 +10,7 @@ interface ActionButtonsProps {
 
 export function ActionButtons({pickingRandom, onPickRandom}: ActionButtonsProps) {
     return (
-        <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={2}>
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Button
                 variant="contained"
                 color="primary"

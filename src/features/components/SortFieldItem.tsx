@@ -47,20 +47,20 @@ export function SortFieldItem({
         borderColor: 'divider',
         borderRadius: 2,
         backgroundColor: 'background.paper',
+          maxWidth: 215
       }}
     >
-      <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="column" spacing={2} alignItems={"center"}>
         <Chip
           label={`${index + 1}`}
           size="small"
           color="primary"
           sx={{
-            minWidth: 32,
-            fontWeight: 600,
+              minWidth: 32, fontWeight: 600, maxWidth: 32,
           }}
         />
 
-        <FormControl size="small" sx={{ minWidth: 180, flex: 1 }}>
+            <FormControl size="small" sx={{minWidth: 180, flex: 1, maxWidth: 180}}>
           <InputLabel id={`sort-field-${index}-label`}>Field</InputLabel>
           <Select
             labelId={`sort-field-${index}-label`}
@@ -76,7 +76,7 @@ export function SortFieldItem({
           </Select>
         </FormControl>
 
-        <FormControl size="small" sx={{ minWidth: 150 }}>
+            <FormControl size="small" sx={{minWidth: 180, maxWidth: 180}}>
           <InputLabel id={`sort-type-${index}-label`}>Order</InputLabel>
           <Select
             labelId={`sort-type-${index}-label`}

@@ -35,7 +35,7 @@ export function SortSection({
         </Button>
       </Stack>
 
-      <Stack spacing={1.5}>
+        <Stack spacing={1.5} direction={"row"}>
         {sortOrders.map((order, index) => (
           <SortFieldItem
             key={index}

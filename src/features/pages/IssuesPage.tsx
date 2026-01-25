@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Alert, Box, Container, Stack, Typography} from '@mui/material';
 import {useInfiniteIssues} from '../hooks/useInfiniteIssues';
 import {useFilters} from '../hooks/useFilters';
@@ -12,10 +12,21 @@ import {SortSection} from '../components/SortSection';
 import {ActionButtons} from '../components/ActionButtons';
 import {Loader} from '../../shared/ui/Loader/Loader';
 import {DEFAULT_STARS_FILTER} from '../../shared/constants';
+import {updateUrlParams} from '../../shared/utils/urlParams';
 
 export function IssuesPage() {
-    const filters = useFilters(DEFAULT_STARS_FILTER);
+    const filters = useFilters({initialStarsFilter: DEFAULT_STARS_FILTER});
     const sorting = useSorting();
+
+    // Sync state with URL whenever filters or sorting change
+    useEffect(() => {
+        // Update URL with current state
+        updateUrlParams(
+            filters.selectedLanguages,
+            filters.starsFilter,
+            sorting.sortOrders
+        );
+    }, [filters.selectedLanguages, filters.starsFilter, sorting.sortOrders]);
 
     const baseRequest = useIssuesRequest({
         selectedLanguages: filters.selectedLanguages,

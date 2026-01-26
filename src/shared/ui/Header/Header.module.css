@@ -1,0 +1,58 @@
+.appBar {
+    top: 0;
+    z-index: 1100;
+    background-color: var(--mui-palette-background-default);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid;
+    border-color: var(--mui-palette-divider);
+    box-shadow: none;
+}
+
+.toolbar {
+    justify-content: space-between;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 600px) {
+    .toolbar {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+.title {
+    font-weight: 700;
+    color: var(--mui-palette-primary-main);
+    font-size: 1.25rem;
+}
+
+.linksBox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.githubLink {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--mui-palette-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.githubLink:hover {
+    color: var(--mui-palette-primary-main);
+}
+
+.githubText {
+    display: none;
+}
+
+@media (min-width: 600px) {
+    .githubText {
+        display: block;
+    }
+}

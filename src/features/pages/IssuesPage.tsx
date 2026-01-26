@@ -13,6 +13,7 @@ import {ActionButtons} from '../components/ActionButtons';
 import {Loader} from '../../shared/ui/Loader/Loader';
 import {DEFAULT_STARS_FILTER} from '../../shared/constants';
 import {updateUrlParams} from '../../shared/utils/urlParams';
+import styles from './IssuesPage.module.css';
 
 export function IssuesPage() {
     const filters = useFilters({initialStarsFilter: DEFAULT_STARS_FILTER});
@@ -56,13 +57,13 @@ export function IssuesPage() {
     }, [baseRequest, pickRandom]);
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-          <Box sx={{mb: 3}}>
+      <Container maxWidth="xl" className={styles.container}>
+          <Box className={styles.contentBox}>
+              <Box className={styles.actionButtonsWrapper}>
               <ActionButtons pickingRandom={pickingRandom} onPickRandom={handlePickRandom}/>
           </Box>
 
-        <Stack spacing={3} sx={{ mb: 3 }}>
+              <Stack spacing={3} className={styles.filtersStack}>
           <FiltersSection
               selectedLanguages={filters.selectedLanguages}
               onLanguagesChange={filters.handleLanguageChange}
@@ -83,7 +84,7 @@ export function IssuesPage() {
         </Stack>
 
         {!loading && issues.length > 0 && (
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography variant="body2" color="text.secondary" className={styles.issuesCount}>
             Showing {issues.length} issues
           </Typography>
         )}
@@ -92,13 +93,13 @@ export function IssuesPage() {
       {loading && issues.length === 0 && <Loader />}
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+          <Alert severity="error" className={styles.errorAlert}>
           Failed to load issues: {error.message}
         </Alert>
       )}
 
       {!loading && issues.length === 0 && (
-        <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant="body1" color="text.secondary" className={styles.emptyState}>
           No issues found. Try adjusting your filters.
         </Typography>
       )}

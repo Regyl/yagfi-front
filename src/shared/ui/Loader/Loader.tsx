@@ -1,18 +1,10 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import {Box, CircularProgress, Typography} from '@mui/material';
+import styles from './Loader.module.css';
 
 export function Loader() {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '400px',
-        gap: 2,
-      }}
-    >
+      <Box className={styles.container}>
       <CircularProgress size={48} />
       <Typography variant="body2" color="text.secondary">
         Loading issues...

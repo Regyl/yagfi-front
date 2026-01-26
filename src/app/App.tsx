@@ -1,16 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, CssBaseline, ThemeProvider} from '@mui/material';
 import {theme} from '../theme/theme';
 import {Header} from '../shared/ui/Header/Header';
 import {IssuesPage} from '../features/pages/IssuesPage';
+import {setThemeVariables} from '../shared/utils/themeVariables';
+import styles from './App.module.css';
 
 export default function App() {
+    useEffect(() => {
+        setThemeVariables(theme);
+    }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-        <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
+        <Box className={styles.appContainer}>
             <Header/>
-            <Box component="main" sx={{flex: 1}}>
+            <Box component="main" className={styles.main}>
                 <IssuesPage/>
             </Box>
         </Box>

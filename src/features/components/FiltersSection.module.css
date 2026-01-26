@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.autocomplete {
+    min-width: 200px;
+}
+
+.starsFilterBox {
+    /* Container for stars filter section */
+}
+
+.starsFilterTitle {
+    margin-bottom: 0.5rem;
+}
+
+.starsFilterStack {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.operatorFormControl {
+    min-width: 180px;
+}
+
+.starsTextField {
+    min-width: 120px;
+}

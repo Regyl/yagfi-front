@@ -1,0 +1,18 @@
+.container {
+    /* Container for sort section */
+}
+
+.headerStack {
+    margin-bottom: 1rem;
+}
+
+.sortFieldsStack {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+}
+
+.helpText {
+    margin-top: 0.5rem;
+    display: block;
+}

@@ -4,6 +4,7 @@ import {Badge} from '../../shared/ui/Badge/Badge';
 import {formatDate} from '../../shared/utils/formatDate';
 import {getGitHubAvatar} from '../../shared/utils/getGitHubAvatar';
 import {Issue} from '../../types';
+import styles from './IssueCard.module.css';
 
 interface IssueCardProps {
   issue: Issue;
@@ -32,29 +33,10 @@ export function IssueCard({ issue }: IssueCardProps) {
       href={issueUrl}
       target="_blank"
       rel="noopener noreferrer"
-      sx={{
-        textDecoration: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-        height: '100%',
-          width: '100%',
-          minHeight: 200,
-        cursor: 'pointer',
-          overflow: 'hidden',
-      }}
+      className={styles.card}
     >
-        <CardContent
-            sx={{
-                p: 2.5,
-                display: 'flex',
-                flexDirection: 'column',
-                flex: 1,
-                height: '100%',
-                minWidth: 0,
-                overflow: 'hidden',
-            }}
-        >
-            <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{mb: 1, minWidth: 0}}>
+        <CardContent className={styles.cardContent}>
+            <Stack direction="row" spacing={1.5} alignItems="flex-start" className={styles.headerStack}>
           {avatarUrl && (
             <Box
               component="img"
@@ -64,31 +46,12 @@ export function IssueCard({ issue }: IssueCardProps) {
                 // Hide image if it fails to load
                 e.currentTarget.style.display = 'none';
               }}
-              sx={{
-                width: 32,
-                height: 32,
-                flexShrink: 0,
-                borderRadius: 1,
-                border: '1px solid',
-                borderColor: 'divider',
-                objectFit: 'cover',
-              }}
+              className={styles.avatar}
             />
           )}
           <Typography
             variant="h3"
-            sx={{
-              fontSize: '1rem',
-              fontWeight: 600,
-              color: 'text.primary',
-              lineHeight: 1.4,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              flex: 1,
-                minWidth: 0,
-            }}
+            className={styles.title}
           >
             {issueTitle}
           </Typography>
@@ -96,15 +59,7 @@ export function IssueCard({ issue }: IssueCardProps) {
 
         <Typography
           variant="body2"
-          sx={{
-            mb: 1.5,
-            color: 'text.secondary',
-            fontSize: '0.875rem',
-            display: '-webkit-box',
-            WebkitLineClamp: 1,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-          }}
+          className={styles.repositoryTitle}
         >
           {repositoryTitle}
         </Typography>
@@ -112,15 +67,7 @@ export function IssueCard({ issue }: IssueCardProps) {
         {repositoryDescription && (
           <Typography
             variant="body2"
-            sx={{
-              mb: 1.5,
-              color: 'text.secondary',
-              fontSize: '0.8125rem',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-            }}
+            className={styles.description}
           >
             {repositoryDescription}
           </Typography>
@@ -131,7 +78,7 @@ export function IssueCard({ issue }: IssueCardProps) {
           spacing={1}
           alignItems="center"
           flexWrap="wrap"
-          sx={{mt: 'auto', pt: 1}}
+          className={styles.footerStack}
         >
           {repositoryLanguage && (
             <Badge color="primary">{repositoryLanguage}</Badge>
@@ -141,11 +88,7 @@ export function IssueCard({ issue }: IssueCardProps) {
           </Badge>
           <Typography
             variant="caption"
-            sx={{
-              ml: 'auto',
-              color: 'text.secondary',
-              fontSize: '0.75rem',
-            }}
+            className={styles.dateText}
           >
             {formatDate(issueCreated)}
           </Typography>

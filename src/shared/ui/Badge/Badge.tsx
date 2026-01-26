@@ -1,5 +1,6 @@
 import React from 'react';
-import { Chip } from '@mui/material';
+import {Chip} from '@mui/material';
+import styles from './Badge.module.css';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -12,11 +13,7 @@ export function Badge({ children, color = 'default' }: BadgeProps) {
       label={children}
       size="small"
       color={color}
-      sx={{
-        height: 24,
-        fontSize: '0.75rem',
-        fontWeight: 500,
-      }}
+      className={styles.chip}
     />
   );
 }

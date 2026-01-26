@@ -3,7 +3,7 @@ import { AppBar, Box, Link, Toolbar, Typography, IconButton } from '@mui/materia
 import { GitHub as GitHubIcon, Brightness4, Brightness7 } from '@mui/icons-material';
 import { GITHUB_REPO_URL } from '../../constants';
 
-// Ορίζουμε τα Props που περιμένει το Header
+
 interface HeaderProps {
     mode: 'light' | 'dark';
     onToggleTheme: () => void;
@@ -36,7 +36,7 @@ export function Header({ mode, onToggleTheme }: HeaderProps) {
                     YAGFI - Yet Another Good First Issues
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    {/* Κουμπί εναλλαγής Theme */}
+                    {}
                     <IconButton 
                         onClick={onToggleTheme} 
                         color="inherit" 

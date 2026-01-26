@@ -58,7 +58,7 @@ export const lightTheme = createTheme({
         contrastText: '#000000',
     },
     background: {
-        default: '#f4f7f5', // Πολύ ανοιχτό γκρι-πράσινο για να ταιριάζει με το Lime
+        default: '#f4f7f5', 
         paper: '#ffffff',
     },
     text: {

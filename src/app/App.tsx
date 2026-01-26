@@ -20,7 +20,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        {/* Στέλνουμε το mode και τη συνάρτηση στο Header για να μπει εκεί το κουμπί */}
+        {}
         <Header mode={mode} onToggleTheme={toggleTheme} />
         <Box component="main" sx={{ flex: 1 }}>
           <IssuesPage />

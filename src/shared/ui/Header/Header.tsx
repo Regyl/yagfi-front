@@ -1,9 +1,15 @@
 import React from 'react';
-import {AppBar, Box, Link, Toolbar, Typography,} from '@mui/material';
-import {GitHub as GitHubIcon} from '@mui/icons-material';
-import {GITHUB_REPO_URL} from '../../constants';
+import { AppBar, Box, Link, Toolbar, Typography, IconButton } from '@mui/material';
+import { GitHub as GitHubIcon, Brightness4, Brightness7 } from '@mui/icons-material';
+import { GITHUB_REPO_URL } from '../../constants';
 
-export function Header() {
+// Ορίζουμε τα Props που περιμένει το Header
+interface HeaderProps {
+    mode: 'light' | 'dark';
+    onToggleTheme: () => void;
+}
+
+export function Header({ mode, onToggleTheme }: HeaderProps) {
     return (
         <AppBar
             position="sticky"
@@ -17,7 +23,7 @@ export function Header() {
                 boxShadow: 'none',
             }}
         >
-            <Toolbar sx={{justifyContent: 'space-between', px: {xs: 2, sm: 3}}}>
+            <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 3 } }}>
                 <Typography
                     variant="h6"
                     component="div"
@@ -29,7 +35,19 @@ export function Header() {
                 >
                     YAGFI - Yet Another Good First Issues
                 </Typography>
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {/* Κουμπί εναλλαγής Theme */}
+                    <IconButton 
+                        onClick={onToggleTheme} 
+                        color="inherit" 
+                        sx={{ 
+                            color: 'text.secondary',
+                            '&:hover': { color: 'primary.main' } 
+                        }}
+                    >
+                        {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+                    </IconButton>
+
                     <Link
                         href={GITHUB_REPO_URL}
                         target="_blank"
@@ -47,11 +65,11 @@ export function Header() {
                             fontSize: '0.875rem',
                         }}
                     >
-                        <GitHubIcon fontSize="small"/>
+                        <GitHubIcon fontSize="small" />
                         <Typography
                             variant="body2"
                             sx={{
-                                display: {xs: 'none', sm: 'block'},
+                                display: { xs: 'none', sm: 'block' },
                             }}
                         >
                             GitHub

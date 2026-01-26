@@ -3,7 +3,6 @@ import {Box, Button, Stack, Typography,} from '@mui/material';
 import {Add as AddIcon} from '@mui/icons-material';
 import {Order} from '../../types';
 import {SortFieldItem} from './SortFieldItem';
-import styles from './SortSection.module.css';
 
 interface SortSectionProps {
   sortOrders: Order[];
@@ -21,8 +20,8 @@ export function SortSection({
   onSortTypeChange,
 }: SortSectionProps) {
   return (
-      <Box className={styles.container}>
-          <Stack direction="row" spacing={2} alignItems="center" className={styles.headerStack}>
+    <Box>
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
         <Typography variant="subtitle2" color="text.secondary">
           Sort Order (priority):
         </Typography>
@@ -36,7 +35,7 @@ export function SortSection({
         </Button>
       </Stack>
 
-          <Stack spacing={1.5} direction={"row"} className={styles.sortFieldsStack}>
+        <Stack spacing={1.5} direction={"row"}>
         {sortOrders.map((order, index) => (
           <SortFieldItem
             key={index}
@@ -51,7 +50,7 @@ export function SortSection({
       </Stack>
 
       {sortOrders.length > 1 && (
-          <Typography variant="caption" color="text.secondary" className={styles.helpText}>
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
           Items are sorted by the first field, then by the second, and so on.
         </Typography>
       )}

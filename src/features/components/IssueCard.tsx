@@ -4,7 +4,6 @@ import {Badge} from '../../shared/ui/Badge/Badge';
 import {formatDate} from '../../shared/utils/formatDate';
 import {getGitHubAvatar} from '../../shared/utils/getGitHubAvatar';
 import {Issue} from '../../types';
-import styles from './IssueCard.module.css';
 
 interface IssueCardProps {
   issue: Issue;
@@ -33,10 +32,29 @@ export function IssueCard({ issue }: IssueCardProps) {
       href={issueUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={styles.card}
+      sx={{
+        textDecoration: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+        height: '100%',
+          width: '100%',
+          minHeight: 200,
+        cursor: 'pointer',
+          overflow: 'hidden',
+      }}
     >
-        <CardContent className={styles.cardContent}>
-            <Stack direction="row" spacing={1.5} alignItems="flex-start" className={styles.headerStack}>
+        <CardContent
+            sx={{
+                p: 2.5,
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                height: '100%',
+                minWidth: 0,
+                overflow: 'hidden',
+            }}
+        >
+            <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{mb: 1, minWidth: 0}}>
           {avatarUrl && (
             <Box
               component="img"
@@ -46,12 +64,31 @@ export function IssueCard({ issue }: IssueCardProps) {
                 // Hide image if it fails to load
                 e.currentTarget.style.display = 'none';
               }}
-              className={styles.avatar}
+              sx={{
+                width: 32,
+                height: 32,
+                flexShrink: 0,
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+                objectFit: 'cover',
+              }}
             />
           )}
           <Typography
             variant="h3"
-            className={styles.title}
+            sx={{
+              fontSize: '1rem',
+              fontWeight: 600,
+              color: 'text.primary',
+              lineHeight: 1.4,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              flex: 1,
+                minWidth: 0,
+            }}
           >
             {issueTitle}
           </Typography>
@@ -59,7 +96,15 @@ export function IssueCard({ issue }: IssueCardProps) {
 
         <Typography
           variant="body2"
-          className={styles.repositoryTitle}
+          sx={{
+            mb: 1.5,
+            color: 'text.secondary',
+            fontSize: '0.875rem',
+            display: '-webkit-box',
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}
         >
           {repositoryTitle}
         </Typography>
@@ -67,7 +112,15 @@ export function IssueCard({ issue }: IssueCardProps) {
         {repositoryDescription && (
           <Typography
             variant="body2"
-            className={styles.description}
+            sx={{
+              mb: 1.5,
+              color: 'text.secondary',
+              fontSize: '0.8125rem',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
           >
             {repositoryDescription}
           </Typography>
@@ -78,7 +131,7 @@ export function IssueCard({ issue }: IssueCardProps) {
           spacing={1}
           alignItems="center"
           flexWrap="wrap"
-          className={styles.footerStack}
+          sx={{mt: 'auto', pt: 1}}
         >
           {repositoryLanguage && (
             <Badge color="primary">{repositoryLanguage}</Badge>
@@ -88,7 +141,11 @@ export function IssueCard({ issue }: IssueCardProps) {
           </Badge>
           <Typography
             variant="caption"
-            className={styles.dateText}
+            sx={{
+              ml: 'auto',
+              color: 'text.secondary',
+              fontSize: '0.75rem',
+            }}
           >
             {formatDate(issueCreated)}
           </Typography>

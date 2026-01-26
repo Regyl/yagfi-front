@@ -18,7 +18,6 @@ import {Add as AddIcon, Close as CloseIcon} from '@mui/icons-material';
 import {StarsFilter} from '../../types';
 import {STARS_OPERATORS} from '../../shared/constants';
 import {useLanguages} from '../hooks';
-import styles from './FiltersSection.module.css';
 
 interface FiltersSectionProps {
   selectedLanguages: string[];
@@ -42,7 +41,7 @@ export function FiltersSection({
     const {languages, loading: languagesLoading} = useLanguages();
 
   return (
-      <Stack spacing={3} className={styles.container}>
+    <Stack spacing={3}>
         <Autocomplete
             multiple
             options={languages.filter((lang) => lang != null && lang.trim() !== '')}
@@ -63,7 +62,7 @@ export function FiltersSection({
                 );
             }}
             size="small"
-            className={styles.autocomplete}
+            sx={{minWidth: 200}}
             renderInput={(params) => (
                 <TextField
                     {...params}
@@ -87,13 +86,13 @@ export function FiltersSection({
             }}
         />
 
-          <Box className={styles.starsFilterBox}>
-              <Typography variant="subtitle2" color="text.secondary" className={styles.starsFilterTitle}>
+      <Box>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
           Filter by Stars:
         </Typography>
         {starsFilter ? (
-            <Stack direction="row" spacing={2} alignItems="center" className={styles.starsFilterStack}>
-                <FormControl size="small" className={styles.operatorFormControl}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <FormControl size="small" sx={{ minWidth: 180 }}>
               <InputLabel id="stars-operator-label">Operator</InputLabel>
               <Select
                 labelId="stars-operator-label"
@@ -114,7 +113,7 @@ export function FiltersSection({
               label="Stars"
               value={starsFilter.value}
               onChange={onStarsValueChange}
-              className={styles.starsTextField}
+              sx={{ minWidth: 120 }}
             />
             <IconButton
               size="small"

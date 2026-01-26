@@ -151,21 +151,5 @@ export const theme = createTheme({
               },
           },
       },
-      MuiLink: {
-          styleOverrides: {
-              root: {
-                  textDecoration: 'none',
-                  '&:hover': {
-                      textDecoration: 'none',
-                  },
-                  '& *': {
-                      textDecoration: 'none',
-                  },
-                  '&:hover *': {
-                      textDecoration: 'none',
-                  },
-              },
-          },
-      },
   },
 });

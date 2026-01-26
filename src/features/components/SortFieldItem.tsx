@@ -13,7 +13,6 @@ import {
 import {Delete as DeleteIcon} from '@mui/icons-material';
 import {Order} from '../../types';
 import {SORT_FIELDS, SORT_TYPES} from '../../shared/constants';
-import styles from './SortFieldItem.module.css';
 
 interface SortFieldItemProps {
   order: Order;
@@ -41,16 +40,27 @@ export function SortFieldItem({
   };
 
   return (
-      <Box className={styles.container}>
-          <Stack direction="column" spacing={2} alignItems={"center"} className={styles.contentStack}>
+    <Box
+      sx={{
+        p: 2,
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 2,
+        backgroundColor: 'background.paper',
+          maxWidth: 215
+      }}
+    >
+        <Stack direction="column" spacing={2} alignItems={"center"}>
         <Chip
           label={`${index + 1}`}
           size="small"
           color="primary"
-          className={styles.chip}
+          sx={{
+              minWidth: 32, fontWeight: 600, maxWidth: 32,
+          }}
         />
 
-              <FormControl size="small" className={styles.fieldFormControl}>
+            <FormControl size="small" sx={{minWidth: 180, flex: 1, maxWidth: 180}}>
           <InputLabel id={`sort-field-${index}-label`}>Field</InputLabel>
           <Select
             labelId={`sort-field-${index}-label`}
@@ -66,7 +76,7 @@ export function SortFieldItem({
           </Select>
         </FormControl>
 
-              <FormControl size="small" className={styles.typeFormControl}>
+            <FormControl size="small" sx={{minWidth: 180, maxWidth: 180}}>
           <InputLabel id={`sort-type-${index}-label`}>Order</InputLabel>
           <Select
             labelId={`sort-type-${index}-label`}
@@ -87,7 +97,7 @@ export function SortFieldItem({
             size="small"
             onClick={onRemove}
             color="error"
-            className={styles.removeButton}
+            sx={{ ml: 1 }}
           >
             <DeleteIcon fontSize="small" />
           </IconButton>

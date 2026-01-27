@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
-import { darkTheme, lightTheme } from '../theme/theme'; // Εισαγωγή και των δύο themes
+import { darkTheme, lightTheme } from '../theme/theme'; // Insertion of both themes
 import { Header } from '../shared/ui/Header/Header';
 import { IssuesPage } from '../features/pages/IssuesPage';
 

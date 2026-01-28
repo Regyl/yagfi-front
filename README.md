@@ -7,6 +7,7 @@ YAGFI - yet another good first issue
 <div align="center">
   <a href="https://discord.gg/cggqh3Qr8d"><img src="https://img.shields.io/discord/1465432673164984567" alt="Discord"></a>
 </div>
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->

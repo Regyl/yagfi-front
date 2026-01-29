@@ -14,6 +14,7 @@ export function IssueCard({ issue }: IssueCardProps) {
     issueTitle,
     issueUrl,
     issueCreated,
+      issueLabels,
     repositoryTitle,
     repositoryDescription,
     repositoryLanguage,
@@ -125,6 +126,25 @@ export function IssueCard({ issue }: IssueCardProps) {
             {repositoryDescription}
           </Typography>
         )}
+
+            {issueLabels && issueLabels.length > 0 && (
+                <Stack
+                    direction="row"
+                    spacing={0.5}
+                    flexWrap="wrap"
+                    sx={{mb: 1.5, gap: 0.5}}
+                >
+                    {issueLabels.map((label, index) => (
+                        <Badge
+                            key={index}
+                            color="default"
+                            variant="outlined"
+                        >
+                            {label}
+                        </Badge>
+                    ))}
+                </Stack>
+            )}
 
         <Stack
           direction="row"

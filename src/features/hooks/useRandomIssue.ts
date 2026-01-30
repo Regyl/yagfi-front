@@ -1,7 +1,6 @@
 import {useCallback, useState} from 'react';
-import {fetchIssues} from '../../api/issuesApi';
+import {fetchRandomIssue} from '../../api/issuesApi';
 import {IssuesRequest} from '../../types';
-import {RANDOM_ISSUE_CONFIG} from '../../shared/constants';
 
 export interface UseRandomIssueReturn {
     pickingRandom: boolean;
@@ -14,44 +13,20 @@ export function useRandomIssue(): UseRandomIssueReturn {
     const pickRandom = useCallback(async (baseRequest: Omit<IssuesRequest, 'offset'>) => {
         setPickingRandom(true);
         try {
-            const {maxAttempts, maxOffset} = RANDOM_ISSUE_CONFIG;
-
-            // Try to get a random issue by requesting with random offset
-            for (let attempt = 0; attempt < maxAttempts; attempt++) {
-                const randomOffset = Math.floor(Math.random() * maxOffset);
-                const request: IssuesRequest = {
-                    ...baseRequest,
-                    limit: 1,
-                    offset: randomOffset,
-                };
-
-                const response = await fetchIssues(request);
-
-                if (response.issues && response.issues.length > 0) {
-                    const randomIssue = response.issues[0];
-                    window.open(randomIssue.issueUrl, '_blank', 'noopener,noreferrer');
-                    setPickingRandom(false);
-                    return;
-                }
-            }
-
-            // If all attempts failed, try with offset 0
-            const request: IssuesRequest = {
-                ...baseRequest,
-                limit: 1,
-                offset: 0,
+            // Prepare request payload without limit and offset
+            const requestPayload: Omit<IssuesRequest, 'limit' | 'offset'> = {
+                filter: baseRequest.filter,
+                orders: baseRequest.orders,
             };
 
-            const response = await fetchIssues(request);
-            if (response.issues && response.issues.length > 0) {
-                const randomIssue = response.issues[0];
-                window.open(randomIssue.issueUrl, '_blank', 'noopener,noreferrer');
-            } else {
-                alert('No issues found with current filters. Try adjusting your filters.');
-            }
+            const issueUrl = await fetchRandomIssue(requestPayload);
+            window.open(issueUrl, '_blank', 'noopener,noreferrer');
         } catch (err) {
             console.error('Failed to pick random issue:', err);
-            alert('Failed to pick random issue. Please try again.');
+            const errorMessage = err instanceof Error 
+                ? err.message 
+                : 'Failed to pick random issue. Please try again.';
+            alert(errorMessage);
         } finally {
             setPickingRandom(false);
         }

@@ -17,7 +17,7 @@ export function useLanguages() {
 
                 if (!cancelled) {
                     // Filter out null, undefined, and empty strings
-                    setLanguages(data.filter((lang) => lang != null && typeof lang === 'string' && lang.trim() !== ''));
+                    setLanguages(data.filter((lang) => lang != null && lang.trim() !== ''));
                 }
             } catch (err) {
                 if (!cancelled) {

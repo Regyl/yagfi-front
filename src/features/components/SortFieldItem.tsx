@@ -31,7 +31,7 @@ export function SortFieldItem({
   onRemove,
   canRemove,
 }: SortFieldItemProps) {
-  const handleFieldChange = (event: SelectChangeEvent<string>) => {
+  const handleFieldChange = (event: SelectChangeEvent) => {
     onFieldChange(event.target.value);
   };
 

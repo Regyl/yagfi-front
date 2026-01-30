@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import {createTheme} from '@mui/material/styles';
 
 
 const commonSettings = {
@@ -69,6 +69,3 @@ export const lightTheme = createTheme({
   },
   components: darkTheme.components, 
 });
-
-
-export const theme = darkTheme;

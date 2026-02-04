@@ -44,6 +44,11 @@ export interface IssuesRequest {
   orders?: Order[];
 }
 
+export interface SyncEvent {
+    source: string;
+    lastUpdateDttm: string;
+}
+
 // Runtime environment configuration (injected by entrypoint.sh in production)
 declare global {
     interface Window {

@@ -1,8 +1,10 @@
 import React from 'react';
-import { AppBar, Box, Link, Toolbar, Typography, IconButton } from '@mui/material';
-import { GitHub as GitHubIcon, Brightness4, Brightness7 } from '@mui/icons-material';
-import { GITHUB_REPO_URL } from '../../constants';
-
+import {AppBar, Box, IconButton, Link, Toolbar, Tooltip, Typography} from '@mui/material';
+import {Brightness4, Brightness7, GitHub as GitHubIcon, Sync as SyncIcon} from '@mui/icons-material';
+import {GITHUB_REPO_URL} from '../../constants';
+import {useSyncStatus} from '../../../features/hooks';
+import {formatDate} from '../../utils/formatDate';
+import {SyncEvent} from '../../../types';
 
 interface HeaderProps {
     mode: 'light' | 'dark';
@@ -10,6 +12,22 @@ interface HeaderProps {
 }
 
 export function Header({ mode, onToggleTheme }: HeaderProps) {
+    const { syncEvents, loading } = useSyncStatus();
+
+    const getLatestSyncTime = () => {
+        if (loading || syncEvents.length === 0) {
+            return null;
+        }
+        const latestEvent = syncEvents.reduce((latest: SyncEvent, current: SyncEvent) => {
+            return new Date(current.lastUpdateDttm) > new Date(latest.lastUpdateDttm) 
+                ? current 
+                : latest;
+        });
+        return formatDate(latestEvent.lastUpdateDttm);
+    };
+
+    const latestSyncTime = getLatestSyncTime();
+
     return (
         <AppBar
             position="sticky"
@@ -36,7 +54,42 @@ export function Header({ mode, onToggleTheme }: HeaderProps) {
                     YAGFI - Yet Another Good First Issues
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    {}
+                    {latestSyncTime && (
+                        <Tooltip
+                            title={
+                                <Box>
+                                    {syncEvents.map((event: SyncEvent) => (
+                                        <Box key={event.source} sx={{ mb: 0.5 }}>
+                                            <Typography variant="caption" component="div">
+                                                {event.source}: {formatDate(event.lastUpdateDttm)}
+                                            </Typography>
+                                        </Box>
+                                    ))}
+                                </Box>
+                            }
+                            arrow
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 0.5,
+                                    color: 'text.secondary',
+                                    fontSize: '0.75rem',
+                                }}
+                            >
+                                <SyncIcon fontSize="small" />
+                                <Typography
+                                    variant="caption"
+                                    sx={{
+                                        display: { xs: 'none', md: 'block' },
+                                    }}
+                                >
+                                    Synced {latestSyncTime}
+                                </Typography>
+                            </Box>
+                        </Tooltip>
+                    )}
                     <IconButton 
                         onClick={onToggleTheme} 
                         color="inherit" 

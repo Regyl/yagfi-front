@@ -10,6 +10,7 @@ export interface Issue {
   repositoryStars: number;
   repositoryDescription: string | null;
   repositoryLanguage: string;
+  repositoryLicense: string | null;
   repositoryOwnerAvatar?: string;
 }
 

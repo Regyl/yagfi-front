@@ -19,6 +19,7 @@ export function IssueCard({ issue }: IssueCardProps) {
     repositoryDescription,
     repositoryLanguage,
     repositoryStars,
+    repositoryLicense,
     repositoryOwnerAvatar,
   } = issue;
 
@@ -148,10 +149,9 @@ export function IssueCard({ issue }: IssueCardProps) {
 
         <Stack
           direction="row"
-          spacing={1}
           alignItems="center"
           flexWrap="wrap"
-          sx={{mt: 'auto', pt: 1}}
+          sx={{mt: 'auto', pt: 1, gap: 1}}
         >
           {repositoryLanguage && (
             <Badge color="primary">{repositoryLanguage}</Badge>
@@ -159,6 +159,11 @@ export function IssueCard({ issue }: IssueCardProps) {
           <Badge color="secondary">
             {repositoryStars} ★
           </Badge>
+          {repositoryLicense && (
+            <Badge color="secondary">
+              {repositoryLicense}
+            </Badge>
+          )}
           <Typography
             variant="caption"
             sx={{

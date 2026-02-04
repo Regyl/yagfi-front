@@ -14,7 +14,7 @@ export function IssueCard({ issue }: IssueCardProps) {
     issueTitle,
     issueUrl,
     issueCreated,
-      issueLabels,
+    issueLabels,
     repositoryTitle,
     repositoryDescription,
     repositoryLanguage,
@@ -131,7 +131,7 @@ export function IssueCard({ issue }: IssueCardProps) {
             {issueLabels && issueLabels.length > 0 && (
                 <Stack
                     direction="row"
-                    spacing={0.5}
+                    alignItems="center"
                     flexWrap="wrap"
                     sx={{mb: 1.5, gap: 0.5}}
                 >

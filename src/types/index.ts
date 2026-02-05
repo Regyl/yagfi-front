@@ -4,7 +4,8 @@ export interface Issue {
   issueUrl: string;
   issueUpdated: string;
   issueCreated: string;
-    issueLabels: string[];
+  issueLabels: string[];
+  issueLanguage: string;
   repositoryTitle: string;
   repositoryUrl: string;
   repositoryStars: number;

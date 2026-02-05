@@ -2,6 +2,7 @@ import React, {useMemo} from 'react';
 import {Box, Card, CardContent, Link, Stack, Typography,} from '@mui/material';
 import {Badge} from '../../shared/ui/Badge/Badge';
 import {formatDate} from '../../shared/utils/formatDate';
+import {formatLanguage} from '../../shared/utils/formatLanguage';
 import {getGitHubAvatar} from '../../shared/utils/getGitHubAvatar';
 import {Issue} from '../../types';
 
@@ -15,6 +16,7 @@ export function IssueCard({ issue }: IssueCardProps) {
     issueUrl,
     issueCreated,
     issueLabels,
+    issueLanguage,
     repositoryTitle,
     repositoryDescription,
     repositoryLanguage,
@@ -159,6 +161,11 @@ export function IssueCard({ issue }: IssueCardProps) {
           <Badge color="secondary">
             {repositoryStars} ★
           </Badge>
+            {issueLanguage && (
+                <Badge color="secondary">
+                    {formatLanguage(issueLanguage)}
+                </Badge>
+            )}
           {repositoryLicense && (
             <Badge color="secondary">
               {repositoryLicense}

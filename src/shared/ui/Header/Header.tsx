@@ -1,7 +1,14 @@
-import React from 'react';
-import {AppBar, Box, IconButton, Link, Toolbar, Tooltip, Typography} from '@mui/material';
-import {Brightness4, Brightness7, GitHub as GitHubIcon, Sync as SyncIcon} from '@mui/icons-material';
-import {GITHUB_REPO_URL} from '../../constants';
+import React, {useState} from 'react';
+import {AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from '@mui/material';
+import {
+    Brightness4,
+    Brightness7,
+    GitHub as GitHubIcon,
+    Storage as StorageIcon,
+    Sync as SyncIcon,
+    Web as WebIcon,
+} from '@mui/icons-material';
+import {GITHUB_BACKEND_REPO_URL, GITHUB_FRONTEND_REPO_URL} from '../../constants';
 import {useSyncStatus} from '../../../features/hooks';
 import {formatDate} from '../../utils/formatDate';
 import {SyncEvent} from '../../../types';
@@ -13,6 +20,7 @@ interface HeaderProps {
 
 export function Header({ mode, onToggleTheme }: HeaderProps) {
     const { syncEvents, loading } = useSyncStatus();
+    const [githubMenuAnchor, setGithubMenuAnchor] = useState<null | HTMLElement>(null);
 
     const getLatestSyncTime = () => {
         if (loading || syncEvents.length === 0) {
@@ -27,6 +35,19 @@ export function Header({ mode, onToggleTheme }: HeaderProps) {
     };
 
     const latestSyncTime = getLatestSyncTime();
+
+    const handleGithubMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setGithubMenuAnchor(event.currentTarget);
+    };
+
+    const handleGithubMenuClose = () => {
+        setGithubMenuAnchor(null);
+    };
+
+    const handleGithubMenuClick = (url: string) => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+        handleGithubMenuClose();
+    };
 
     return (
         <AppBar
@@ -101,33 +122,64 @@ export function Header({ mode, onToggleTheme }: HeaderProps) {
                         {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
                     </IconButton>
 
-                    <Link
-                        href={GITHUB_REPO_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 0.5,
-                            color: 'text.secondary',
-                            textDecoration: 'none',
-                            transition: 'color 0.2s ease',
-                            '&:hover': {
-                                color: 'primary.main',
-                            },
-                            fontSize: '0.875rem',
-                        }}
-                    >
-                        <GitHubIcon fontSize="small" />
-                        <Typography
-                            variant="body2"
+                    <Box>
+                        <Box
+                            component="button"
+                            onClick={handleGithubMenuOpen}
                             sx={{
-                                display: { xs: 'none', sm: 'block' },
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                color: 'text.secondary',
+                                textDecoration: 'none',
+                                border: 'none',
+                                background: 'none',
+                                cursor: 'pointer',
+                                padding: 0,
+                                transition: 'color 0.2s ease',
+                                '&:hover': {
+                                    color: 'primary.main',
+                                },
+                                fontSize: '0.875rem',
                             }}
                         >
-                            GitHub
-                        </Typography>
-                    </Link>
+                            <GitHubIcon fontSize="small" />
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    display: { xs: 'none', sm: 'block' },
+                                }}
+                            >
+                                GitHub
+                            </Typography>
+                        </Box>
+                        <Menu
+                            anchorEl={githubMenuAnchor}
+                            open={Boolean(githubMenuAnchor)}
+                            onClose={handleGithubMenuClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                        >
+                            <MenuItem onClick={() => handleGithubMenuClick(GITHUB_FRONTEND_REPO_URL)}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <WebIcon fontSize="small" />
+                                    <Typography variant="body2">Frontend</Typography>
+                                </Box>
+                            </MenuItem>
+                            <MenuItem onClick={() => handleGithubMenuClick(GITHUB_BACKEND_REPO_URL)}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <StorageIcon fontSize="small" />
+                                    <Typography variant="body2">Backend</Typography>
+                                </Box>
+                            </MenuItem>
+                        </Menu>
+                    </Box>
                 </Box>
             </Toolbar>
         </AppBar>

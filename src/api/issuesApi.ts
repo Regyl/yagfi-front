@@ -1,4 +1,4 @@
-import {IssuesRequest, IssuesResponse, SyncEvent} from '../types';
+import {FeedGenerateRequest, FeedGenerateResponse, IssuesRequest, IssuesResponse, SyncEvent} from '../types';
 import {API_BASE_URL} from '../shared/constants';
 import {getUtmSource} from '../shared/utils/urlParams';
 
@@ -68,6 +68,20 @@ export async function fetchSyncEvents(): Promise<SyncEvent[]> {
 
     if (!response.ok) {
         throw new Error('Failed to fetch sync events');
+    }
+
+    return response.json();
+}
+
+export async function generateFeed(payload: FeedGenerateRequest): Promise<FeedGenerateResponse> {
+    const response = await fetch(`${API_BASE_URL}/feed/generate`, {
+        method: 'POST',
+        headers: getRequestHeaders(),
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to generate feed');
     }
 
     return response.json();

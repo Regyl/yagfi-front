@@ -51,6 +51,19 @@ export interface SyncEvent {
     lastUpdateDttm: string;
 }
 
+export interface FeedGenerateRequest {
+    nickname: string;
+    email: string;
+}
+
+export interface FeedGenerateResponse {
+    id: number;
+    nickname: string;
+    email: string;
+    status: string;
+    created: string;
+}
+
 // Runtime environment configuration (injected by entrypoint.sh in production)
 declare global {
     interface Window {

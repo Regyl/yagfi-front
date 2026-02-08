@@ -1,7 +1,23 @@
-import React, {useState} from 'react';
-import {Alert, Box, Button, Container, Paper, Stack, TextField, Typography,} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {
+    Alert,
+    Avatar,
+    Box,
+    Button,
+    Container,
+    Divider,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Paper,
+    Stack,
+    TextField,
+    Typography,
+} from '@mui/material';
 import {Send as SendIcon} from '@mui/icons-material';
-import {generateFeed} from '../../api/issuesApi';
+import {fetchFeedUsers, generateFeed} from '../../api/issuesApi';
+import {getGitHubUserAvatar} from '../../shared/utils/getGitHubUserAvatar';
 
 export function FeedPage() {
     const [nickname, setNickname] = useState('');
@@ -9,6 +25,26 @@ export function FeedPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
+    const [users, setUsers] = useState<string[]>([]);
+    const [usersLoading, setUsersLoading] = useState(true);
+    const [usersError, setUsersError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadUsers = async () => {
+            setUsersLoading(true);
+            setUsersError(null);
+            try {
+                const data = await fetchFeedUsers();
+                setUsers(data);
+            } catch (err) {
+                setUsersError(err instanceof Error ? err.message : 'Failed to load users');
+            } finally {
+                setUsersLoading(false);
+            }
+        };
+
+        loadUsers();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -21,6 +57,9 @@ export function FeedPage() {
             setSuccess(true);
             setNickname('');
             setEmail('');
+            // Reload users list after successful generation
+            const data = await fetchFeedUsers();
+            setUsers(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to generate feed');
         } finally {
@@ -32,79 +71,139 @@ export function FeedPage() {
 
     return (
         <Container maxWidth="sm" sx={{py: 4}}>
-            <Paper elevation={0} sx={{p: 4, border: '1px solid', borderColor: 'divider'}}>
-                <Typography variant="h4" component="h1" sx={{mb: 3, fontWeight: 600}}>
-                    Generate Custom Feed
-                </Typography>
+            <Stack spacing={4}>
+                <Paper elevation={0} sx={{p: 4, border: '1px solid', borderColor: 'divider'}}>
+                    <Typography variant="h4" component="h1" sx={{mb: 3, fontWeight: 600}}>
+                        Generate Custom Feed
+                    </Typography>
 
-                <Typography variant="body2" color="text.secondary" sx={{mb: 4}}>
-                    Create a personalized feed based on your preferences. We'll notify you by email when your feed is ready.
-                </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{mb: 4}}>
+                            Create a personalized feed based on your preferences. We'll notify you by email when your feed is ready.
+                        </Typography>
 
-                <form onSubmit={handleSubmit}>
-                    <Stack spacing={3}>
-                        <TextField
-                            label="Nickname"
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
-                            required
-                            fullWidth
-                            disabled={loading}
-                            placeholder="Enter your nickname"
-                        />
+                        <form onSubmit={handleSubmit}>
+                            <Stack spacing={3}>
+                                <TextField
+                                    label="Nickname"
+                                    value={nickname}
+                                    onChange={(e) => setNickname(e.target.value)}
+                                    required
+                                    fullWidth
+                                    disabled={loading}
+                                    placeholder="Enter your nickname"
+                                />
 
-                        <TextField
-                            label="Email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            fullWidth
-                            disabled={loading}
-                            placeholder="your.email@example.com"
-                        />
+                                <TextField
+                                    label="Email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    fullWidth
+                                    disabled={loading}
+                                    placeholder="your.email@example.com"
+                                />
 
-                        <Box
-                            sx={{
-                                p: 2,
-                                bgcolor: 'background.default',
-                                borderRadius: 1,
-                                border: '1px solid',
-                                borderColor: 'divider',
-                            }}
-                        >
-                            <Typography variant="caption" color="text.secondary" component="div">
-                                <strong>Privacy Note:</strong> Your email will be used only to notify you when your feed is ready. 
-                                We promise no advertising or sharing your data with third parties.
+                                <Box
+                                    sx={{
+                                        p: 2,
+                                        bgcolor: 'background.default',
+                                        borderRadius: 1,
+                                        border: '1px solid',
+                                        borderColor: 'divider',
+                                    }}
+                                >
+                                    <Typography variant="caption" color="text.secondary" component="div">
+                                        <strong>Privacy Note:</strong> Your email will be used only to notify you when your feed is ready. 
+                                        We promise no advertising or sharing your data with third parties.
+                                    </Typography>
+                                </Box>
+
+                                {error && (
+                                    <Alert severity="error" onClose={() => setError(null)}>
+                                        {error}
+                                    </Alert>
+                                )}
+
+                                {success && (
+                                    <Alert severity="success" onClose={() => setSuccess(false)}>
+                                        Feed generation started successfully! You'll receive an email notification when it's ready.
+                                    </Alert>
+                                )}
+
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    size="large"
+                                    disabled={!isFormValid || loading}
+                                    startIcon={<SendIcon />}
+                                    fullWidth
+                                    sx={{mt: 2}}
+                                >
+                                    {loading ? 'Generating...' : 'Generate Feed'}
+                                </Button>
+                            </Stack>
+                        </form>
+                </Paper>
+
+                <Paper elevation={0} sx={{p: 4, border: '1px solid', borderColor: 'divider'}}>
+                    <Typography variant="h5" component="h2" sx={{mb: 3, fontWeight: 600}}>
+                        Processed Requests
+                    </Typography>
+
+                        {usersLoading && (
+                            <Typography variant="body2" color="text.secondary">
+                                Loading users...
                             </Typography>
-                        </Box>
+                        )}
 
-                        {error && (
-                            <Alert severity="error" onClose={() => setError(null)}>
-                                {error}
+                        {usersError && (
+                            <Alert severity="error" sx={{mb: 2}}>
+                                {usersError}
                             </Alert>
                         )}
 
-                        {success && (
-                            <Alert severity="success" onClose={() => setSuccess(false)}>
-                                Feed generation started successfully! You'll receive an email notification when it's ready.
-                            </Alert>
+                        {!usersLoading && !usersError && users.length === 0 && (
+                            <Typography variant="body2" color="text.secondary">
+                                No users found yet.
+                            </Typography>
                         )}
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            size="large"
-                            disabled={!isFormValid || loading}
-                            startIcon={<SendIcon />}
-                            fullWidth
-                            sx={{mt: 2}}
-                        >
-                            {loading ? 'Generating...' : 'Generate Feed'}
-                        </Button>
-                    </Stack>
-                </form>
-            </Paper>
+                        {!usersLoading && !usersError && users.length > 0 && (
+                            <List>
+                                {users.map((nickname, index) => {
+                                    if (!nickname) return null;
+                                    const avatarUrl = getGitHubUserAvatar(nickname);
+                                    return (
+                                        <React.Fragment key={nickname}>
+                                            <ListItem alignItems="flex-start" sx={{px: 0}}>
+                                                <ListItemAvatar>
+                                                    <Avatar
+                                                        src={avatarUrl || undefined}
+                                                        alt={nickname}
+                                                        sx={{
+                                                            bgcolor: 'primary.main',
+                                                        }}
+                                                    >
+                                                        {nickname.charAt(0).toUpperCase()}
+                                                    </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={
+                                                        <Typography variant="subtitle1" component="span">
+                                                            {nickname}
+                                                        </Typography>
+                                                    }
+                                                />
+                                            </ListItem>
+                                            {index < users.length - 1 && <Divider component="li" />}
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </List>
+                        )}
+                </Paper>
+            </Stack>
         </Container>
     );
 }

@@ -86,3 +86,16 @@ export async function generateFeed(payload: FeedGenerateRequest): Promise<FeedGe
 
     return response.json();
 }
+
+export async function fetchFeedUsers(): Promise<string[]> {
+    const response = await fetch(`${API_BASE_URL}/feed/users`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed users');
+    }
+
+    return response.json();
+}

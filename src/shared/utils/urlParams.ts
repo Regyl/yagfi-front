@@ -59,6 +59,14 @@ export function deserializeSortOrders(param: string | null): Order[] {
 }
 
 /**
+ * Reads utm_source from URL search params
+ */
+export function getUtmSource(): string | null {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('utm_source');
+}
+
+/**
  * Reads all filter and sorting state from URL search params
  */
 export function readStateFromUrl(): {
@@ -116,6 +124,12 @@ export function updateUrlParams(
         params.set('sort', sortParam);
     } else {
         params.delete('sort');
+    }
+
+    // Preserve utm_source if it exists
+    const existingUtmSource = params.get('utm_source');
+    if (existingUtmSource) {
+        params.set('utm_source', existingUtmSource);
     }
 
     // Update URL without page reload

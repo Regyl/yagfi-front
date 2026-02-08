@@ -1,10 +1,23 @@
 import {IssuesRequest, IssuesResponse, SyncEvent} from '../types';
 import {API_BASE_URL} from '../shared/constants';
+import {getUtmSource} from '../shared/utils/urlParams';
+
+/**
+ * Gets request headers with optional utm_source
+ */
+function getRequestHeaders(): HeadersInit {
+  const headers: HeadersInit = { 'Content-Type': 'application/json' };
+  const utmSource = getUtmSource();
+  if (utmSource) {
+    headers['X-UTM-Source'] = utmSource;
+  }
+  return headers;
+}
 
 export async function fetchIssues(payload: IssuesRequest): Promise<IssuesResponse> {
   const response = await fetch(`${API_BASE_URL}/issues`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getRequestHeaders(),
     body: JSON.stringify(payload),
   });
 
@@ -20,7 +33,7 @@ export async function fetchRandomIssue(
 ): Promise<string> {
   const response = await fetch(`${API_BASE_URL}/issues/random`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getRequestHeaders(),
     body: JSON.stringify(payload),
   });
 
@@ -37,7 +50,7 @@ export async function fetchRandomIssue(
 export async function fetchLanguages(): Promise<string[]> {
     const response = await fetch(`${API_BASE_URL}/issues/languages`, {
         method: 'GET',
-        headers: {'Content-Type': 'application/json'},
+        headers: getRequestHeaders(),
     });
 
     if (!response.ok) {
@@ -50,7 +63,7 @@ export async function fetchLanguages(): Promise<string[]> {
 export async function fetchSyncEvents(): Promise<SyncEvent[]> {
     const response = await fetch(`${API_BASE_URL}/events`, {
         method: 'GET',
-        headers: {'Content-Type': 'application/json'},
+        headers: getRequestHeaders(),
     });
 
     if (!response.ok) {

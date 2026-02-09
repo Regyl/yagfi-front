@@ -4,6 +4,7 @@ import {
     Avatar,
     Box,
     Button,
+    CircularProgress,
     Container,
     Divider,
     List,
@@ -17,7 +18,7 @@ import {
     Typography,
 } from '@mui/material';
 import {Send as SendIcon} from '@mui/icons-material';
-import {fetchFeedUsers, generateFeed} from '../../api/issuesApi';
+import {checkGitHubUserExists, fetchFeedUsers, generateFeed} from '../../api/issuesApi';
 import {getGitHubUserAvatar} from '../../shared/utils/getGitHubUserAvatar';
 import {useNavigate} from 'react-router-dom';
 
@@ -31,6 +32,9 @@ export function FeedPage() {
     const [users, setUsers] = useState<string[]>([]);
     const [usersLoading, setUsersLoading] = useState(true);
     const [usersError, setUsersError] = useState<string | null>(null);
+    const [emailError, setEmailError] = useState<string | null>(null);
+    const [nicknameError, setNicknameError] = useState<string | null>(null);
+    const [checkingNickname, setCheckingNickname] = useState(false);
 
     useEffect(() => {
         const loadUsers = async () => {
@@ -49,17 +53,86 @@ export function FeedPage() {
         loadUsers();
     }, []);
 
+    const validateEmail = (emailValue: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(emailValue);
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setEmail(value);
+        if (value.trim() && !validateEmail(value)) {
+            setEmailError('Please enter a valid email address');
+        } else {
+            setEmailError(null);
+        }
+    };
+
+    const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setNickname(value);
+        setNicknameError(null);
+    };
+
+    const handleNicknameBlur = async () => {
+        if (nickname.trim()) {
+            await validateNickname(nickname);
+        }
+    };
+
+    const validateNickname = async (nicknameValue: string): Promise<boolean> => {
+        if (!nicknameValue.trim()) {
+            setNicknameError('Nickname is required');
+            return false;
+        }
+
+        setCheckingNickname(true);
+        try {
+            const exists = await checkGitHubUserExists(nicknameValue);
+            if (!exists) {
+                setNicknameError('This GitHub username does not exist. Please check the username and try again.');
+                return false;
+            }
+            setNicknameError(null);
+            return true;
+        } catch (err) {
+            setNicknameError('Failed to verify GitHub username. Please try again.');
+            return false;
+        } finally {
+            setCheckingNickname(false);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
         setSuccess(false);
 
+        // Validate email
+        if (!email.trim()) {
+            setEmailError('Email is required');
+            return;
+        }
+        if (!validateEmail(email)) {
+            setEmailError('Please enter a valid email address');
+            return;
+        }
+        setEmailError(null);
+
+        // Validate nickname
+        const isNicknameValid = await validateNickname(nickname);
+        if (!isNicknameValid) {
+            return;
+        }
+
+        setLoading(true);
         try {
-            await generateFeed({nickname, email});
+            await generateFeed({nickname: nickname.trim(), email: email.trim()});
             setSuccess(true);
             setNickname('');
             setEmail('');
+            setEmailError(null);
+            setNicknameError(null);
             // Reload users list after successful generation
             const data = await fetchFeedUsers();
             setUsers(data);
@@ -70,7 +143,7 @@ export function FeedPage() {
         }
     };
 
-    const isFormValid = nickname.trim() !== '' && email.trim() !== '';
+    const isFormValid = nickname.trim() !== '' && email.trim() !== '' && !emailError && !nicknameError && !checkingNickname;
 
     return (
         <Container maxWidth="sm" sx={{py: 4}}>
@@ -87,24 +160,39 @@ export function FeedPage() {
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={3}>
                                 <TextField
-                                    label="Nickname"
+                                    label="GitHub Username"
                                     value={nickname}
-                                    onChange={(e) => setNickname(e.target.value)}
+                                    onChange={handleNicknameChange}
+                                    onBlur={handleNicknameBlur}
                                     required
                                     fullWidth
-                                    disabled={loading}
-                                    placeholder="Enter your nickname"
+                                    disabled={loading || checkingNickname}
+                                    placeholder="Regyl"
+                                    error={!!nicknameError}
+                                    helperText={
+                                        nicknameError || 
+                                        'Enter your GitHub username (not your profile name). Example: for https://github.com/Regyl, the username is "Regyl"'
+                                    }
+                                    InputProps={{
+                                        endAdornment: checkingNickname ? (
+                                            <Box sx={{display: 'flex', alignItems: 'center', px: 1}}>
+                                                <CircularProgress size={20} />
+                                            </Box>
+                                        ) : null,
+                                    }}
                                 />
 
                                 <TextField
                                     label="Email"
                                     type="email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={handleEmailChange}
                                     required
                                     fullWidth
                                     disabled={loading}
                                     placeholder="your.email@example.com"
+                                    error={!!emailError}
+                                    helperText={emailError || 'We\'ll notify you when your feed is ready'}
                                 />
 
                                 <Box

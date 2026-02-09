@@ -140,3 +140,28 @@ export async function fetchFeedIssuesByNickname(nickname: string): Promise<Issue
     const issues = await response.json();
     return {issues};
 }
+
+/**
+ * Checks if a GitHub user exists by username
+ * @param username - GitHub username to check
+ * @returns true if user exists, false otherwise
+ */
+export async function checkGitHubUserExists(username: string): Promise<boolean> {
+    if (!username || !username.trim()) {
+        return false;
+    }
+
+    try {
+        const response = await fetch(`https://api.github.com/users/${encodeURIComponent(username.trim())}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/vnd.github.v3+json',
+            },
+        });
+
+        return response.ok;
+    } catch (error) {
+        // If there's a network error, return false
+        return false;
+    }
+}

@@ -186,7 +186,7 @@ export function FeedViewPage() {
                     {selectedRepo && (
                         <Box>
                             <Typography variant="h6" component="h2" sx={{mb: 2, fontWeight: 600}}>
-                                Issues from dependencies
+                                Issues from repository {selectedRepo.replace('https://github.com/', '')}
                             </Typography>
                             {issuesLoading && <Loader />}
                             {issuesError && (

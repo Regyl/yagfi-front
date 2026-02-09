@@ -1,4 +1,4 @@
-import {IssuesRequest, IssuesResponse, SyncEvent} from '../types';
+import {FeedGenerateRequest, FeedGenerateResponse, IssuesRequest, IssuesResponse, SyncEvent} from '../types';
 import {API_BASE_URL} from '../shared/constants';
 import {getUtmSource} from '../shared/utils/urlParams';
 
@@ -71,4 +71,72 @@ export async function fetchSyncEvents(): Promise<SyncEvent[]> {
     }
 
     return response.json();
+}
+
+export async function generateFeed(payload: FeedGenerateRequest): Promise<FeedGenerateResponse> {
+    const response = await fetch(`${API_BASE_URL}/feed/generate`, {
+        method: 'POST',
+        headers: getRequestHeaders(),
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to generate feed');
+    }
+
+    return response.json();
+}
+
+export async function fetchFeedUsers(): Promise<string[]> {
+    const response = await fetch(`${API_BASE_URL}/feed/users`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed users');
+    }
+
+    return response.json();
+}
+
+export async function fetchFeedRepositories(nickname: string): Promise<{sourceRepo: string; count: number}[]> {
+    const response = await fetch(`${API_BASE_URL}/feed/repositories?nickname=${encodeURIComponent(nickname)}`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed repositories');
+    }
+
+    return response.json();
+}
+
+export async function fetchFeedIssues(sourceRepo: string): Promise<IssuesResponse> {
+    const response = await fetch(`${API_BASE_URL}/feed/issues?sourceRepo=${encodeURIComponent(sourceRepo)}`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed issues');
+    }
+
+    const issues = await response.json();
+    return {issues};
+}
+
+export async function fetchFeedIssuesByNickname(nickname: string): Promise<IssuesResponse> {
+    const response = await fetch(`${API_BASE_URL}/feed/feed-issues?nickname=${encodeURIComponent(nickname)}`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed issues');
+    }
+
+    const issues = await response.json();
+    return {issues};
 }

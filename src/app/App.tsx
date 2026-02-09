@@ -6,6 +6,7 @@ import {Header} from '../shared/ui/Header/Header';
 import {Sidebar} from '../shared/ui/Sidebar/Sidebar';
 import {IssuesPage} from '../features/pages/IssuesPage';
 import {FeedPage} from '../features/pages/FeedPage';
+import {FeedViewPage} from '../features/pages/FeedViewPage';
 
 export default function App() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
@@ -28,6 +29,7 @@ export default function App() {
               <Routes>
                 <Route path="/issues" element={<IssuesPage />} />
                 <Route path="/feed" element={<FeedPage />} />
+                <Route path="/feed/:nickname" element={<FeedViewPage />} />
                 <Route path="/" element={<Navigate to="/issues" replace />} />
               </Routes>
             </Box>

@@ -99,3 +99,30 @@ export async function fetchFeedUsers(): Promise<string[]> {
 
     return response.json();
 }
+
+export async function fetchFeedRepositories(nickname: string): Promise<{sourceRepo: string; count: number}[]> {
+    const response = await fetch(`${API_BASE_URL}/feed/repositories?nickname=${encodeURIComponent(nickname)}`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed repositories');
+    }
+
+    return response.json();
+}
+
+export async function fetchFeedIssues(sourceRepo: string): Promise<IssuesResponse> {
+    const response = await fetch(`${API_BASE_URL}/feed/issues?sourceRepo=${encodeURIComponent(sourceRepo)}`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed issues');
+    }
+
+    const issues = await response.json();
+    return {issues};
+}

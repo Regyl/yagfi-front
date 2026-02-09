@@ -9,6 +9,7 @@ import {
     List,
     ListItem,
     ListItemAvatar,
+    ListItemButton,
     ListItemText,
     Paper,
     Stack,
@@ -18,8 +19,10 @@ import {
 import {Send as SendIcon} from '@mui/icons-material';
 import {fetchFeedUsers, generateFeed} from '../../api/issuesApi';
 import {getGitHubUserAvatar} from '../../shared/utils/getGitHubUserAvatar';
+import {useNavigate} from 'react-router-dom';
 
 export function FeedPage() {
+    const navigate = useNavigate();
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -176,25 +179,33 @@ export function FeedPage() {
                                     const avatarUrl = getGitHubUserAvatar(nickname);
                                     return (
                                         <React.Fragment key={nickname}>
-                                            <ListItem alignItems="flex-start" sx={{px: 0}}>
-                                                <ListItemAvatar>
-                                                    <Avatar
-                                                        src={avatarUrl || undefined}
-                                                        alt={nickname}
-                                                        sx={{
-                                                            bgcolor: 'primary.main',
-                                                        }}
-                                                    >
-                                                        {nickname.charAt(0).toUpperCase()}
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={
-                                                        <Typography variant="subtitle1" component="span">
-                                                            {nickname}
-                                                        </Typography>
-                                                    }
-                                                />
+                                            <ListItem disablePadding>
+                                                <ListItemButton
+                                                    onClick={() => navigate(`/feed/${nickname}`)}
+                                                    sx={{
+                                                        px: 0,
+                                                        py: 1.5,
+                                                    }}
+                                                >
+                                                    <ListItemAvatar>
+                                                        <Avatar
+                                                            src={avatarUrl || undefined}
+                                                            alt={nickname}
+                                                            sx={{
+                                                                bgcolor: 'primary.main',
+                                                            }}
+                                                        >
+                                                            {nickname.charAt(0).toUpperCase()}
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText
+                                                        primary={
+                                                            <Typography variant="subtitle1" component="span">
+                                                                {nickname}
+                                                            </Typography>
+                                                        }
+                                                    />
+                                                </ListItemButton>
                                             </ListItem>
                                             {index < users.length - 1 && <Divider component="li" />}
                                         </React.Fragment>

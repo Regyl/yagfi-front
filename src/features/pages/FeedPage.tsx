@@ -277,7 +277,7 @@ export function FeedPage() {
                                     required
                                     fullWidth
                                     disabled={loading || checkingNickname}
-                                    placeholder="Regyl"
+                                    placeholder="GitHub Username"
                                     error={!!nicknameError}
                                     helperText={
                                         nicknameError || 

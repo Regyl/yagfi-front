@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
     Alert,
     Box,
+    Button,
     Card,
     CardContent,
     CircularProgress,
@@ -16,9 +17,10 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {
     ExpandLess as ExpandLessIcon,
     ExpandMore as ExpandMoreIcon,
-    OpenInNew as OpenInNewIcon
+    OpenInNew as OpenInNewIcon,
+    Refresh as RefreshIcon,
 } from '@mui/icons-material';
-import {fetchFeedIssues, fetchFeedRepositories} from '../../api/issuesApi';
+import {fetchFeedIssues, fetchFeedIssuesByNickname, fetchFeedRepositories} from '../../api/issuesApi';
 import {Issue} from '../../types';
 import {IssuesList} from '../components/IssuesList';
 import {Loader} from '../../shared/ui/Loader/Loader';
@@ -28,12 +30,15 @@ export function FeedViewPage() {
     const navigate = useNavigate();
     const [repositories, setRepositories] = useState<{sourceRepo: string; count: number}[]>([]);
     const [selectedRepo, setSelectedRepo] = useState<string | null>(null);
-    const [issues, setIssues] = useState<Issue[]>([]);
-    const [repositoriesExpanded, setRepositoriesExpanded] = useState(true);
+    const [feedIssues, setFeedIssues] = useState<Issue[]>([]);
+    const [repoIssues, setRepoIssues] = useState<Issue[]>([]);
+    const [repositoriesExpanded, setRepositoriesExpanded] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [issuesLoading, setIssuesLoading] = useState(false);
+    const [feedIssuesLoading, setFeedIssuesLoading] = useState(true);
+    const [repoIssuesLoading, setRepoIssuesLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [issuesError, setIssuesError] = useState<string | null>(null);
+    const [feedIssuesError, setFeedIssuesError] = useState<string | null>(null);
+    const [repoIssuesError, setRepoIssuesError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!nickname) {
@@ -41,39 +46,65 @@ export function FeedViewPage() {
             return;
         }
 
-        const loadRepositories = async () => {
+        const loadData = async () => {
             setLoading(true);
+            setFeedIssuesLoading(true);
             setError(null);
+            setFeedIssuesError(null);
 
             try {
-                const data = await fetchFeedRepositories(nickname);
-                setRepositories(data);
+                const [reposData, issuesData] = await Promise.all([
+                    fetchFeedRepositories(nickname),
+                    fetchFeedIssuesByNickname(nickname),
+                ]);
+                setRepositories(reposData);
+                setFeedIssues(issuesData.issues);
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to load feed');
+                const errorMessage = err instanceof Error ? err.message : 'Failed to load feed';
+                setError(errorMessage);
+                setFeedIssuesError(errorMessage);
             } finally {
                 setLoading(false);
+                setFeedIssuesLoading(false);
             }
         };
 
-        loadRepositories();
+        loadData();
     }, [nickname, navigate]);
 
-    const handleRepoClick = async (sourceRepo: string) => {
+    const handleRepoClick = (sourceRepo: string) => {
         setSelectedRepo(sourceRepo);
         setRepositoriesExpanded(false);
-        setIssuesLoading(true);
-        setIssuesError(null);
-        setIssues([]);
-
-        try {
-            const response = await fetchFeedIssues(sourceRepo);
-            setIssues(response.issues);
-        } catch (err) {
-            setIssuesError(err instanceof Error ? err.message : 'Failed to load issues');
-        } finally {
-            setIssuesLoading(false);
-        }
     };
+
+    const handleReset = () => {
+        setSelectedRepo(null);
+    };
+
+    useEffect(() => {
+        if (!selectedRepo) {
+            setRepoIssues([]);
+            setRepoIssuesError(null);
+            return;
+        }
+
+        const loadRepoIssues = async () => {
+            setRepoIssuesLoading(true);
+            setRepoIssuesError(null);
+            setRepoIssues([]);
+
+            try {
+                const response = await fetchFeedIssues(selectedRepo);
+                setRepoIssues(response.issues);
+            } catch (err) {
+                setRepoIssuesError(err instanceof Error ? err.message : 'Failed to load issues');
+            } finally {
+                setRepoIssuesLoading(false);
+            }
+        };
+
+        loadRepoIssues();
+    }, [selectedRepo]);
 
     if (loading) {
         return (
@@ -99,12 +130,8 @@ export function FeedViewPage() {
                 Feed for {nickname}
             </Typography>
 
-            {repositories.length === 0 ? (
-                <Typography variant="body1" color="text.secondary">
-                    No repositories found for this feed.
-                </Typography>
-            ) : (
-                <Stack spacing={4}>
+            <Stack spacing={4}>
+                {repositories.length > 0 && (
                     <Box>
                         <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
                             <Typography variant="h6" component="h2" sx={{fontWeight: 600}}>
@@ -182,35 +209,70 @@ export function FeedViewPage() {
                             </Stack>
                         </Collapse>
                     </Box>
+                )}
 
-                    {selectedRepo && (
-                        <Box>
-                            <Typography variant="h6" component="h2" sx={{mb: 2, fontWeight: 600}}>
+                {selectedRepo ? (
+                    <Box>
+                        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
+                            <Typography variant="h6" component="h2" sx={{fontWeight: 600}}>
                                 Issues from repository {selectedRepo.replace('https://github.com/', '')}
                             </Typography>
-                            {issuesLoading && <Loader />}
-                            {issuesError && (
-                                <Alert severity="error" sx={{mb: 2}}>
-                                    {issuesError}
-                                </Alert>
-                            )}
-                            {!issuesLoading && !issuesError && issues.length === 0 && (
-                                <Typography variant="body1" color="text.secondary">
-                                    No issues found for this repository.
-                                </Typography>
-                            )}
-                            {!issuesLoading && !issuesError && issues.length > 0 && (
-                                <>
-                                    <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
-                                        Showing {issues.length} issues
-                                    </Typography>
-                                    <IssuesList issues={issues} />
-                                </>
-                            )}
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                startIcon={<RefreshIcon />}
+                                onClick={handleReset}
+                            >
+                                Reset
+                            </Button>
                         </Box>
-                    )}
-                </Stack>
-            )}
+                        {repoIssuesLoading && <Loader />}
+                        {repoIssuesError && (
+                            <Alert severity="error" sx={{mb: 2}}>
+                                {repoIssuesError}
+                            </Alert>
+                        )}
+                        {!repoIssuesLoading && !repoIssuesError && repoIssues.length === 0 && (
+                            <Typography variant="body1" color="text.secondary">
+                                No issues found for this repository.
+                            </Typography>
+                        )}
+                        {!repoIssuesLoading && !repoIssuesError && repoIssues.length > 0 && (
+                            <>
+                                <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
+                                    Showing {repoIssues.length} issues
+                                </Typography>
+                                <IssuesList issues={repoIssues} />
+                            </>
+                        )}
+                    </Box>
+                ) : (
+                    <Box>
+                        <Typography variant="h6" component="h2" sx={{mb: 2, fontWeight: 600}}>
+                            Issues from dependencies
+                        </Typography>
+                        {feedIssuesLoading && <Loader />}
+                        {feedIssuesError && (
+                            <Alert severity="error" sx={{mb: 2}}>
+                                {feedIssuesError}
+                            </Alert>
+                        )}
+                        {!feedIssuesLoading && !feedIssuesError && feedIssues.length === 0 && (
+                            <Typography variant="body1" color="text.secondary">
+                                No issues found.
+                            </Typography>
+                        )}
+                        {!feedIssuesLoading && !feedIssuesError && feedIssues.length > 0 && (
+                            <>
+                                <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
+                                    Showing {feedIssues.length} issues
+                                </Typography>
+                                <IssuesList issues={feedIssues} />
+                            </>
+                        )}
+                    </Box>
+                )}
+            </Stack>
         </Container>
     );
 }

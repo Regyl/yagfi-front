@@ -126,3 +126,17 @@ export async function fetchFeedIssues(sourceRepo: string): Promise<IssuesRespons
     const issues = await response.json();
     return {issues};
 }
+
+export async function fetchFeedIssuesByNickname(nickname: string): Promise<IssuesResponse> {
+    const response = await fetch(`${API_BASE_URL}/feed/feed-issues?nickname=${encodeURIComponent(nickname)}`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch feed issues');
+    }
+
+    const issues = await response.json();
+    return {issues};
+}

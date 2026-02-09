@@ -77,11 +77,11 @@ export function FeedPage() {
             <Stack spacing={4}>
                 <Paper elevation={0} sx={{p: 4, border: '1px solid', borderColor: 'divider'}}>
                     <Typography variant="h4" component="h1" sx={{mb: 3, fontWeight: 600}}>
-                        Generate Custom Feed
+                        Generate Personalized Feed
                     </Typography>
 
                         <Typography variant="body2" color="text.secondary" sx={{mb: 4}}>
-                            Create a personalized feed based on your preferences. We'll notify you by email when your feed is ready.
+                            Create a personalized feed based on your preferences/repositories. We'll notify you by email when your feed is ready.
                         </Typography>
 
                         <form onSubmit={handleSubmit}>

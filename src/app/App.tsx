@@ -23,9 +23,23 @@ export default function App() {
       <BrowserRouter>
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
           <Header mode={mode} onToggleTheme={toggleTheme} />
-          <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              flex: 1, 
+              overflow: 'hidden',
+            }}
+          >
             <Sidebar />
-            <Box component="main" sx={{ flex: 1, overflow: 'auto', ml: '240px' }}>
+            <Box 
+              component="main" 
+              sx={{ 
+                flex: 1, 
+                overflow: 'auto', 
+                ml: { xs: 0, sm: '240px' },
+                pb: { xs: '80px', sm: 0 }
+              }}
+            >
               <Routes>
                 <Route path="/issues" element={<IssuesPage />} />
                 <Route path="/feed" element={<FeedPage />} />

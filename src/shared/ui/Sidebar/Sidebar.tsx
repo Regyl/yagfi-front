@@ -25,31 +25,38 @@ export function Sidebar() {
         <Paper
             elevation={0}
             sx={{
-                position: 'fixed',
-                top: 64, // Header height
-                left: 0,
-                width: 240,
-                height: 'calc(100vh - 64px)', // Full viewport height minus header
+                position: { xs: 'fixed', sm: 'fixed' },
+                top: { xs: 'auto', sm: 64 }, // Header height
+                bottom: { xs: 0, sm: 'auto' },
+                left: { xs: 0, sm: 0 },
+                width: { xs: '100%', sm: 240 },
+                height: { xs: 'auto', sm: 'calc(100vh - 64px)' }, // Full viewport height minus header
                 borderRadius: 0,
-                borderRight: '1px solid',
+                borderRight: { xs: 'none', sm: '1px solid' },
+                borderTop: { xs: '1px solid', sm: 'none' },
                 borderColor: 'divider',
+                borderTopColor: { xs: 'divider', sm: 'transparent' },
+                borderRightColor: { xs: 'transparent', sm: 'divider' },
                 backgroundColor: 'background.default',
                 zIndex: 1000,
-                overflowY: 'auto',
+                overflowY: { xs: 'visible', sm: 'auto' },
             }}
         >
-            <Box sx={{pt: 2}}>
-                <List>
+            <Box sx={{pt: { xs: 1, sm: 2 }, pb: { xs: 1, sm: 0 }}}>
+                <List sx={{display: { xs: 'flex', sm: 'block' }, flexDirection: { xs: 'row', sm: 'column' }, gap: { xs: 0, sm: 0 }}}>
                     {menuItems.map((item) => {
                         const isSelected = location.pathname === item.path;
                         return (
-                            <ListItem key={item.path} disablePadding>
+                            <ListItem key={item.path} disablePadding sx={{width: { xs: 'auto', sm: '100%' }, flex: { xs: 1, sm: 'none' }}}>
                                 <ListItemButton
                                     selected={isSelected}
                                     onClick={() => navigate(item.path)}
                                     sx={{
-                                        mx: 1,
+                                        mx: { xs: 0.5, sm: 1 },
                                         borderRadius: 1,
+                                        flexDirection: { xs: 'column', sm: 'row' },
+                                        py: { xs: 1, sm: 1.5 },
+                                        minHeight: { xs: 'auto', sm: 48 },
                                         '&.Mui-selected': {
                                             backgroundColor: 'primary.main',
                                             color: 'primary.contrastText',
@@ -68,14 +75,16 @@ export function Sidebar() {
                                     <ListItemIcon
                                         sx={{
                                             color: isSelected ? 'primary.contrastText' : 'text.secondary',
-                                            minWidth: 40,
+                                            minWidth: { xs: 'auto', sm: 40 },
+                                            justifyContent: { xs: 'center', sm: 'flex-start' },
+                                            mb: { xs: 0.5, sm: 0 },
                                         }}
                                     >
                                         {item.icon}
                                     </ListItemIcon>
                                     <ListItemText
                                         primary={
-                                            <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                                            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: { xs: 'center', sm: 'flex-start' }, gap: 1, flexDirection: { xs: 'column', sm: 'row' }}}>
                                                 <span>{item.label}</span>
                                                 {item.path === '/feed' && (
                                                     <Badge color="primary" variant="outlined">
@@ -86,7 +95,10 @@ export function Sidebar() {
                                         }
                                         primaryTypographyProps={{
                                             fontWeight: isSelected ? 600 : 400,
+                                            fontSize: { xs: '0.75rem', sm: '1rem' },
+                                            textAlign: { xs: 'center', sm: 'left' },
                                         }}
+                                        sx={{mt: { xs: 0, sm: 0 }}}
                                     />
                                 </ListItemButton>
                             </ListItem>

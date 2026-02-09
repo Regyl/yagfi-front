@@ -17,7 +17,14 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import {Send as SendIcon} from '@mui/icons-material';
+import {
+    Build as BuildIcon,
+    Code as CodeIcon,
+    GitHub as GitHubIcon,
+    Inventory as InventoryIcon,
+    LocalShipping as LocalShippingIcon,
+    Send as SendIcon,
+} from '@mui/icons-material';
 import {checkGitHubUserExists, fetchFeedUsers, generateFeed} from '../../api/issuesApi';
 import {getGitHubUserAvatar} from '../../shared/utils/getGitHubUserAvatar';
 import {useNavigate} from 'react-router-dom';
@@ -153,9 +160,56 @@ export function FeedPage() {
                         Generate Personalized Feed
                     </Typography>
 
-                        <Typography variant="body2" color="text.secondary" sx={{mb: 4}}>
+                        <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
                             Create a personalized feed based on your preferences/repositories. We'll notify you by email when your feed is ready.
                         </Typography>
+
+                        <Box
+                            sx={{
+                                p: 2,
+                                bgcolor: 'background.paper',
+                                borderRadius: 1,
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                mb: 4,
+                            }}
+                        >
+                            <Typography variant="subtitle2" sx={{mb: 1.5, fontWeight: 600}}>
+                                Supported Package Managers:
+                            </Typography>
+                            <Stack direction="column" spacing={1.5}>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                    <InventoryIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        NPM
+                                    </Typography>
+                                </Box>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                    <BuildIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        Maven
+                                    </Typography>
+                                </Box>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                    <GitHubIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        Github Packages
+                                    </Typography>
+                                </Box>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                    <LocalShippingIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        Cargo
+                                    </Typography>
+                                </Box>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                    <CodeIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Typography variant="body2" color="text.secondary">
+                                        Go (partially)
+                                    </Typography>
+                                </Box>
+                            </Stack>
+                        </Box>
 
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={3}>

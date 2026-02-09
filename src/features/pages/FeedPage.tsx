@@ -17,14 +17,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import {
-    Build as BuildIcon,
-    Code as CodeIcon,
-    GitHub as GitHubIcon,
-    Inventory as InventoryIcon,
-    LocalShipping as LocalShippingIcon,
-    Send as SendIcon,
-} from '@mui/icons-material';
+import {Send as SendIcon} from '@mui/icons-material';
 import {checkGitHubUserExists, fetchFeedUsers, generateFeed} from '../../api/issuesApi';
 import {getGitHubUserAvatar} from '../../shared/utils/getGitHubUserAvatar';
 import {useNavigate} from 'react-router-dom';
@@ -179,33 +172,96 @@ export function FeedPage() {
                             </Typography>
                             <Stack direction="column" spacing={1.5}>
                                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                                    <InventoryIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Box
+                                        component="img"
+                                        src={`${process.env.PUBLIC_URL || ''}/icons/npm.svg`}
+                                        alt="NPM"
+                                        sx={{
+                                            width: 20,
+                                            height: 20,
+                                            objectFit: 'contain',
+                                        }}
+                                        onError={(e) => {
+                                            console.error('Failed to load npm icon');
+                                        }}
+                                    />
                                     <Typography variant="body2" color="text.secondary">
                                         NPM
                                     </Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                                    <BuildIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Box
+                                        component="img"
+                                        src={`${process.env.PUBLIC_URL || ''}/icons/maven.svg`}
+                                        alt="Maven"
+                                        sx={{
+                                            width: 20,
+                                            height: 20,
+                                            objectFit: 'contain',
+                                        }}
+                                    />
                                     <Typography variant="body2" color="text.secondary">
                                         Maven
                                     </Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                                    <GitHubIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Box
+                                        component="img"
+                                        src={`${process.env.PUBLIC_URL || ''}/icons/github.svg`}
+                                        alt="Github Packages"
+                                        sx={{
+                                            width: 20,
+                                            height: 20,
+                                            objectFit: 'contain',
+                                        }}
+                                    />
                                     <Typography variant="body2" color="text.secondary">
                                         Github Packages
                                     </Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                                    <LocalShippingIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Box
+                                        component="img"
+                                        src={`${process.env.PUBLIC_URL || ''}/icons/rust.svg`}
+                                        alt="Cargo"
+                                        sx={{
+                                            width: 20,
+                                            height: 20,
+                                            objectFit: 'contain',
+                                        }}
+                                    />
                                     <Typography variant="body2" color="text.secondary">
                                         Cargo
                                     </Typography>
                                 </Box>
                                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                                    <CodeIcon sx={{fontSize: 20, color: 'text.secondary'}} />
+                                    <Box
+                                        component="img"
+                                        src={`${process.env.PUBLIC_URL || ''}/icons/go.svg`}
+                                        alt="Go"
+                                        sx={{
+                                            width: 20,
+                                            height: 20,
+                                            objectFit: 'contain',
+                                        }}
+                                    />
                                     <Typography variant="body2" color="text.secondary">
                                         Go (partially)
+                                    </Typography>
+                                </Box>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                                    <Box
+                                        component="img"
+                                        src={`${process.env.PUBLIC_URL || ''}/icons/python.svg`}
+                                        alt="PyPi"
+                                        sx={{
+                                            width: 20,
+                                            height: 20,
+                                            objectFit: 'contain',
+                                        }}
+                                    />
+                                    <Typography variant="body2" color="text.secondary">
+                                        PyPi
                                     </Typography>
                                 </Box>
                             </Stack>

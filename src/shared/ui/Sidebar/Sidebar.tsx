@@ -2,6 +2,7 @@ import React from 'react';
 import {Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper} from '@mui/material';
 import {BugReport as BugReportIcon, RssFeed as RssFeedIcon} from '@mui/icons-material';
 import {useLocation, useNavigate} from 'react-router-dom';
+import {Badge} from '../Badge/Badge';
 
 export function Sidebar() {
     const navigate = useNavigate();
@@ -73,7 +74,16 @@ export function Sidebar() {
                                         {item.icon}
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={item.label}
+                                        primary={
+                                            <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                                                <span>{item.label}</span>
+                                                {item.path === '/feed' && (
+                                                    <Badge color="primary" variant="outlined">
+                                                        beta
+                                                    </Badge>
+                                                )}
+                                            </Box>
+                                        }
                                         primaryTypographyProps={{
                                             fontWeight: isSelected ? 600 : 400,
                                         }}

@@ -1,14 +1,11 @@
 import React from 'react';
-import {CircularProgress, Typography} from '@mui/material';
-import {LoaderContainer} from './Loader.styles';
+import {Loader2} from 'lucide-react';
 
 export function Loader() {
   return (
-    <LoaderContainer>
-      <CircularProgress size={48} />
-      <Typography variant="body2" color="text.secondary">
-        Loading issues...
-      </Typography>
-    </LoaderContainer>
+    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+      <Loader2 className="size-12 animate-spin text-muted-foreground" />
+      <p className="text-sm text-muted-foreground">Loading issues...</p>
+    </div>
   );
 }

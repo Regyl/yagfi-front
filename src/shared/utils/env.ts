@@ -6,8 +6,10 @@ export function getEnv(key: string, defaultValue?: string): string {
         }
     }
 
-    // Check build-time environment (process.env) - available during development
-    const buildTimeValue = process.env[key];
+    // Check build-time environment - Vite uses import.meta.env, CRA uses process.env
+    const buildTimeValue = typeof import.meta !== 'undefined' && import.meta.env
+        ? (import.meta.env as Record<string, string>)[key]
+        : (typeof process !== 'undefined' && process.env ? process.env[key] : undefined);
     if (buildTimeValue !== undefined && buildTimeValue !== null && buildTimeValue !== '') {
         return buildTimeValue;
     }

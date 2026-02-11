@@ -1,9 +1,11 @@
 import React from 'react';
-import {InputLabel, MenuItem, Select, SelectChangeEvent, Stack} from '@mui/material';
-import {Delete as DeleteIcon} from '@mui/icons-material';
+import {Trash2} from 'lucide-react';
 import {Order} from '../../types';
 import {SORT_FIELDS, SORT_TYPES} from '../../shared/constants';
-import {FieldFormControl, OrderChip, RemoveButton, SortFieldContainer, TypeFormControl,} from './SortFieldItem.styles';
+import {Badge} from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select';
+import {Label} from '@/components/ui/label';
 
 interface SortFieldItemProps {
   order: Order;
@@ -22,57 +24,48 @@ export function SortFieldItem({
   onRemove,
   canRemove,
 }: SortFieldItemProps) {
-  const handleFieldChange = (event: SelectChangeEvent) => {
-    onFieldChange(event.target.value);
-  };
-
-  const handleTypeChange = (event: SelectChangeEvent<'asc' | 'desc'>) => {
-    onTypeChange(event.target.value);
-  };
-
   return (
-    <SortFieldContainer>
-      <Stack direction="column" spacing={2} alignItems="center">
-        <OrderChip label={`${index + 1}`} size="small" color="primary" />
-
-        <FieldFormControl size="small">
-          <InputLabel id={`sort-field-${index}-label`}>Field</InputLabel>
-          <Select
-            labelId={`sort-field-${index}-label`}
-            value={order.field}
-            label="Field"
-            onChange={handleFieldChange}
-          >
-            {SORT_FIELDS.map((field) => (
-              <MenuItem key={field.value} value={field.value}>
-                {field.label}
-              </MenuItem>
-            ))}
+    <div className="max-w-[215px] rounded-lg border border-border bg-card p-4">
+      <div className="flex flex-col items-center gap-4">
+        <Badge className="flex size-8 min-w-8 max-w-8 items-center justify-center font-semibold">
+          {index + 1}
+        </Badge>
+        <div className="flex w-full flex-col gap-2">
+          <Label>Field</Label>
+          <Select value={order.field} onValueChange={onFieldChange}>
+            <SelectTrigger className="h-8 w-full">
+              <SelectValue placeholder="Field" />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_FIELDS.map((f) => (
+                <SelectItem key={f.value} value={f.value}>
+                  {f.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
-        </FieldFormControl>
-
-        <TypeFormControl size="small">
-          <InputLabel id={`sort-type-${index}-label`}>Order</InputLabel>
-          <Select
-            labelId={`sort-type-${index}-label`}
-            value={order.type}
-            label="Order"
-            onChange={handleTypeChange}
-          >
-            {SORT_TYPES.map((type) => (
-              <MenuItem key={type.value} value={type.value}>
-                {type.label}
-              </MenuItem>
-            ))}
+        </div>
+        <div className="flex w-full flex-col gap-2">
+          <Label>Order</Label>
+          <Select value={order.type} onValueChange={(v) => onTypeChange(v as 'asc' | 'desc')}>
+            <SelectTrigger className="h-8 w-full">
+              <SelectValue placeholder="Order" />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_TYPES.map((t) => (
+                <SelectItem key={t.value} value={t.value}>
+                  {t.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
-        </TypeFormControl>
-
+        </div>
         {canRemove && (
-          <RemoveButton size="small" onClick={onRemove} color="error">
-            <DeleteIcon fontSize="small" />
-          </RemoveButton>
+          <Button variant="ghost" size="icon" onClick={onRemove} className="size-8 text-destructive">
+            <Trash2 className="size-4" />
+          </Button>
         )}
-      </Stack>
-    </SortFieldContainer>
+      </div>
+    </div>
   );
 }

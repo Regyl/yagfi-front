@@ -1,9 +1,8 @@
 import React from 'react';
-import {Box, Button, Stack, Typography} from '@mui/material';
-import {Add as AddIcon} from '@mui/icons-material';
+import {Plus} from 'lucide-react';
 import {Order} from '../../types';
 import {SortFieldItem} from './SortFieldItem';
-import {SortHint, SortRow} from './SortSection.styles';
+import {Button} from '@/components/ui/button';
 
 interface SortSectionProps {
   sortOrders: Order[];
@@ -21,40 +20,34 @@ export function SortSection({
   onSortTypeChange,
 }: SortSectionProps) {
   return (
-    <Box>
-      <SortRow direction="row" spacing={2} alignItems="center">
-        <Typography variant="subtitle2" color="text.secondary">
+    <div>
+      <div className="mb-4 flex flex-wrap items-center gap-4">
+        <span className="text-sm font-medium text-muted-foreground">
           Sort Order (priority):
-        </Typography>
-        <Button
-          size="small"
-          startIcon={<AddIcon />}
-          onClick={onAddSortField}
-          variant="outlined"
-        >
+        </span>
+        <Button variant="outline" size="sm" onClick={onAddSortField}>
+          <Plus className="size-4" />
           Add Sort Field
         </Button>
-      </SortRow>
-
-      <Stack spacing={1.5} direction="row">
-        {sortOrders.map((order, index) => (
+      </div>
+      <div className="flex flex-wrap gap-3">
+        {sortOrders.map((order, i) => (
           <SortFieldItem
-            key={index}
+            key={i}
             order={order}
-            index={index}
-            onFieldChange={(field) => onSortFieldChange(index, field)}
-            onTypeChange={(type) => onSortTypeChange(index, type)}
-            onRemove={() => onRemoveSortField(index)}
+            index={i}
+            onFieldChange={(f) => onSortFieldChange(i, f)}
+            onTypeChange={(t) => onSortTypeChange(i, t)}
+            onRemove={() => onRemoveSortField(i)}
             canRemove={sortOrders.length > 1}
           />
         ))}
-      </Stack>
-
+      </div>
       {sortOrders.length > 1 && (
-        <SortHint variant="caption" color="text.secondary">
+        <p className="mt-2 block text-sm text-muted-foreground">
           Items are sorted by the first field, then by the second, and so on.
-        </SortHint>
+        </p>
       )}
-    </Box>
+    </div>
   );
 }

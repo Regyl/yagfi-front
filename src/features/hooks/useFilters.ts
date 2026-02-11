@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {SelectChangeEvent} from '@mui/material';
 import {StarsFilter} from '../../types';
 import {DEFAULT_STARS_FILTER} from '../../shared/constants';
 import {getIsUpdatingUrl, onUrlUpdate, readStateFromUrl} from '../../shared/utils/urlParams';
@@ -9,7 +8,7 @@ export interface UseFiltersReturn {
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
     handleLanguageChange: (languages: string[]) => void;
     handleStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleStarsOperatorChange: (event: SelectChangeEvent<StarsFilter['operator']>) => void;
+    handleStarsOperatorChange: (operator: StarsFilter['operator']) => void;
     handleRemoveStarsFilter: () => void;
     handleAddStarsFilter: () => void;
 }
@@ -96,8 +95,7 @@ export function useFilters({
         }
     }, [starsFilter]);
 
-    const handleStarsOperatorChange = useCallback((event: SelectChangeEvent<StarsFilter['operator']>) => {
-        const operator = event.target.value as StarsFilter['operator'];
+    const handleStarsOperatorChange = useCallback((operator: StarsFilter['operator']) => {
         if (starsFilter) {
             setStarsFilter({...starsFilter, operator});
         } else {

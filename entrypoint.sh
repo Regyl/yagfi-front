@@ -9,9 +9,9 @@ echo "Injecting environment variables into index.html..."
 # Prepare environment variables object
 ENV_VARS="{"
 
-# Collect all REACT_APP_* variables
+# Collect all REACT_APP_* and VITE_APP_* variables
 FIRST_VAR=true
-for var in $(printenv | grep '^REACT_APP_' | cut -d= -f1 | sort); do
+for var in $(printenv | grep -E '^(REACT_APP_|VITE_APP_)' | cut -d= -f1 | sort); do
     # Get the value and escape single quotes and newlines
     value=$(printenv "$var" | sed "s/'/'\"'\"'/g" | tr -d '\n' | tr -d '\r')
     # Keep full key name (including REACT_APP_ prefix) for consistency

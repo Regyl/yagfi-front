@@ -1,30 +1,16 @@
 import React, {useMemo} from 'react';
-import {Box} from '@mui/material';
-import {useTheme} from '@mui/material/styles';
 import {Badge} from '../../shared/ui/Badge/Badge';
 import {formatDate} from '../../shared/utils/formatDate';
 import {formatLanguage} from '../../shared/utils/formatLanguage';
 import {getGitHubAvatar} from '../../shared/utils/getGitHubAvatar';
 import {Issue} from '../../types';
-import {
-    avatarImgStyles,
-    DateText,
-    FooterStack,
-    IssueCardContent,
-    IssueCardLink,
-    IssueHeader,
-    IssueTitle,
-    LabelsStack,
-    RepoDescription,
-    RepoTitle,
-} from './IssueCard.styles';
+import {Card, CardContent} from '@/components/ui/card';
 
 interface IssueCardProps {
   issue: Issue;
 }
 
-export function IssueCard({ issue }: IssueCardProps) {
-  const theme = useTheme();
+export function IssueCard({issue}: IssueCardProps) {
   const {
     issueTitle,
     issueUrl,
@@ -39,63 +25,63 @@ export function IssueCard({ issue }: IssueCardProps) {
     repositoryOwnerAvatar,
   } = issue;
 
-  const avatarUrl = useMemo(() => {
-    return repositoryOwnerAvatar || getGitHubAvatar(repositoryTitle);
-  }, [repositoryOwnerAvatar, repositoryTitle]);
+  const avatarUrl = useMemo(
+    () => repositoryOwnerAvatar || getGitHubAvatar(repositoryTitle),
+    [repositoryOwnerAvatar, repositoryTitle]
+  );
 
   return (
-    <IssueCardLink
-      component="a"
+    <a
       href={issueUrl}
       target="_blank"
       rel="noopener noreferrer"
+      className="block h-full min-h-[200px] no-underline"
     >
-      <IssueCardContent>
-        <IssueHeader direction="row" spacing={1.5} alignItems="flex-start">
-          {avatarUrl && (
-            <Box
-              component="img"
-              src={avatarUrl}
-              alt="Repository owner"
-              sx={avatarImgStyles(theme)}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
+      <Card className="flex h-full cursor-pointer flex-col overflow-hidden transition-colors hover:bg-accent/50">
+        <CardContent className="flex flex-1 flex-col gap-2 p-5">
+          <div className="flex min-w-0 gap-2">
+            {avatarUrl && (
+              <img
+                src={avatarUrl}
+                alt="Repository owner"
+                className="size-8 shrink-0 rounded border border-border object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            )}
+            <h3 className="line-clamp-2 min-w-0 flex-1 text-base font-semibold leading-snug">
+              {issueTitle}
+            </h3>
+          </div>
+          <p className="line-clamp-1 text-sm text-muted-foreground">{repositoryTitle}</p>
+          {repositoryDescription && (
+            <p className="line-clamp-2 text-[13px] text-muted-foreground">
+              {repositoryDescription}
+            </p>
           )}
-          <IssueTitle variant="h3">{issueTitle}</IssueTitle>
-        </IssueHeader>
-
-        <RepoTitle variant="body2">{repositoryTitle}</RepoTitle>
-
-        {repositoryDescription && (
-          <RepoDescription variant="body2">{repositoryDescription}</RepoDescription>
-        )}
-
-        {issueLabels && issueLabels.length > 0 && (
-          <LabelsStack direction="row" alignItems="center" flexWrap="wrap">
-            {issueLabels.map((label, index) => (
-              <Badge key={index} color="default" variant="outlined">
-                {label}
-              </Badge>
-            ))}
-          </LabelsStack>
-        )}
-
-        <FooterStack direction="row" alignItems="center" flexWrap="wrap">
-          {repositoryLanguage && (
-            <Badge color="primary">{repositoryLanguage}</Badge>
+          {issueLabels && issueLabels.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {issueLabels.map((label, i) => (
+                <Badge key={i} color="default" variant="outlined">
+                  {label}
+                </Badge>
+              ))}
+            </div>
           )}
-          <Badge color="secondary">{repositoryStars} ★</Badge>
-          {issueLanguage && (
-            <Badge color="secondary">{formatLanguage(issueLanguage)}</Badge>
-          )}
-          {repositoryLicense && (
-            <Badge color="secondary">{repositoryLicense}</Badge>
-          )}
-          <DateText variant="caption">{formatDate(issueCreated)}</DateText>
-        </FooterStack>
-      </IssueCardContent>
-    </IssueCardLink>
+          <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
+            {repositoryLanguage && <Badge color="primary">{repositoryLanguage}</Badge>}
+            <Badge color="secondary">{repositoryStars} ★</Badge>
+            {issueLanguage && (
+              <Badge color="secondary">{formatLanguage(issueLanguage)}</Badge>
+            )}
+            {repositoryLicense && <Badge color="secondary">{repositoryLicense}</Badge>}
+            <span className="ml-auto text-xs text-muted-foreground">
+              {formatDate(issueCreated)}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    </a>
   );
 }

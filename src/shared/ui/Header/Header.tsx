@@ -1,134 +1,82 @@
 import React, {useState} from 'react';
-import {Box, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
-import {
-    Brightness4,
-    Brightness7,
-    GitHub as GitHubIcon,
-    Storage as StorageIcon,
-    Sync as SyncIcon,
-    Web as WebIcon,
-} from '@mui/icons-material';
+import {Github, Globe, Moon, RefreshCw, Server, Sun} from 'lucide-react';
 import {GITHUB_BACKEND_REPO_URL, GITHUB_FRONTEND_REPO_URL} from '../../constants';
 import {useSyncStatus} from '../../../features/hooks';
 import {formatDate} from '../../utils/formatDate';
 import {SyncEvent} from '../../../types';
-import {useTheme} from '@mui/material/styles';
-import {
-    GithubButton,
-    HeaderActions,
-    logoStyles,
-    MenuItemContent,
-    StyledAppBar,
-    StyledToolbar,
-    SyncEventItem,
-    SyncInfo,
-    SyncText,
-    ThemeButton,
-} from './Header.styles';
+import {Button} from '@/components/ui/button';
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from '@/components/ui/dropdown-menu';
+import {Tooltip, TooltipContent, TooltipTrigger,} from '@/components/ui/tooltip';
 
 interface HeaderProps {
-    mode: 'light' | 'dark';
-    onToggleTheme: () => void;
+  mode: 'light' | 'dark';
+  onToggleTheme: () => void;
 }
 
-export function Header({ mode, onToggleTheme }: HeaderProps) {
-    const theme = useTheme();
-    const { syncEvents, loading } = useSyncStatus();
-    const [githubMenuAnchor, setGithubMenuAnchor] = useState<null | HTMLElement>(null);
+export function Header({mode, onToggleTheme}: HeaderProps) {
+  const {syncEvents, loading} = useSyncStatus();
+  const [open, setOpen] = useState(false);
 
-    const getLatestSyncTime = () => {
-        if (loading || syncEvents.length === 0) {
-            return null;
-        }
-        const latestEvent = syncEvents.reduce((latest: SyncEvent, current: SyncEvent) => {
-            return new Date(current.lastUpdateDttm) > new Date(latest.lastUpdateDttm)
-                ? current
-                : latest;
-        });
-        return formatDate(latestEvent.lastUpdateDttm);
-    };
-
-    const latestSyncTime = getLatestSyncTime();
-
-    const handleGithubMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setGithubMenuAnchor(event.currentTarget);
-    };
-
-    const handleGithubMenuClose = () => {
-        setGithubMenuAnchor(null);
-    };
-
-    const handleGithubMenuClick = (url: string) => {
-        window.open(url, '_blank', 'noopener,noreferrer');
-        handleGithubMenuClose();
-    };
-
-    return (
-        <StyledAppBar position="sticky">
-            <StyledToolbar>
-                <Typography variant="h6" component="div" sx={logoStyles(theme)}>
-                    YAGFI - Yet Another Good First Issues
-                </Typography>
-                <HeaderActions>
-                    {latestSyncTime && (
-                        <Tooltip
-                            title={
-                                <>
-                                    {syncEvents.map((event: SyncEvent) => (
-                                        <SyncEventItem key={event.source}>
-                                            <Typography variant="caption" component="div">
-                                                {event.source}: {formatDate(event.lastUpdateDttm)}
-                                            </Typography>
-                                        </SyncEventItem>
-                                    ))}
-                                </>
-                            }
-                            arrow
-                        >
-                            <SyncInfo>
-                                <SyncIcon fontSize="small" />
-                                <SyncText variant="caption">Synced {latestSyncTime}</SyncText>
-                            </SyncInfo>
-                        </Tooltip>
-                    )}
-                    <ThemeButton onClick={onToggleTheme} color="inherit">
-                        {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-                    </ThemeButton>
-
-                    <Box>
-                        <GithubButton onClick={handleGithubMenuOpen}>
-                            <GitHubIcon fontSize="small" />
-                            <Typography variant="body2">GitHub</Typography>
-                        </GithubButton>
-                        <Menu
-                            anchorEl={githubMenuAnchor}
-                            open={Boolean(githubMenuAnchor)}
-                            onClose={handleGithubMenuClose}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                        >
-                            <MenuItem onClick={() => handleGithubMenuClick(GITHUB_FRONTEND_REPO_URL)}>
-                                <MenuItemContent>
-                                    <WebIcon fontSize="small" />
-                                    <Typography variant="body2">Frontend</Typography>
-                                </MenuItemContent>
-                            </MenuItem>
-                            <MenuItem onClick={() => handleGithubMenuClick(GITHUB_BACKEND_REPO_URL)}>
-                                <MenuItemContent>
-                                    <StorageIcon fontSize="small" />
-                                    <Typography variant="body2">Backend</Typography>
-                                </MenuItemContent>
-                            </MenuItem>
-                        </Menu>
-                    </Box>
-                </HeaderActions>
-            </StyledToolbar>
-        </StyledAppBar>
+  const latestSyncTime = (() => {
+    if (loading || syncEvents.length === 0) return null;
+    const latest = syncEvents.reduce((a, b) =>
+      new Date(b.lastUpdateDttm) > new Date(a.lastUpdateDttm) ? b : a
     );
+    return formatDate(latest.lastUpdateDttm);
+  })();
+
+  const handleGithubClick = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    setOpen(false);
+  };
+
+  return (
+    <header className="sticky top-0 z-[1100] border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6">
+        <span className="text-xl font-bold text-primary">
+          YAGFI - Yet Another Good First Issues
+        </span>
+        <div className="flex items-center gap-4">
+          {latestSyncTime && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex cursor-default items-center gap-1 text-xs text-muted-foreground">
+                  <RefreshCw className="size-4" />
+                  <span className="hidden md:inline">Synced {latestSyncTime}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                {syncEvents.map((e: SyncEvent) => (
+                  <div key={e.source} className="mb-1 last:mb-0">
+                    {e.source}: {formatDate(e.lastUpdateDttm)}
+                  </div>
+                ))}
+              </TooltipContent>
+            </Tooltip>
+          )}
+          <Button variant="ghost" size="icon" onClick={onToggleTheme} className="text-muted-foreground hover:text-primary">
+            {mode === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+          </Button>
+          <DropdownMenu open={open} onOpenChange={setOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary">
+                <Github className="size-4" />
+                <span className="hidden sm:inline">GitHub</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleGithubClick(GITHUB_FRONTEND_REPO_URL)}>
+                <Globe className="size-4" />
+                Frontend
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleGithubClick(GITHUB_BACKEND_REPO_URL)}>
+                <Server className="size-4" />
+                Backend
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </header>
+  );
 }

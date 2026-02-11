@@ -1,6 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {CircularProgress, Typography} from '@mui/material';
-import {EndMessage, TriggerContainer} from './InfiniteScrollTrigger.styles';
+import {Loader2} from 'lucide-react';
 
 interface InfiniteScrollTriggerProps {
   onIntersect: () => void;
@@ -19,42 +18,31 @@ export function InfiniteScrollTrigger({
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (entry.isIntersecting && hasMore && !loading) {
-          onIntersect();
-        }
+        if (entry.isIntersecting && hasMore && !loading) onIntersect();
       },
-      {
-        root: null,
-        rootMargin: '200px',
-        threshold: 0.1,
-      }
+      {root: null, rootMargin: '200px', threshold: 0.1}
     );
-
-    const currentTrigger = triggerRef.current;
-    if (currentTrigger) {
-      observer.observe(currentTrigger);
-    }
-
+    const el = triggerRef.current;
+    if (el) observer.observe(el);
     return () => {
-      if (currentTrigger) {
-        observer.unobserve(currentTrigger);
-      }
+      if (el) observer.unobserve(el);
     };
   }, [hasMore, loading, onIntersect]);
 
   if (!hasMore) {
     return (
-      <EndMessage>
-        <Typography variant="body2" color="text.secondary">
-          No more issues to load
-        </Typography>
-      </EndMessage>
+      <div className="py-16 text-center">
+        <p className="text-sm text-muted-foreground">No more issues to load</p>
+      </div>
     );
   }
 
   return (
-    <TriggerContainer ref={triggerRef}>
-      {loading && <CircularProgress size={32} />}
-    </TriggerContainer>
+    <div
+      ref={triggerRef}
+      className="flex min-h-[100px] items-center justify-center py-16"
+    >
+      {loading && <Loader2 className="size-8 animate-spin text-muted-foreground" />}
+    </div>
   );
 }

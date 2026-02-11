@@ -1,42 +1,46 @@
-import React, {useMemo, useState} from 'react';
-import {CssBaseline, ThemeProvider} from '@mui/material';
+import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
-import {darkTheme, lightTheme} from '../theme/theme';
 import {Header} from '../shared/ui/Header/Header';
 import {Sidebar} from '../shared/ui/Sidebar/Sidebar';
 import {IssuesPage} from '../features/pages/IssuesPage';
 import {FeedPage} from '../features/pages/FeedPage';
 import {FeedViewPage} from '../features/pages/FeedViewPage';
-import {AppContent, AppLayout, Main} from './App.styles';
+import {TooltipProvider} from '@/components/ui/tooltip';
 
 export default function App() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
 
-  const theme = useMemo(() => (mode === 'light' ? lightTheme : darkTheme), [mode]);
+  useEffect(() => {
+    const root = document.documentElement;
+    if (mode === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [mode]);
 
   const toggleTheme = () => {
-    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <TooltipProvider>
       <BrowserRouter>
-        <AppLayout>
+        <div className="flex min-h-screen flex-col">
           <Header mode={mode} onToggleTheme={toggleTheme} />
-          <AppContent>
+          <div className="flex flex-1 overflow-hidden">
             <Sidebar />
-            <Main component="main">
+            <main className="flex-1 overflow-auto pb-20 sm:ml-60 sm:pb-0">
               <Routes>
                 <Route path="/issues" element={<IssuesPage />} />
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/feed/:nickname" element={<FeedViewPage />} />
                 <Route path="/" element={<Navigate to="/issues" replace />} />
               </Routes>
-            </Main>
-          </AppContent>
-        </AppLayout>
+            </main>
+          </div>
+        </div>
       </BrowserRouter>
-    </ThemeProvider>
+    </TooltipProvider>
   );
 }

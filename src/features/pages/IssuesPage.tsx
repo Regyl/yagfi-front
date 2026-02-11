@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect} from 'react';
-import {Alert, Box, Container, Stack, Typography} from '@mui/material';
 import {useInfiniteIssues} from '../hooks/useInfiniteIssues';
 import {useFilters} from '../hooks/useFilters';
 import {useSorting} from '../hooks/useSorting';
@@ -13,14 +12,21 @@ import {ActionButtons} from '../components/ActionButtons';
 import {Loader} from '../../shared/ui/Loader/Loader';
 import {DEFAULT_STARS_FILTER} from '../../shared/constants';
 import {updateUrlParams} from '../../shared/utils/urlParams';
+import {
+    ActionsSection,
+    EmptyState,
+    ErrorAlert,
+    FiltersStack,
+    PageContainer,
+    PageHeader,
+    ResultsCount,
+} from './IssuesPage.styles';
 
 export function IssuesPage() {
     const filters = useFilters({initialStarsFilter: DEFAULT_STARS_FILTER});
     const sorting = useSorting();
 
-    // Sync state with URL whenever filters or sorting change
     useEffect(() => {
-        // Update URL with current state
         updateUrlParams(
             filters.selectedLanguages,
             filters.starsFilter,
@@ -56,13 +62,13 @@ export function IssuesPage() {
     }, [baseRequest, pickRandom]);
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-          <Box sx={{mb: 3}}>
+    <PageContainer maxWidth="xl">
+      <PageHeader>
+          <ActionsSection>
               <ActionButtons pickingRandom={pickingRandom} onPickRandom={handlePickRandom}/>
-          </Box>
+          </ActionsSection>
 
-        <Stack spacing={3} sx={{ mb: 3 }}>
+        <FiltersStack spacing={3}>
           <FiltersSection
               selectedLanguages={filters.selectedLanguages}
               onLanguagesChange={filters.handleLanguageChange}
@@ -80,27 +86,27 @@ export function IssuesPage() {
               onSortFieldChange={sorting.handleSortFieldChange}
               onSortTypeChange={sorting.handleSortTypeChange}
           />
-        </Stack>
+        </FiltersStack>
 
         {!loading && issues.length > 0 && (
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          <ResultsCount variant="body2" color="text.secondary">
             Showing {issues.length} issues
-          </Typography>
+          </ResultsCount>
         )}
-      </Box>
+      </PageHeader>
 
       {loading && issues.length === 0 && <Loader />}
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+        <ErrorAlert severity="error">
           Failed to load issues: {error.message}
-        </Alert>
+        </ErrorAlert>
       )}
 
       {!loading && issues.length === 0 && (
-        <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', py: 8 }}>
+        <EmptyState variant="body1" color="text.secondary">
           No issues found. Try adjusting your filters.
-        </Typography>
+        </EmptyState>
       )}
 
       {issues.length > 0 && (
@@ -113,6 +119,6 @@ export function IssuesPage() {
           />
         </>
       )}
-    </Container>
+    </PageContainer>
   );
 }

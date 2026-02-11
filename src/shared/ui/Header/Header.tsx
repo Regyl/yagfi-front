@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from '@mui/material';
+import {Box, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
 import {
     Brightness4,
     Brightness7,
@@ -12,6 +12,19 @@ import {GITHUB_BACKEND_REPO_URL, GITHUB_FRONTEND_REPO_URL} from '../../constants
 import {useSyncStatus} from '../../../features/hooks';
 import {formatDate} from '../../utils/formatDate';
 import {SyncEvent} from '../../../types';
+import {useTheme} from '@mui/material/styles';
+import {
+    GithubButton,
+    HeaderActions,
+    logoStyles,
+    MenuItemContent,
+    StyledAppBar,
+    StyledToolbar,
+    SyncEventItem,
+    SyncInfo,
+    SyncText,
+    ThemeButton,
+} from './Header.styles';
 
 interface HeaderProps {
     mode: 'light' | 'dark';
@@ -19,6 +32,7 @@ interface HeaderProps {
 }
 
 export function Header({ mode, onToggleTheme }: HeaderProps) {
+    const theme = useTheme();
     const { syncEvents, loading } = useSyncStatus();
     const [githubMenuAnchor, setGithubMenuAnchor] = useState<null | HTMLElement>(null);
 
@@ -27,8 +41,8 @@ export function Header({ mode, onToggleTheme }: HeaderProps) {
             return null;
         }
         const latestEvent = syncEvents.reduce((latest: SyncEvent, current: SyncEvent) => {
-            return new Date(current.lastUpdateDttm) > new Date(latest.lastUpdateDttm) 
-                ? current 
+            return new Date(current.lastUpdateDttm) > new Date(latest.lastUpdateDttm)
+                ? current
                 : latest;
         });
         return formatDate(latestEvent.lastUpdateDttm);
@@ -50,109 +64,42 @@ export function Header({ mode, onToggleTheme }: HeaderProps) {
     };
 
     return (
-        <AppBar
-            position="sticky"
-            sx={{
-                top: 0,
-                zIndex: 1100,
-                backgroundColor: 'background.default',
-                backdropFilter: 'blur(8px)',
-                borderBottom: '1px solid',
-                borderColor: 'divider',
-                boxShadow: 'none',
-            }}
-        >
-            <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 3 } }}>
-                <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{
-                        fontWeight: 700,
-                        color: 'primary.main',
-                        fontSize: '1.25rem',
-                    }}
-                >
+        <StyledAppBar position="sticky">
+            <StyledToolbar>
+                <Typography variant="h6" component="div" sx={logoStyles(theme)}>
                     YAGFI - Yet Another Good First Issues
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <HeaderActions>
                     {latestSyncTime && (
                         <Tooltip
                             title={
-                                <Box>
+                                <>
                                     {syncEvents.map((event: SyncEvent) => (
-                                        <Box key={event.source} sx={{ mb: 0.5 }}>
+                                        <SyncEventItem key={event.source}>
                                             <Typography variant="caption" component="div">
                                                 {event.source}: {formatDate(event.lastUpdateDttm)}
                                             </Typography>
-                                        </Box>
+                                        </SyncEventItem>
                                     ))}
-                                </Box>
+                                </>
                             }
                             arrow
                         >
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 0.5,
-                                    color: 'text.secondary',
-                                    fontSize: '0.75rem',
-                                }}
-                            >
+                            <SyncInfo>
                                 <SyncIcon fontSize="small" />
-                                <Typography
-                                    variant="caption"
-                                    sx={{
-                                        display: { xs: 'none', md: 'block' },
-                                    }}
-                                >
-                                    Synced {latestSyncTime}
-                                </Typography>
-                            </Box>
+                                <SyncText variant="caption">Synced {latestSyncTime}</SyncText>
+                            </SyncInfo>
                         </Tooltip>
                     )}
-                    <IconButton 
-                        onClick={onToggleTheme} 
-                        color="inherit" 
-                        sx={{ 
-                            color: 'text.secondary',
-                            '&:hover': { color: 'primary.main' } 
-                        }}
-                    >
+                    <ThemeButton onClick={onToggleTheme} color="inherit">
                         {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-                    </IconButton>
+                    </ThemeButton>
 
                     <Box>
-                        <Box
-                            component="button"
-                            onClick={handleGithubMenuOpen}
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 0.5,
-                                color: 'text.secondary',
-                                textDecoration: 'none',
-                                border: 'none',
-                                background: 'none',
-                                cursor: 'pointer',
-                                padding: 0,
-                                transition: 'color 0.2s ease',
-                                '&:hover': {
-                                    color: 'primary.main',
-                                },
-                                fontSize: '0.875rem',
-                            }}
-                        >
+                        <GithubButton onClick={handleGithubMenuOpen}>
                             <GitHubIcon fontSize="small" />
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    display: { xs: 'none', sm: 'block' },
-                                }}
-                            >
-                                GitHub
-                            </Typography>
-                        </Box>
+                            <Typography variant="body2">GitHub</Typography>
+                        </GithubButton>
                         <Menu
                             anchorEl={githubMenuAnchor}
                             open={Boolean(githubMenuAnchor)}
@@ -167,21 +114,21 @@ export function Header({ mode, onToggleTheme }: HeaderProps) {
                             }}
                         >
                             <MenuItem onClick={() => handleGithubMenuClick(GITHUB_FRONTEND_REPO_URL)}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <MenuItemContent>
                                     <WebIcon fontSize="small" />
                                     <Typography variant="body2">Frontend</Typography>
-                                </Box>
+                                </MenuItemContent>
                             </MenuItem>
                             <MenuItem onClick={() => handleGithubMenuClick(GITHUB_BACKEND_REPO_URL)}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <MenuItemContent>
                                     <StorageIcon fontSize="small" />
                                     <Typography variant="body2">Backend</Typography>
-                                </Box>
+                                </MenuItemContent>
                             </MenuItem>
                         </Menu>
                     </Box>
-                </Box>
-            </Toolbar>
-        </AppBar>
+                </HeaderActions>
+            </StyledToolbar>
+        </StyledAppBar>
     );
 }

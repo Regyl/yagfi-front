@@ -1,7 +1,7 @@
 import React from 'react';
-import {Box} from '@mui/material';
 import {IssueCard} from './IssueCard';
 import {Issue} from '../../types';
+import {GridContainer, GridItem} from './IssuesList.styles';
 
 interface IssuesListProps {
   issues: Issue[];
@@ -9,23 +9,12 @@ interface IssuesListProps {
 
 export function IssuesList({ issues }: IssuesListProps) {
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: {
-          xs: '1fr',
-          sm: 'repeat(2, 1fr)',
-          md: 'repeat(3, 1fr)',
-          lg: 'repeat(4, 1fr)',
-        },
-        gap: 2,
-      }}
-    >
+    <GridContainer>
       {issues.map((issue) => (
-          <Box key={issue.issueId} sx={{display: 'flex', minHeight: 0, minWidth: 0}}>
+        <GridItem key={issue.issueId}>
           <IssueCard issue={issue} />
-        </Box>
+        </GridItem>
       ))}
-    </Box>
+    </GridContainer>
   );
 }

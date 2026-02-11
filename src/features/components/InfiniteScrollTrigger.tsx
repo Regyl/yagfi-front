@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import React, {useEffect, useRef} from 'react';
+import {CircularProgress, Typography} from '@mui/material';
+import {EndMessage, TriggerContainer} from './InfiniteScrollTrigger.styles';
 
 interface InfiniteScrollTriggerProps {
   onIntersect: () => void;
@@ -24,7 +25,7 @@ export function InfiniteScrollTrigger({
       },
       {
         root: null,
-        rootMargin: '200px', // Start loading 200px before reaching the trigger
+        rootMargin: '200px',
         threshold: 0.1,
       }
     );
@@ -43,26 +44,17 @@ export function InfiniteScrollTrigger({
 
   if (!hasMore) {
     return (
-      <Box sx={{ textAlign: 'center', py: 4 }}>
+      <EndMessage>
         <Typography variant="body2" color="text.secondary">
           No more issues to load
         </Typography>
-      </Box>
+      </EndMessage>
     );
   }
 
   return (
-    <Box
-      ref={triggerRef}
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        py: 4,
-        minHeight: 100,
-      }}
-    >
+    <TriggerContainer ref={triggerRef}>
       {loading && <CircularProgress size={32} />}
-    </Box>
+    </TriggerContainer>
   );
 }

@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {Box, CssBaseline, ThemeProvider} from '@mui/material';
+import {CssBaseline, ThemeProvider} from '@mui/material';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import {darkTheme, lightTheme} from '../theme/theme';
 import {Header} from '../shared/ui/Header/Header';
@@ -7,6 +7,7 @@ import {Sidebar} from '../shared/ui/Sidebar/Sidebar';
 import {IssuesPage} from '../features/pages/IssuesPage';
 import {FeedPage} from '../features/pages/FeedPage';
 import {FeedViewPage} from '../features/pages/FeedViewPage';
+import {AppContent, AppLayout, Main} from './App.styles';
 
 export default function App() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
@@ -21,34 +22,20 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <AppLayout>
           <Header mode={mode} onToggleTheme={toggleTheme} />
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              flex: 1, 
-              overflow: 'hidden',
-            }}
-          >
+          <AppContent>
             <Sidebar />
-            <Box 
-              component="main" 
-              sx={{ 
-                flex: 1, 
-                overflow: 'auto', 
-                ml: { xs: 0, sm: '240px' },
-                pb: { xs: '80px', sm: 0 }
-              }}
-            >
+            <Main component="main">
               <Routes>
                 <Route path="/issues" element={<IssuesPage />} />
                 <Route path="/feed" element={<FeedPage />} />
                 <Route path="/feed/:nickname" element={<FeedViewPage />} />
                 <Route path="/" element={<Navigate to="/issues" replace />} />
               </Routes>
-            </Box>
-          </Box>
-        </Box>
+            </Main>
+          </AppContent>
+        </AppLayout>
       </BrowserRouter>
     </ThemeProvider>
   );

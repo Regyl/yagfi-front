@@ -1,18 +1,9 @@
 import React from 'react';
-import {
-    Box,
-    Chip,
-    FormControl,
-    IconButton,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    Stack,
-} from '@mui/material';
+import {InputLabel, MenuItem, Select, SelectChangeEvent, Stack} from '@mui/material';
 import {Delete as DeleteIcon} from '@mui/icons-material';
 import {Order} from '../../types';
 import {SORT_FIELDS, SORT_TYPES} from '../../shared/constants';
+import {FieldFormControl, OrderChip, RemoveButton, SortFieldContainer, TypeFormControl,} from './SortFieldItem.styles';
 
 interface SortFieldItemProps {
   order: Order;
@@ -40,27 +31,11 @@ export function SortFieldItem({
   };
 
   return (
-    <Box
-      sx={{
-        p: 2,
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 2,
-        backgroundColor: 'background.paper',
-          maxWidth: 215
-      }}
-    >
-        <Stack direction="column" spacing={2} alignItems={"center"}>
-        <Chip
-          label={`${index + 1}`}
-          size="small"
-          color="primary"
-          sx={{
-              minWidth: 32, fontWeight: 600, maxWidth: 32,
-          }}
-        />
+    <SortFieldContainer>
+      <Stack direction="column" spacing={2} alignItems="center">
+        <OrderChip label={`${index + 1}`} size="small" color="primary" />
 
-            <FormControl size="small" sx={{minWidth: 180, flex: 1, maxWidth: 180}}>
+        <FieldFormControl size="small">
           <InputLabel id={`sort-field-${index}-label`}>Field</InputLabel>
           <Select
             labelId={`sort-field-${index}-label`}
@@ -74,9 +49,9 @@ export function SortFieldItem({
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FieldFormControl>
 
-            <FormControl size="small" sx={{minWidth: 180, maxWidth: 180}}>
+        <TypeFormControl size="small">
           <InputLabel id={`sort-type-${index}-label`}>Order</InputLabel>
           <Select
             labelId={`sort-type-${index}-label`}
@@ -90,19 +65,14 @@ export function SortFieldItem({
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </TypeFormControl>
 
         {canRemove && (
-          <IconButton
-            size="small"
-            onClick={onRemove}
-            color="error"
-            sx={{ ml: 1 }}
-          >
+          <RemoveButton size="small" onClick={onRemove} color="error">
             <DeleteIcon fontSize="small" />
-          </IconButton>
+          </RemoveButton>
         )}
       </Stack>
-    </Box>
+    </SortFieldContainer>
   );
 }

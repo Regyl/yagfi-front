@@ -1,22 +1,14 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import {CircularProgress, Typography} from '@mui/material';
+import {LoaderContainer} from './Loader.styles';
 
 export function Loader() {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '400px',
-        gap: 2,
-      }}
-    >
+    <LoaderContainer>
       <CircularProgress size={48} />
       <Typography variant="body2" color="text.secondary">
         Loading issues...
       </Typography>
-    </Box>
+    </LoaderContainer>
   );
 }

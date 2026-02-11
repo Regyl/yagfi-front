@@ -1,7 +1,8 @@
 import React from 'react';
-import {Button, CircularProgress, Stack} from '@mui/material';
+import {Button, Stack} from '@mui/material';
 import {Label as LabelIcon, Shuffle as ShuffleIcon} from '@mui/icons-material';
 import {CONTRIBUTING_URL} from '../../shared/constants';
+import {actionButtonStyles, StyledCircularProgress} from './ActionButtons.styles';
 
 interface ActionButtonsProps {
     pickingRandom: boolean;
@@ -18,17 +19,17 @@ export function ActionButtons({pickingRandom, onPickRandom}: ActionButtonsProps)
                 href={CONTRIBUTING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                sx={{minWidth: 150}}
+                sx={actionButtonStyles}
             >
                 Suggest a Label
             </Button>
             <Button
                 variant="contained"
                 color="primary"
-                startIcon={pickingRandom ? <CircularProgress size={16} sx={{color: 'inherit'}}/> : <ShuffleIcon/>}
+                startIcon={pickingRandom ? <StyledCircularProgress size={16}/> : <ShuffleIcon/>}
                 onClick={onPickRandom}
                 disabled={pickingRandom}
-                sx={{minWidth: 150}}
+                sx={actionButtonStyles}
             >
                 {pickingRandom ? 'Picking...' : 'Pick Random'}
             </Button>

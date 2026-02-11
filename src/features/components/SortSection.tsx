@@ -1,8 +1,9 @@
 import React from 'react';
-import {Box, Button, Stack, Typography,} from '@mui/material';
+import {Box, Button, Stack, Typography} from '@mui/material';
 import {Add as AddIcon} from '@mui/icons-material';
 import {Order} from '../../types';
 import {SortFieldItem} from './SortFieldItem';
+import {SortHint, SortRow} from './SortSection.styles';
 
 interface SortSectionProps {
   sortOrders: Order[];
@@ -21,7 +22,7 @@ export function SortSection({
 }: SortSectionProps) {
   return (
     <Box>
-      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
+      <SortRow direction="row" spacing={2} alignItems="center">
         <Typography variant="subtitle2" color="text.secondary">
           Sort Order (priority):
         </Typography>
@@ -33,9 +34,9 @@ export function SortSection({
         >
           Add Sort Field
         </Button>
-      </Stack>
+      </SortRow>
 
-        <Stack spacing={1.5} direction={"row"}>
+      <Stack spacing={1.5} direction="row">
         {sortOrders.map((order, index) => (
           <SortFieldItem
             key={index}
@@ -50,11 +51,10 @@ export function SortSection({
       </Stack>
 
       {sortOrders.length > 1 && (
-        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+        <SortHint variant="caption" color="text.secondary">
           Items are sorted by the first field, then by the second, and so on.
-        </Typography>
+        </SortHint>
       )}
     </Box>
   );
 }
-

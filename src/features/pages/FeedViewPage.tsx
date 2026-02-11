@@ -1,18 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CircularProgress,
-    Collapse,
-    Container,
-    IconButton,
-    Link,
-    Stack,
-    Typography,
-} from '@mui/material';
+import {Alert, Button, CardContent, CircularProgress, Collapse, Stack, Typography,} from '@mui/material';
 import {useNavigate, useParams} from 'react-router-dom';
 import {
     ExpandLess as ExpandLessIcon,
@@ -24,8 +11,28 @@ import {fetchFeedIssues, fetchFeedIssuesByNickname, fetchFeedRepositories} from 
 import {Issue} from '../../types';
 import {IssuesList} from '../components/IssuesList';
 import {Loader} from '../../shared/ui/Loader/Loader';
+import {useTheme} from '@mui/material/styles';
+import {
+    CardContentFlex,
+    CountBox,
+    countValueStyles,
+    ErrorAlert,
+    ExpandButton,
+    LoadingContainer,
+    PageContainer,
+    pageTitleStyles,
+    RepoCard,
+    RepoInfoBox,
+    RepoLink,
+    repoNameStyles,
+    ResultsCount,
+    SectionHeader,
+    sectionTitleStyles,
+    subsectionTitleStyles,
+} from './FeedViewPage.styles';
 
 export function FeedViewPage() {
+    const theme = useTheme();
     const {nickname} = useParams<{nickname: string}>();
     const navigate = useNavigate();
     const [repositories, setRepositories] = useState<{sourceRepo: string; count: number}[]>([]);
@@ -108,113 +115,91 @@ export function FeedViewPage() {
 
     if (loading) {
         return (
-            <Container maxWidth="lg" sx={{py: 4}}>
-                <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 400}}>
+            <PageContainer maxWidth="lg">
+                <LoadingContainer>
                     <CircularProgress />
-                </Box>
-            </Container>
+                </LoadingContainer>
+            </PageContainer>
         );
     }
 
     if (error) {
         return (
-            <Container maxWidth="lg" sx={{py: 4}}>
+            <PageContainer maxWidth="lg">
                 <Alert severity="error">{error}</Alert>
-            </Container>
+            </PageContainer>
         );
     }
 
     return (
-        <Container maxWidth="lg" sx={{py: 4}}>
-            <Typography variant="h4" component="h1" sx={{mb: 4, fontWeight: 600}}>
+        <PageContainer maxWidth="lg">
+            <Typography variant="h4" component="h1" sx={pageTitleStyles(theme)}>
                 Feed for {nickname}
             </Typography>
 
             <Stack spacing={4}>
                 {repositories.length > 0 && (
-                    <Box>
-                        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
-                            <Typography variant="h6" component="h2" sx={{fontWeight: 600}}>
+                    <Stack>
+                        <SectionHeader>
+                            <Typography variant="h6" component="h2" sx={sectionTitleStyles}>
                                 Repositories
                             </Typography>
-                            <IconButton
+                            <ExpandButton
                                 onClick={() => setRepositoriesExpanded(!repositoriesExpanded)}
                                 size="small"
-                                sx={{
-                                    color: 'text.secondary',
-                                }}
                             >
                                 {repositoriesExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                            </IconButton>
-                        </Box>
+                            </ExpandButton>
+                        </SectionHeader>
                         <Collapse in={repositoriesExpanded}>
                             <Stack spacing={2}>
                                 {repositories.map((repo) => {
                                     const repoName = repo.sourceRepo.replace('https://github.com/', '');
                                     const isSelected = selectedRepo === repo.sourceRepo;
                                     return (
-                                        <Card
+                                        <RepoCard
                                             key={repo.sourceRepo}
                                             elevation={0}
-                                            sx={{
-                                                border: '1px solid',
-                                                borderColor: isSelected ? 'primary.main' : 'divider',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s ease',
-                                                '&:hover': {
-                                                    borderColor: 'primary.main',
-                                                    boxShadow: 1,
-                                                },
-                                            }}
+                                            isSelected={isSelected}
                                             onClick={() => handleRepoClick(repo.sourceRepo)}
                                         >
                                             <CardContent>
-                                                <Box sx={{display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2}}>
-                                                    <Box sx={{flex: 1, minWidth: 0}}>
-                                                        <Link
+                                                <CardContentFlex>
+                                                    <RepoInfoBox>
+                                                        <RepoLink
                                                             href={repo.sourceRepo}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             onClick={(e) => e.stopPropagation()}
-                                                            sx={{
-                                                                display: 'inline-flex',
-                                                                alignItems: 'center',
-                                                                gap: 0.5,
-                                                                color: 'primary.main',
-                                                                textDecoration: 'none',
-                                                                '&:hover': {
-                                                                    textDecoration: 'underline',
-                                                                },
-                                                            }}
                                                         >
-                                                            <Typography variant="h6" component="span" sx={{fontWeight: 600}}>
+                                                            <Typography variant="h6" component="span" sx={repoNameStyles}>
                                                                 {repoName}
                                                             </Typography>
                                                             <OpenInNewIcon fontSize="small" />
-                                                        </Link>
-                                                    </Box>
-                                                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1}}>
-                                                        <Typography variant="h6" component="div" sx={{fontWeight: 600, color: 'primary.main'}}>
+                                                        </RepoLink>
+                                                    </RepoInfoBox>
+                                                    <CountBox>
+                                                        <Typography variant="h6" component="div" sx={countValueStyles(theme)}>
                                                             {repo.count}
                                                         </Typography>
                                                         <Typography variant="caption" color="text.secondary">
                                                             dependencies
                                                         </Typography>
-                                                    </Box>
-                                                </Box>
+                                                    </CountBox>
+                                                </CardContentFlex>
                                             </CardContent>
-                                        </Card>
+                                        </RepoCard>
                                     );
                                 })}
                             </Stack>
                         </Collapse>
-                    </Box>
+                    </Stack>
                 )}
 
                 {selectedRepo ? (
-                    <Box>
-                        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
-                            <Typography variant="h6" component="h2" sx={{fontWeight: 600}}>
+                    <Stack>
+                        <SectionHeader>
+                            <Typography variant="h6" component="h2" sx={sectionTitleStyles}>
                                 Issues from repository {selectedRepo.replace('https://github.com/', '')}
                             </Typography>
                             <Button
@@ -225,12 +210,12 @@ export function FeedViewPage() {
                             >
                                 Reset
                             </Button>
-                        </Box>
+                        </SectionHeader>
                         {repoIssuesLoading && <Loader />}
                         {repoIssuesError && (
-                            <Alert severity="error" sx={{mb: 2}}>
+                            <ErrorAlert severity="error">
                                 {repoIssuesError}
-                            </Alert>
+                            </ErrorAlert>
                         )}
                         {!repoIssuesLoading && !repoIssuesError && repoIssues.length === 0 && (
                             <Typography variant="body1" color="text.secondary">
@@ -239,23 +224,23 @@ export function FeedViewPage() {
                         )}
                         {!repoIssuesLoading && !repoIssuesError && repoIssues.length > 0 && (
                             <>
-                                <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
+                                <ResultsCount variant="body2" color="text.secondary">
                                     Showing {repoIssues.length} issues
-                                </Typography>
+                                </ResultsCount>
                                 <IssuesList issues={repoIssues} />
                             </>
                         )}
-                    </Box>
+                    </Stack>
                 ) : (
-                    <Box>
-                        <Typography variant="h6" component="h2" sx={{mb: 2, fontWeight: 600}}>
+                    <Stack>
+                        <Typography variant="h6" component="h2" sx={subsectionTitleStyles(theme)}>
                             Issues from dependencies
                         </Typography>
                         {feedIssuesLoading && <Loader />}
                         {feedIssuesError && (
-                            <Alert severity="error" sx={{mb: 2}}>
+                            <ErrorAlert severity="error">
                                 {feedIssuesError}
-                            </Alert>
+                            </ErrorAlert>
                         )}
                         {!feedIssuesLoading && !feedIssuesError && feedIssues.length === 0 && (
                             <Typography variant="body1" color="text.secondary">
@@ -264,15 +249,15 @@ export function FeedViewPage() {
                         )}
                         {!feedIssuesLoading && !feedIssuesError && feedIssues.length > 0 && (
                             <>
-                                <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
+                                <ResultsCount variant="body2" color="text.secondary">
                                     Showing {feedIssues.length} issues
-                                </Typography>
+                                </ResultsCount>
                                 <IssuesList issues={feedIssues} />
                             </>
                         )}
-                    </Box>
+                    </Stack>
                 )}
             </Stack>
-        </Container>
+        </PageContainer>
     );
 }

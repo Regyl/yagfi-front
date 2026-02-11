@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
-import {Header} from '../shared/ui/Header/Header';
-import {Sidebar} from '../shared/ui/Sidebar/Sidebar';
-import {IssuesPage} from '../features/pages/IssuesPage';
-import {FeedPage} from '../features/pages/FeedPage';
-import {FeedViewPage} from '../features/pages/FeedViewPage';
+import {Header} from '@/shared/ui/Header/Header';
+import {Sidebar} from '@/shared/ui/Sidebar/Sidebar';
+import {IssuesPage} from '@/features/pages/IssuesPage';
+import {FeedPage} from '@/features/pages/FeedPage';
+import {FeedViewPage} from '@/features/pages/FeedViewPage';
 import {TooltipProvider} from '@/components/ui/tooltip';
 
 export default function App() {

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {ChevronDown, ChevronUp, ExternalLink, Loader2, RotateCcw} from 'lucide-react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {fetchFeedIssues, fetchFeedIssuesByNickname, fetchFeedRepositories} from '../../api/issuesApi';
-import {Issue} from '../../types';
+import {fetchFeedIssues, fetchFeedIssuesByNickname, fetchFeedRepositories} from '@/api/issuesApi';
+import {Issue} from '@/types';
 import {IssuesList} from '../components/IssuesList';
-import {Loader} from '../../shared/ui/Loader/Loader';
+import {Loader} from '@/shared/ui/Loader/Loader';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent} from '@/components/ui/card';
 import {Alert, AlertDescription} from '@/components/ui/alert';

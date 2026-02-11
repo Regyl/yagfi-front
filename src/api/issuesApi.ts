@@ -1,6 +1,6 @@
-import {FeedGenerateRequest, FeedGenerateResponse, IssuesRequest, IssuesResponse, SyncEvent} from '../types';
-import {API_BASE_URL} from '../shared/constants';
-import {getUtmSource} from '../shared/utils/urlParams';
+import {FeedGenerateRequest, FeedGenerateResponse, IssuesRequest, IssuesResponse, SyncEvent} from '@/types';
+import {API_BASE_URL} from '@/shared/constants';
+import {getUtmSource} from '@/shared/utils/urlParams';
 
 /**
  * Gets request headers with optional utm_source

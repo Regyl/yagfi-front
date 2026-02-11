@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Loader2, Plus, X} from 'lucide-react';
-import {StarsFilter} from '../../types';
-import {STARS_OPERATORS} from '../../shared/constants';
-import {useLanguages} from '../hooks';
+import {StarsFilter} from '@/types';
+import {STARS_OPERATORS} from '@/shared/constants';
+import {useLanguages} from '@/features/hooks';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';

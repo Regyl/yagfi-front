@@ -1,10 +1,10 @@
 import React from 'react';
 import {Trash2} from 'lucide-react';
-import {Order} from '../../types';
-import {SORT_FIELDS, SORT_TYPES} from '../../shared/constants';
+import {Order} from '@/types';
+import {SORT_FIELDS, SORT_TYPES} from '@/shared/constants';
 import {Badge} from '@/components/ui/badge';
 import {Button} from '@/components/ui/button';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {Label} from '@/components/ui/label';
 
 interface SortFieldItemProps {

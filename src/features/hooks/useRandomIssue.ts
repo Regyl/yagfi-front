@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
-import {fetchRandomIssue} from '../../api/issuesApi';
-import {IssuesRequest} from '../../types';
+import {fetchRandomIssue} from '@/api/issuesApi';
+import {IssuesRequest} from '@/types';
 
 export interface UseRandomIssueReturn {
     pickingRandom: boolean;

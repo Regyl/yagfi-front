@@ -1,6 +1,6 @@
 import React from 'react';
 import {Loader2, Shuffle, Tag} from 'lucide-react';
-import {CONTRIBUTING_URL} from '../../shared/constants';
+import {CONTRIBUTING_URL} from '@/shared/constants';
 import {Button} from '@/components/ui/button';
 
 interface ActionButtonsProps {

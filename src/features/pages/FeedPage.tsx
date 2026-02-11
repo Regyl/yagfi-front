@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Loader2, Send} from 'lucide-react';
-import {checkGitHubUserExists, fetchFeedUsers, generateFeed} from '../../api/issuesApi';
-import {getGitHubUserAvatar} from '../../shared/utils/getGitHubUserAvatar';
+import {checkGitHubUserExists, fetchFeedUsers, generateFeed} from '@/api/issuesApi';
+import {getGitHubUserAvatar} from '@/shared/utils/getGitHubUserAvatar';
 import {useNavigate} from 'react-router-dom';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';

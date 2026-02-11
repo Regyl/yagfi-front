@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {Order} from '../../types';
-import {DEFAULT_SORT_FIELD} from '../../shared/constants';
-import {getIsUpdatingUrl, onUrlUpdate, readStateFromUrl} from '../../shared/utils/urlParams';
+import {Order} from '@/types';
+import {DEFAULT_SORT_FIELD} from '@/shared/constants';
+import {getIsUpdatingUrl, onUrlUpdate, readStateFromUrl} from '@/shared/utils/urlParams';
 
 export interface UseSortingReturn {
     sortOrders: Order[];

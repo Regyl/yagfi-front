@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
-import {Badge} from '../../shared/ui/Badge/Badge';
-import {formatDate} from '../../shared/utils/formatDate';
-import {formatLanguage} from '../../shared/utils/formatLanguage';
-import {getGitHubAvatar} from '../../shared/utils/getGitHubAvatar';
-import {Issue} from '../../types';
+import {Badge} from '@/shared/ui/Badge/Badge';
+import {formatDate} from '@/shared/utils/formatDate';
+import {formatLanguage} from '@/shared/utils/formatLanguage';
+import {getGitHubAvatar} from '@/shared/utils/getGitHubAvatar';
+import {Issue} from '@/types';
 import {Card, CardContent} from '@/components/ui/card';
 
 interface IssueCardProps {

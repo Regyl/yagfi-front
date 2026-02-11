@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
-import {IssuesRequest, StarsFilter} from '../../types';
-import {PAGE_SIZE} from '../../shared/constants';
+import {IssuesRequest, StarsFilter} from '@/types';
+import {PAGE_SIZE} from '@/shared/constants';
 
 interface UseIssuesRequestParams {
     selectedLanguages: string[];

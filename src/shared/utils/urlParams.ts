@@ -1,4 +1,4 @@
-import {Order, StarsFilter} from '../../types';
+import {Order, StarsFilter} from '@/types';
 import {DEFAULT_SORT_FIELD} from '../constants';
 
 /**

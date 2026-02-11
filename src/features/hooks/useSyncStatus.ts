@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {fetchSyncEvents} from '../../api/issuesApi';
-import {SyncEvent} from '../../types';
+import {fetchSyncEvents} from '@/api/issuesApi';
+import {SyncEvent} from '@/types';
 
 export interface UseSyncStatusReturn {
     syncEvents: SyncEvent[];

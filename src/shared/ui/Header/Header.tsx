@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {Github, Globe, Moon, RefreshCw, Server, Sun} from 'lucide-react';
 import {GITHUB_BACKEND_REPO_URL, GITHUB_FRONTEND_REPO_URL} from '../../constants';
-import {useSyncStatus} from '../../../features/hooks';
+import {useSyncStatus} from '@/features/hooks';
 import {formatDate} from '../../utils/formatDate';
-import {SyncEvent} from '../../../types';
+import {SyncEvent} from '@/types';
 import {Button} from '@/components/ui/button';
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from '@/components/ui/dropdown-menu';
 import {Tooltip, TooltipContent, TooltipTrigger,} from '@/components/ui/tooltip';
@@ -34,7 +34,7 @@ export function Header({mode, onToggleTheme}: HeaderProps) {
     <header className="sticky top-0 z-[1100] border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center justify-between px-4 sm:px-6">
         <span className="text-xl font-bold text-primary">
-          YAGFI - Yet Another Good First Issues
+          YAGFI - Yet Another Good First Issue
         </span>
         <div className="flex items-center gap-4">
           {latestSyncTime && (

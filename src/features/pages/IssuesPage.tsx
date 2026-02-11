@@ -1,17 +1,17 @@
 import React, {useCallback, useEffect} from 'react';
-import {useInfiniteIssues} from '../hooks/useInfiniteIssues';
-import {useFilters} from '../hooks/useFilters';
-import {useSorting} from '../hooks/useSorting';
-import {useRandomIssue} from '../hooks/useRandomIssue';
-import {useIssuesRequest} from '../hooks/useIssuesRequest';
+import {useInfiniteIssues} from '@/features/hooks/useInfiniteIssues';
+import {useFilters} from '@/features/hooks/useFilters';
+import {useSorting} from '@/features/hooks/useSorting';
+import {useRandomIssue} from '@/features/hooks/useRandomIssue';
+import {useIssuesRequest} from '@/features/hooks';
 import {IssuesList} from '../components/IssuesList';
 import {InfiniteScrollTrigger} from '../components/InfiniteScrollTrigger';
 import {FiltersSection} from '../components/FiltersSection';
 import {SortSection} from '../components/SortSection';
 import {ActionButtons} from '../components/ActionButtons';
-import {Loader} from '../../shared/ui/Loader/Loader';
-import {DEFAULT_STARS_FILTER} from '../../shared/constants';
-import {updateUrlParams} from '../../shared/utils/urlParams';
+import {Loader} from '@/shared/ui/Loader/Loader';
+import {DEFAULT_STARS_FILTER} from '@/shared/constants';
+import {updateUrlParams} from '@/shared/utils/urlParams';
 import {Alert, AlertDescription} from '@/components/ui/alert';
 
 export function IssuesPage() {

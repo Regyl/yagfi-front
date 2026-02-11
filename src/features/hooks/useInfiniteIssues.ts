@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {fetchIssues} from '../../api/issuesApi';
-import {Issue, IssuesRequest} from '../../types';
+import {fetchIssues} from '@/api/issuesApi';
+import {Issue, IssuesRequest} from '@/types';
 
 interface UseInfiniteIssuesReturn {
   issues: Issue[];

@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {fetchLanguages} from '../../api/issuesApi';
+import {fetchLanguages} from '@/api/issuesApi';
 
 export function useLanguages() {
     const [languages, setLanguages] = useState<string[]>([]);

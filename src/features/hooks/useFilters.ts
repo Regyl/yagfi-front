@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {StarsFilter} from '../../types';
-import {DEFAULT_STARS_FILTER} from '../../shared/constants';
-import {getIsUpdatingUrl, onUrlUpdate, readStateFromUrl} from '../../shared/utils/urlParams';
+import {StarsFilter} from '@/types';
+import {DEFAULT_STARS_FILTER} from '@/shared/constants';
+import {getIsUpdatingUrl, onUrlUpdate, readStateFromUrl} from '@/shared/utils/urlParams';
 
 export interface UseFiltersReturn {
     selectedLanguages: string[];

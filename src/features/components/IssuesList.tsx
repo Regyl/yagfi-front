@@ -1,6 +1,6 @@
 import React from 'react';
 import {IssueCard} from './IssueCard';
-import {Issue} from '../../types';
+import {Issue} from '@/types';
 
 interface IssuesListProps {
   issues: Issue[];

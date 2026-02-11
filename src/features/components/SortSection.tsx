@@ -1,6 +1,6 @@
 import React from 'react';
 import {Plus} from 'lucide-react';
-import {Order} from '../../types';
+import {Order} from '@/types';
 import {SortFieldItem} from './SortFieldItem';
 import {Button} from '@/components/ui/button';
 

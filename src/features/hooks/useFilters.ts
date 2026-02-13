@@ -15,6 +15,9 @@ export interface UseFiltersReturn {
     handleStarsOperatorChange: (operator: StarsFilter['operator']) => void;
     handleRemoveStarsFilter: () => void;
     handleAddStarsFilter: () => void;
+    handleResetLanguages: () => void;
+    handleResetLicenses: () => void;
+    handleResetAll: () => void;
 }
 
 interface UseFiltersParams {
@@ -134,6 +137,22 @@ export function useFilters({
         setStarsFilter({value: 100, operator: 'GREATER'});
     }, []);
 
+    const handleResetLanguages = useCallback(() => {
+        setSelectedLanguages([]);
+    }, []);
+
+    const handleResetLicenses = useCallback(() => {
+        setSelectedLicenses([]);
+        setLicensesOperator('IN');
+    }, []);
+
+    const handleResetAll = useCallback(() => {
+        setSelectedLanguages([]);
+        setSelectedLicenses([]);
+        setLicensesOperator('IN');
+        setStarsFilter(null);
+    }, []);
+
     return {
         selectedLanguages,
         selectedLicenses,
@@ -146,5 +165,8 @@ export function useFilters({
         handleStarsOperatorChange,
         handleRemoveStarsFilter,
         handleAddStarsFilter,
+        handleResetLanguages,
+        handleResetLicenses,
+        handleResetAll,
     };
 }

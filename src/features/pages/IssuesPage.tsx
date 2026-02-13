@@ -86,6 +86,9 @@ export function IssuesPage() {
             onStarsOperatorChange={filters.handleStarsOperatorChange}
             onRemoveStarsFilter={filters.handleRemoveStarsFilter}
             onAddStarsFilter={filters.handleAddStarsFilter}
+            onResetLanguages={filters.handleResetLanguages}
+            onResetLicenses={filters.handleResetLicenses}
+            onResetAll={filters.handleResetAll}
           />
           <SortSection
             sortOrders={sorting.sortOrders}

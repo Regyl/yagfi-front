@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Loader2, Plus, X} from 'lucide-react';
-import {StarsFilter} from '@/types';
-import {STARS_OPERATORS} from '@/shared/constants';
-import {useLanguages} from '@/features/hooks';
+import {LicensesFilter, StarsFilter} from '@/types';
+import {LICENSES_OPERATORS, STARS_OPERATORS} from '@/shared/constants';
+import {useLanguages, useLicenses} from '@/features/hooks';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
@@ -13,6 +13,10 @@ import {Checkbox} from '@/components/ui/checkbox';
 interface FiltersSectionProps {
   selectedLanguages: string[];
   onLanguagesChange: (languages: string[]) => void;
+  selectedLicenses: string[];
+  onLicensesChange: (licenses: string[]) => void;
+  licensesOperator: LicensesFilter['operator'];
+  onLicensesOperatorChange: (value: LicensesFilter['operator']) => void;
   starsFilter: {value: number; operator: StarsFilter['operator']} | null;
   onStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onStarsOperatorChange: (value: StarsFilter['operator']) => void;
@@ -23,6 +27,10 @@ interface FiltersSectionProps {
 export function FiltersSection({
   selectedLanguages,
   onLanguagesChange,
+  selectedLicenses,
+  onLicensesChange,
+  licensesOperator,
+  onLicensesOperatorChange,
   starsFilter,
   onStarsValueChange,
   onStarsOperatorChange,
@@ -30,8 +38,11 @@ export function FiltersSection({
   onAddStarsFilter,
 }: FiltersSectionProps) {
   const {languages, loading} = useLanguages();
+  const {licenses, loading: licensesLoading} = useLicenses();
   const [langOpen, setLangOpen] = useState(false);
+  const [licensesOpen, setLicensesOpen] = useState(false);
   const [filter, setFilter] = useState('');
+  const [licensesFilter, setLicensesFilter] = useState('');
 
   const filtered = languages
     .filter((l) => l?.trim())
@@ -42,6 +53,18 @@ export function FiltersSection({
       onLanguagesChange(selectedLanguages.filter((x) => x !== lang));
     } else {
       onLanguagesChange([...selectedLanguages, lang]);
+    }
+  };
+
+  const filteredLicenses = licenses
+    .filter((l) => l?.trim())
+    .filter((l) => !licensesFilter || l.toLowerCase().includes(licensesFilter.toLowerCase()));
+
+  const toggleLicense = (lic: string) => {
+    if (selectedLicenses.includes(lic)) {
+      onLicensesChange(selectedLicenses.filter((x) => x !== lic));
+    } else {
+      onLicensesChange([...selectedLicenses, lic]);
     }
   };
 
@@ -102,6 +125,77 @@ export function FiltersSection({
             </div>
           </PopoverContent>
         </Popover>
+      </div>
+
+      <div className="min-w-0 flex-1 sm:max-w-[240px]">
+        <Label htmlFor="licenses-trigger" className="mb-2 block text-sm font-medium">
+          Licenses
+        </Label>
+        <div className="flex flex-wrap items-center gap-2">
+          <Select value={licensesOperator} onValueChange={onLicensesOperatorChange}>
+            <SelectTrigger className="h-9 w-[100px] sm:w-[120px]">
+              <SelectValue placeholder="Operator" />
+            </SelectTrigger>
+            <SelectContent>
+              {LICENSES_OPERATORS.map((op) => (
+                <SelectItem key={op.value} value={op.value}>
+                  {op.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Popover open={licensesOpen} onOpenChange={setLicensesOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                id="licenses-trigger"
+                variant="outline"
+                className="min-w-0 flex-1 justify-between font-normal"
+                aria-expanded={licensesOpen}
+                aria-haspopup="listbox"
+              >
+                {selectedLicenses.length === 0
+                  ? 'All licenses'
+                  : `${selectedLicenses.length} selected`}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="min-w-[300px] w-[var(--radix-popover-trigger-width)] p-0">
+              <div className="p-2">
+                <Input
+                  placeholder="Filter licenses..."
+                  value={licensesFilter}
+                  onChange={(e) => setLicensesFilter(e.target.value)}
+                  className="h-9"
+                  aria-label="Filter licenses"
+                />
+              </div>
+              <div
+                className="max-h-[280px] overflow-y-auto p-2"
+                role="listbox"
+                aria-label="License options"
+              >
+                {licensesLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="size-5 animate-spin text-muted-foreground" aria-hidden />
+                  </div>
+                ) : (
+                  filteredLicenses.map((lic) => (
+                    <label
+                      key={lic}
+                      className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-accent"
+                    >
+                      <Checkbox
+                        checked={selectedLicenses.includes(lic)}
+                        onCheckedChange={() => toggleLicense(lic)}
+                        aria-label={`Select ${lic}`}
+                      />
+                      {lic}
+                    </label>
+                  ))
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
 
       <div className="min-w-0">

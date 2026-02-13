@@ -1,4 +1,4 @@
-import {Order, StarsFilter} from '@/types';
+import {LicensesFilter, Order, StarsFilter} from '@/types';
 import {DEFAULT_SORT_FIELD} from '../constants';
 
 /**
@@ -11,6 +11,16 @@ export function serializeLanguages(languages: string[]): string | null {
 }
 
 export function deserializeLanguages(param: string | null): string[] {
+    if (!param) return [];
+    return param.split(',').filter(Boolean);
+}
+
+// Licenses: comma-separated list + operator (licensesOp: IN | NOT_IN)
+export function serializeLicenses(licenses: string[]): string | null {
+    return licenses.length > 0 ? licenses.join(',') : null;
+}
+
+export function deserializeLicenses(param: string | null): string[] {
     if (!param) return [];
     return param.split(',').filter(Boolean);
 }
@@ -71,13 +81,20 @@ export function getUtmSource(): string | null {
  */
 export function readStateFromUrl(): {
     languages: string[];
+    licenses: string[];
+    licensesOperator: LicensesFilter['operator'];
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
     sortOrders: Order[];
 } {
     const params = new URLSearchParams(window.location.search);
+    const licensesOp = params.get('licensesOp');
+    const validLicensesOp: LicensesFilter['operator'] =
+        licensesOp === 'IN' || licensesOp === 'NOT_IN' ? licensesOp : 'IN';
 
     return {
         languages: deserializeLanguages(params.get('languages')),
+        licenses: deserializeLicenses(params.get('licenses')),
+        licensesOperator: validLicensesOp,
         starsFilter: deserializeStarsFilter(params.get('stars'), params.get('starsOp')),
         sortOrders: deserializeSortOrders(params.get('sort')),
     };
@@ -93,6 +110,8 @@ const urlUpdateCallbacks: Set<() => void> = new Set();
  */
 export function updateUrlParams(
     languages: string[],
+    licenses: string[],
+    licensesOperator: LicensesFilter['operator'],
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null,
     sortOrders: Order[]
 ): void {
@@ -106,6 +125,16 @@ export function updateUrlParams(
         params.set('languages', languagesParam);
     } else {
         params.delete('languages');
+    }
+
+    // Update licenses filter
+    const licensesParam = serializeLicenses(licenses);
+    if (licensesParam) {
+        params.set('licenses', licensesParam);
+        params.set('licensesOp', licensesOperator);
+    } else {
+        params.delete('licenses');
+        params.delete('licensesOp');
     }
 
     // Update stars filter

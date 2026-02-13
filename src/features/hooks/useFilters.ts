@@ -1,12 +1,16 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {StarsFilter} from '@/types';
+import {LicensesFilter, StarsFilter} from '@/types';
 import {DEFAULT_STARS_FILTER} from '@/shared/constants';
 import {getIsUpdatingUrl, onUrlUpdate, readStateFromUrl} from '@/shared/utils/urlParams';
 
 export interface UseFiltersReturn {
     selectedLanguages: string[];
+    selectedLicenses: string[];
+    licensesOperator: LicensesFilter['operator'];
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
     handleLanguageChange: (languages: string[]) => void;
+    handleLicenseChange: (licenses: string[]) => void;
+    handleLicensesOperatorChange: (operator: LicensesFilter['operator']) => void;
     handleStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleStarsOperatorChange: (operator: StarsFilter['operator']) => void;
     handleRemoveStarsFilter: () => void;
@@ -30,10 +34,19 @@ export function useFilters({
     const urlParams = new URLSearchParams(window.location.search);
     const hasStarsInUrl = urlParams.has('stars') && urlParams.has('starsOp');
     const hasLanguagesInUrl = urlParams.has('languages');
+    const hasLicensesInUrl = urlParams.has('licenses');
 
     // For languages: use URL if present, otherwise use initial or empty array
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
         hasLanguagesInUrl ? urlState.languages : (initialLanguages ?? urlState.languages)
+    );
+
+    // For licenses: use URL if present, otherwise use empty array
+    const [selectedLicenses, setSelectedLicenses] = useState<string[]>(
+        hasLicensesInUrl ? urlState.licenses : urlState.licenses
+    );
+    const [licensesOperator, setLicensesOperator] = useState<LicensesFilter['operator']>(
+        hasLicensesInUrl ? urlState.licensesOperator : urlState.licensesOperator
     );
 
     // For stars filter: if URL has stars params, use them (even if null - means filter was explicitly removed)
@@ -54,6 +67,8 @@ export function useFilters({
             if (currentUrl !== lastUrlRef.current && !getIsUpdatingUrl()) {
                 const newUrlState = readStateFromUrl();
                 setSelectedLanguages(newUrlState.languages);
+                setSelectedLicenses(newUrlState.licenses);
+                setLicensesOperator(newUrlState.licensesOperator);
                 setStarsFilter(newUrlState.starsFilter);
             }
             lastUrlRef.current = currentUrl;
@@ -79,6 +94,14 @@ export function useFilters({
 
     const handleLanguageChange = useCallback((languages: string[]) => {
         setSelectedLanguages(languages);
+    }, []);
+
+    const handleLicenseChange = useCallback((licenses: string[]) => {
+        setSelectedLicenses(licenses);
+    }, []);
+
+    const handleLicensesOperatorChange = useCallback((operator: LicensesFilter['operator']) => {
+        setLicensesOperator(operator);
     }, []);
 
     const handleStarsValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,8 +136,12 @@ export function useFilters({
 
     return {
         selectedLanguages,
+        selectedLicenses,
+        licensesOperator,
         starsFilter,
         handleLanguageChange,
+        handleLicenseChange,
+        handleLicensesOperatorChange,
         handleStarsValueChange,
         handleStarsOperatorChange,
         handleRemoveStarsFilter,

@@ -24,6 +24,11 @@ export interface LanguageFilter {
   operator: 'IN' | 'NOT_IN';
 }
 
+export interface LicensesFilter {
+  values: string[];
+  operator: 'IN' | 'NOT_IN';
+}
+
 export interface StarsFilter {
   value: number;
   operator: 'GREATER' | 'LESS';
@@ -31,6 +36,7 @@ export interface StarsFilter {
 
 export interface IssuesFilter {
   languages?: LanguageFilter;
+  licenses?: LicensesFilter;
   stars?: StarsFilter;
 }
 

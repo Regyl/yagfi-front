@@ -21,13 +21,23 @@ export function IssuesPage() {
   useEffect(() => {
     updateUrlParams(
       filters.selectedLanguages,
+      filters.selectedLicenses,
+      filters.licensesOperator,
       filters.starsFilter,
       sorting.sortOrders
     );
-  }, [filters.selectedLanguages, filters.starsFilter, sorting.sortOrders]);
+  }, [
+    filters.selectedLanguages,
+    filters.selectedLicenses,
+    filters.licensesOperator,
+    filters.starsFilter,
+    sorting.sortOrders,
+  ]);
 
   const baseRequest = useIssuesRequest({
     selectedLanguages: filters.selectedLanguages,
+    selectedLicenses: filters.selectedLicenses,
+    licensesOperator: filters.licensesOperator,
     starsFilter: filters.starsFilter,
     sortOrders: sorting.sortOrders,
   });
@@ -67,6 +77,10 @@ export function IssuesPage() {
           <FiltersSection
             selectedLanguages={filters.selectedLanguages}
             onLanguagesChange={filters.handleLanguageChange}
+            selectedLicenses={filters.selectedLicenses}
+            onLicensesChange={filters.handleLicenseChange}
+            licensesOperator={filters.licensesOperator}
+            onLicensesOperatorChange={filters.handleLicensesOperatorChange}
             starsFilter={filters.starsFilter}
             onStarsValueChange={filters.handleStarsValueChange}
             onStarsOperatorChange={filters.handleStarsOperatorChange}

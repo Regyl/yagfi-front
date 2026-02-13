@@ -4,12 +4,16 @@ import {PAGE_SIZE} from '@/shared/constants';
 
 interface UseIssuesRequestParams {
     selectedLanguages: string[];
+    selectedLicenses: string[];
+    licensesOperator: 'IN' | 'NOT_IN';
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
     sortOrders: { field: string; type: 'asc' | 'desc' }[];
 }
 
 export function useIssuesRequest({
                                      selectedLanguages,
+                                     selectedLicenses,
+                                     licensesOperator,
                                      starsFilter,
                                      sortOrders,
                                  }: UseIssuesRequestParams): Omit<IssuesRequest, 'offset'> {
@@ -20,6 +24,13 @@ export function useIssuesRequest({
             filter.languages = {
                 values: selectedLanguages,
                 operator: 'IN',
+            };
+        }
+
+        if (selectedLicenses.length > 0) {
+            filter.licenses = {
+                values: selectedLicenses,
+                operator: licensesOperator,
             };
         }
 
@@ -35,5 +46,5 @@ export function useIssuesRequest({
             filter: Object.keys(filter).length > 0 ? filter : undefined,
             orders: sortOrders.length > 0 ? sortOrders : undefined,
         };
-    }, [selectedLanguages, starsFilter, sortOrders]);
+    }, [selectedLanguages, selectedLicenses, licensesOperator, starsFilter, sortOrders]);
 }

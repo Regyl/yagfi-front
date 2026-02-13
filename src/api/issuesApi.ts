@@ -60,6 +60,19 @@ export async function fetchLanguages(): Promise<string[]> {
     return response.json();
 }
 
+export async function fetchLicenses(): Promise<string[]> {
+    const response = await fetch(`${API_BASE_URL}/issues/licenses`, {
+        method: 'GET',
+        headers: getRequestHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch licenses');
+    }
+
+    return response.json();
+}
+
 export async function fetchSyncEvents(): Promise<SyncEvent[]> {
     const response = await fetch(`${API_BASE_URL}/events`, {
         method: 'GET',

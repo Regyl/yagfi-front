@@ -4,4 +4,5 @@ export * from './useRandomIssue';
 export * from './useIssuesRequest';
 export * from './useInfiniteIssues';
 export * from './useLanguages';
+export * from './useLicenses';
 export * from './useSyncStatus';

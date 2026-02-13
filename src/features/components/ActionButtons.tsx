@@ -10,23 +10,28 @@ interface ActionButtonsProps {
 
 export function ActionButtons({pickingRandom, onPickRandom}: ActionButtonsProps) {
   return (
-    <div className="flex items-center justify-center gap-4">
-      <Button asChild>
+    <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+      <Button asChild variant="outline" size="default">
         <a
           href={CONTRIBUTING_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="min-w-[150px]"
+          className="inline-flex min-w-[140px] items-center justify-center gap-2"
         >
-          <Tag className="size-4" />
+          <Tag className="size-4" aria-hidden />
           Suggest a Label
         </a>
       </Button>
-      <Button onClick={onPickRandom} disabled={pickingRandom} className="min-w-[150px]">
+      <Button
+        onClick={onPickRandom}
+        disabled={pickingRandom}
+        size="default"
+        className="min-w-[140px]"
+      >
         {pickingRandom ? (
-          <Loader2 className="size-4 animate-spin" />
+          <Loader2 className="size-4 animate-spin" aria-hidden />
         ) : (
-          <Shuffle className="size-4" />
+          <Shuffle className="size-4" aria-hidden />
         )}
         {pickingRandom ? 'Picking...' : 'Pick Random'}
       </Button>

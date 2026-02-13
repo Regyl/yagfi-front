@@ -7,7 +7,7 @@ import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select';
-import {Popover, PopoverContent, PopoverTrigger,} from '@/components/ui/popover';
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover';
 import {Checkbox} from '@/components/ui/checkbox';
 
 interface FiltersSectionProps {
@@ -46,14 +46,19 @@ export function FiltersSection({
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="min-w-[200px]">
-        <Label className="mb-2 block">Languages</Label>
+    <div className="flex flex-col gap-8 sm:flex-row sm:flex-wrap sm:items-end">
+      <div className="min-w-0 flex-1 sm:max-w-[240px]">
+        <Label htmlFor="languages-trigger" className="mb-2 block text-sm font-medium">
+          Languages
+        </Label>
         <Popover open={langOpen} onOpenChange={setLangOpen}>
           <PopoverTrigger asChild>
             <Button
+              id="languages-trigger"
               variant="outline"
               className="w-full justify-between font-normal"
+              aria-expanded={langOpen}
+              aria-haspopup="listbox"
             >
               {selectedLanguages.length === 0
                 ? 'All languages'
@@ -63,26 +68,32 @@ export function FiltersSection({
           <PopoverContent align="start" className="w-[var(--radix-popover-trigger-width)] p-0">
             <div className="p-2">
               <Input
-                placeholder="Filter..."
+                placeholder="Filter languages..."
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="h-8"
+                className="h-9"
+                aria-label="Filter languages"
               />
             </div>
-            <div className="max-h-[300px] overflow-y-auto p-2">
+            <div
+              className="max-h-[280px] overflow-y-auto p-2"
+              role="listbox"
+              aria-label="Language options"
+            >
               {loading ? (
-                <div className="flex items-center justify-center py-4">
-                  <Loader2 className="size-5 animate-spin text-muted-foreground" />
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="size-5 animate-spin text-muted-foreground" aria-hidden />
                 </div>
               ) : (
                 filtered.map((lang) => (
                   <label
                     key={lang}
-                    className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
+                    className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-accent"
                   >
                     <Checkbox
                       checked={selectedLanguages.includes(lang)}
                       onCheckedChange={() => toggleLang(lang)}
+                      aria-label={`Select ${lang}`}
                     />
                     {lang}
                   </label>
@@ -93,15 +104,15 @@ export function FiltersSection({
         </Popover>
       </div>
 
-      <div>
-        <Label className="mb-2 block">Filter by Stars:</Label>
+      <div className="min-w-0">
+        <Label className="mb-2 block text-sm font-medium">Filter by Stars</Label>
         {starsFilter ? (
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             <Select
               value={starsFilter.operator}
               onValueChange={onStarsOperatorChange}
             >
-              <SelectTrigger className="h-8 w-[180px]">
+              <SelectTrigger className="h-9 w-[160px] sm:w-[180px]">
                 <SelectValue placeholder="Operator" />
               </SelectTrigger>
               <SelectContent>
@@ -114,23 +125,26 @@ export function FiltersSection({
             </Select>
             <Input
               type="text"
+              inputMode="numeric"
               placeholder="Stars"
               value={starsFilter.value}
               onChange={onStarsValueChange}
-              className="h-8 w-[120px]"
+              className="h-9 w-[100px] sm:w-[120px]"
+              aria-label="Stars value"
             />
             <Button
               variant="ghost"
               size="icon"
               onClick={onRemoveStarsFilter}
-              className="size-8 text-destructive"
+              className="size-9 text-muted-foreground hover:text-destructive"
+              aria-label="Remove stars filter"
             >
-              <X className="size-4" />
+              <X className="size-4" aria-hidden />
             </Button>
           </div>
         ) : (
-          <Button variant="outline" size="sm" onClick={onAddStarsFilter}>
-            <Plus className="size-4" />
+          <Button variant="outline" size="default" onClick={onAddStarsFilter}>
+            <Plus className="size-4" aria-hidden />
             Add Stars Filter
           </Button>
         )}

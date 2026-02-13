@@ -21,16 +21,16 @@ export function SortSection({
 }: SortSectionProps) {
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center gap-4">
+      <div className="mb-3 flex flex-wrap items-center gap-3">
         <span className="text-sm font-medium text-muted-foreground">
-          Sort Order (priority):
+          Sort order (priority)
         </span>
         <Button variant="outline" size="sm" onClick={onAddSortField}>
-          <Plus className="size-4" />
+          <Plus className="size-4" aria-hidden />
           Add Sort Field
         </Button>
       </div>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-4">
         {sortOrders.map((order, i) => (
           <SortFieldItem
             key={i}
@@ -44,7 +44,7 @@ export function SortSection({
         ))}
       </div>
       {sortOrders.length > 1 && (
-        <p className="mt-2 block text-sm text-muted-foreground">
+        <p className="mt-3 text-sm text-muted-foreground">
           Items are sorted by the first field, then by the second, and so on.
         </p>
       )}

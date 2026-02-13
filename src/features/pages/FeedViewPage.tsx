@@ -8,7 +8,7 @@ import {Loader} from '@/shared/ui/Loader/Loader';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent} from '@/components/ui/card';
 import {Alert, AlertDescription} from '@/components/ui/alert';
-import {Collapsible, CollapsibleContent, CollapsibleTrigger,} from '@/components/ui/collapsible';
+import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible';
 import {cn} from '@/lib/utils';
 
 export function FeedViewPage() {
@@ -84,9 +84,9 @@ export function FeedViewPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-6">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex min-h-[400px] items-center justify-center">
-          <Loader2 className="size-12 animate-spin text-muted-foreground" />
+          <Loader2 className="size-12 animate-spin text-muted-foreground" aria-hidden />
         </div>
       </div>
     );
@@ -94,8 +94,8 @@ export function FeedViewPage() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-6">
-        <Alert variant="destructive">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+        <Alert variant="destructive" role="alert">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       </div>
@@ -103,22 +103,34 @@ export function FeedViewPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
-      <h1 className="mb-6 text-2xl font-semibold">Feed for {nickname}</h1>
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <h1 className="mb-8 text-3xl font-semibold tracking-tight">
+        Feed for {nickname}
+      </h1>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-8">
         {repositories.length > 0 && (
           <Collapsible open={repositoriesExpanded} onOpenChange={setRepositoriesExpanded}>
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Repositories</h2>
+              <h2 className="text-xl font-semibold">Repositories</h2>
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-muted-foreground">
-                  {repositoriesExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-foreground"
+                  aria-expanded={repositoriesExpanded}
+                  aria-label={repositoriesExpanded ? 'Collapse repositories' : 'Expand repositories'}
+                >
+                  {repositoriesExpanded ? (
+                    <ChevronUp className="size-4" aria-hidden />
+                  ) : (
+                    <ChevronDown className="size-4" aria-hidden />
+                  )}
                 </Button>
               </CollapsibleTrigger>
             </div>
             <CollapsibleContent>
-              <div className="mt-4 flex flex-col gap-2">
+              <div className="mt-4 flex flex-col gap-3">
                 {repositories.map((repo) => {
                   const repoName = repo.sourceRepo.replace('https://github.com/', '');
                   const isSelected = selectedRepo === repo.sourceRepo;
@@ -126,26 +138,26 @@ export function FeedViewPage() {
                     <Card
                       key={repo.sourceRepo}
                       className={cn(
-                        'cursor-pointer transition-colors hover:border-primary',
+                        'cursor-pointer transition-colors hover:border-primary/50',
                         isSelected && 'border-primary'
                       )}
                       onClick={() => handleRepoClick(repo.sourceRepo)}
                     >
                       <CardContent className="p-4">
-                        <div className="flex items-start justify-between gap-4">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="min-w-0 flex-1">
                             <a
                               href={repo.sourceRepo}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1 text-primary hover:underline"
+                              className="inline-flex items-center gap-1.5 text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
                             >
-                              <span className="font-semibold">{repoName}</span>
-                              <ExternalLink className="size-4" />
+                              <span className="font-medium">{repoName}</span>
+                              <ExternalLink className="size-4 shrink-0" aria-hidden />
                             </a>
                           </div>
-                          <div className="flex flex-col items-end">
+                          <div className="flex flex-col items-start sm:items-end">
                             <span className="font-semibold text-primary">{repo.count}</span>
                             <span className="text-xs text-muted-foreground">dependencies</span>
                           </div>
@@ -160,13 +172,17 @@ export function FeedViewPage() {
         )}
 
         {selectedRepo ? (
-          <div>
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">
-                Issues from repository {selectedRepo.replace('https://github.com/', '')}
+          <section aria-label="Repository issues">
+            <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-xl font-semibold">
+                Issues from {selectedRepo.replace('https://github.com/', '')}
               </h2>
-              <Button variant="outline" size="sm" onClick={() => setSelectedRepo(null)}>
-                <RotateCcw className="size-4" />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSelectedRepo(null)}
+              >
+                <RotateCcw className="size-4" aria-hidden />
                 Reset
               </Button>
             </div>
@@ -177,20 +193,22 @@ export function FeedViewPage() {
               </Alert>
             )}
             {!repoIssuesLoading && !repoIssuesError && repoIssues.length === 0 && (
-              <p className="text-muted-foreground">No issues found for this repository.</p>
+              <p className="py-12 text-center text-muted-foreground">
+                No issues found for this repository.
+              </p>
             )}
             {!repoIssuesLoading && !repoIssuesError && repoIssues.length > 0 && (
               <>
-                <p className="mb-2 text-sm text-muted-foreground">
+                <p className="mb-4 text-sm text-muted-foreground">
                   Showing {repoIssues.length} issues
                 </p>
                 <IssuesList issues={repoIssues} />
               </>
             )}
-          </div>
+          </section>
         ) : (
-          <div>
-            <h2 className="mb-4 text-lg font-semibold">Issues from dependencies</h2>
+          <section aria-label="Dependency issues">
+            <h2 className="mb-4 text-xl font-semibold">Issues from dependencies</h2>
             {feedIssuesLoading && <Loader />}
             {feedIssuesError && (
               <Alert variant="destructive" className="mb-4">
@@ -198,17 +216,19 @@ export function FeedViewPage() {
               </Alert>
             )}
             {!feedIssuesLoading && !feedIssuesError && feedIssues.length === 0 && (
-              <p className="text-muted-foreground">No issues found.</p>
+              <p className="py-12 text-center text-muted-foreground">
+                No issues found.
+              </p>
             )}
             {!feedIssuesLoading && !feedIssuesError && feedIssues.length > 0 && (
               <>
-                <p className="mb-2 text-sm text-muted-foreground">
+                <p className="mb-4 text-sm text-muted-foreground">
                   Showing {feedIssues.length} issues
                 </p>
                 <IssuesList issues={feedIssues} />
               </>
             )}
-          </div>
+          </section>
         )}
       </div>
     </div>

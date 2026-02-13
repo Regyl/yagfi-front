@@ -35,33 +35,35 @@ export function IssueCard({issue}: IssueCardProps) {
       href={issueUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="block h-full min-h-[200px] no-underline"
+      className="block h-full min-h-[180px] no-underline transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl"
     >
-      <Card className="flex h-full cursor-pointer flex-col overflow-hidden transition-colors hover:bg-accent/50">
-        <CardContent className="flex flex-1 flex-col gap-2 p-5">
-          <div className="flex min-w-0 gap-2">
+      <Card className="flex h-full flex-col overflow-hidden border transition-colors hover:border-primary/30 hover:bg-accent/30">
+        <CardContent className="flex flex-1 flex-col gap-3 p-5">
+          <div className="flex min-w-0 gap-3">
             {avatarUrl && (
               <img
                 src={avatarUrl}
-                alt="Repository owner"
-                className="size-8 shrink-0 rounded border border-border object-cover"
+                alt=""
+                className="size-9 shrink-0 rounded-lg border border-border object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
               />
             )}
-            <h3 className="line-clamp-2 min-w-0 flex-1 text-base font-semibold leading-snug">
+            <h3 className="line-clamp-2 min-w-0 flex-1 text-base font-medium leading-snug">
               {issueTitle}
             </h3>
           </div>
-          <p className="line-clamp-1 text-sm text-muted-foreground">{repositoryTitle}</p>
+          <p className="line-clamp-1 text-sm text-muted-foreground">
+            {repositoryTitle}
+          </p>
           {repositoryDescription && (
-            <p className="line-clamp-2 text-[13px] text-muted-foreground">
+            <p className="line-clamp-2 text-sm text-muted-foreground leading-relaxed">
               {repositoryDescription}
             </p>
           )}
           {issueLabels && issueLabels.length > 0 && (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1.5">
               {issueLabels.map((label, i) => (
                 <Badge key={i} color="default" variant="outlined">
                   {label}
@@ -70,12 +72,16 @@ export function IssueCard({issue}: IssueCardProps) {
             </div>
           )}
           <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
-            {repositoryLanguage && <Badge color="primary">{repositoryLanguage}</Badge>}
+            {repositoryLanguage && (
+              <Badge color="primary">{repositoryLanguage}</Badge>
+            )}
             <Badge color="secondary">{repositoryStars} ★</Badge>
             {issueLanguage && (
               <Badge color="secondary">{formatLanguage(issueLanguage)}</Badge>
             )}
-            {repositoryLicense && <Badge color="secondary">{repositoryLicense}</Badge>}
+            {repositoryLicense && (
+              <Badge color="secondary">{repositoryLicense}</Badge>
+            )}
             <span className="ml-auto text-xs text-muted-foreground">
               {formatDate(issueCreated)}
             </span>

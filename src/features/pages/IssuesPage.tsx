@@ -45,12 +45,25 @@ export function IssuesPage() {
   }, [baseRequest, pickRandom]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6">
-      <div className="mb-6">
-        <div className="mb-4">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <section className="mb-12 sm:mb-16" aria-labelledby="hero-heading">
+        <h1
+          id="hero-heading"
+          className="bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-3xl font-semibold tracking-tight text-transparent sm:text-4xl"
+        >
+          Find Your First Open Source Contribution
+        </h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground leading-relaxed">
+          Browse beginner-friendly issues labeled <strong>help wanted</strong> and{' '}
+          <strong>good first issue</strong> from popular GitHub repositories.
+        </p>
+      </section>
+
+      <section className="mb-8" aria-label="Filters and actions">
+        <div className="mb-6">
           <ActionButtons pickingRandom={pickingRandom} onPickRandom={handlePickRandom} />
         </div>
-        <div className="mb-4 flex flex-col gap-6">
+        <div className="mb-8 flex flex-col gap-8">
           <FiltersSection
             selectedLanguages={filters.selectedLanguages}
             onLanguagesChange={filters.handleLanguageChange}
@@ -69,35 +82,35 @@ export function IssuesPage() {
           />
         </div>
         {!loading && issues.length > 0 && (
-          <p className="mb-2 text-sm text-muted-foreground">
+          <p className="mb-4 text-sm text-muted-foreground">
             Showing {issues.length} issues
           </p>
         )}
-      </div>
+      </section>
 
       {loading && issues.length === 0 && <Loader />}
 
       {error && (
-        <Alert variant="destructive" className="mb-4">
+        <Alert variant="destructive" className="mb-8" role="alert">
           <AlertDescription>Failed to load issues: {error.message}</AlertDescription>
         </Alert>
       )}
 
       {!loading && issues.length === 0 && (
-        <p className="py-16 text-center text-muted-foreground">
+        <p className="py-20 text-center text-muted-foreground">
           No issues found. Try adjusting your filters.
         </p>
       )}
 
       {issues.length > 0 && (
-        <>
+        <section aria-label="Issues list">
           <IssuesList issues={issues} />
           <InfiniteScrollTrigger
             onIntersect={handleLoadMore}
             hasMore={hasMore}
             loading={loadingMore}
           />
-        </>
+        </section>
       )}
     </div>
   );

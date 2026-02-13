@@ -1,11 +1,47 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
+import {BrowserRouter, Route, Routes, useLocation} from 'react-router-dom';
 import {Header} from '@/shared/ui/Header/Header';
 import {Sidebar} from '@/shared/ui/Sidebar/Sidebar';
+import {Footer} from '@/shared/ui/Footer/Footer';
+import {HomePage} from '@/features/pages/HomePage';
 import {IssuesPage} from '@/features/pages/IssuesPage';
 import {FeedPage} from '@/features/pages/FeedPage';
 import {FeedViewPage} from '@/features/pages/FeedViewPage';
 import {TooltipProvider} from '@/components/ui/tooltip';
+
+function AppLayout({
+  mode,
+  onToggleTheme,
+}: {
+  mode: 'light' | 'dark';
+  onToggleTheme: () => void;
+}) {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header mode={mode} onToggleTheme={onToggleTheme} />
+      <div className="flex flex-1 overflow-hidden">
+        {!isHome && <Sidebar />}
+        <main
+          className={isHome ? 'flex flex-1 flex-col overflow-auto' : 'flex flex-1 flex-col overflow-auto sm:ml-56'}
+          id="main-content"
+        >
+          <div className="flex-1">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/issues" element={<IssuesPage />} />
+              <Route path="/feed" element={<FeedPage />} />
+              <Route path="/feed/:nickname" element={<FeedViewPage />} />
+            </Routes>
+          </div>
+          {!isHome && <Footer />}
+        </main>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
@@ -26,20 +62,7 @@ export default function App() {
   return (
     <TooltipProvider>
       <BrowserRouter>
-        <div className="flex min-h-screen flex-col">
-          <Header mode={mode} onToggleTheme={toggleTheme} />
-          <div className="flex flex-1 overflow-hidden">
-            <Sidebar />
-            <main className="flex-1 overflow-auto pb-20 sm:ml-60 sm:pb-0">
-              <Routes>
-                <Route path="/issues" element={<IssuesPage />} />
-                <Route path="/feed" element={<FeedPage />} />
-                <Route path="/feed/:nickname" element={<FeedViewPage />} />
-                <Route path="/" element={<Navigate to="/issues" replace />} />
-              </Routes>
-            </main>
-          </div>
-        </div>
+        <AppLayout mode={mode} onToggleTheme={toggleTheme} />
       </BrowserRouter>
     </TooltipProvider>
   );

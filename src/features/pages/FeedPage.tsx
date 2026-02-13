@@ -124,47 +124,59 @@ export function FeedPage() {
     !checkingNickname;
 
   return (
-    <div className="mx-auto max-w-md px-4 py-6">
-      <div className="flex flex-col gap-6">
-        <Card className="border">
-          <CardContent className="p-6">
-            <h1 className="mb-4 text-2xl font-semibold">Generate Personalized Feed</h1>
-            <p className="mb-6 text-sm text-muted-foreground">
-              Create a personalized feed based on your preferences/repositories. We'll notify you by email when your feed is ready.
-            </p>
+    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
+      <section className="mb-12" aria-labelledby="feed-heading">
+        <h1 id="feed-heading" className="text-3xl font-semibold tracking-tight">
+          Generate Personalized Feed
+        </h1>
+        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+          Create a personalized feed based on your preferences and repositories. We&apos;ll notify you by email when your feed is ready.
+        </p>
+      </section>
 
-            <div className="mb-6 rounded-lg border bg-card p-4">
-              <h3 className="mb-3 text-sm font-semibold">Supported Package Managers:</h3>
-              <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-8">
+        <Card className="border">
+          <CardContent className="p-6 sm:p-8">
+            <div className="mb-8 rounded-lg border border-border bg-muted/30 p-4">
+              <h2 className="mb-3 text-sm font-medium">Supported Package Managers</h2>
+              <ul className="flex flex-col gap-3" role="list">
                 {ICONS.map(({src, alt, label}) => (
-                  <div key={label} className="flex items-center gap-3">
-                    <img src={src} alt={alt} className="size-5 object-contain" />
+                  <li key={label} className="flex items-center gap-3">
+                    <img src={src} alt="" className="size-5 object-contain" />
                     <span className="text-sm text-muted-foreground">{label}</span>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div>
                 <Label htmlFor="nickname">GitHub Username</Label>
-                <div className="relative mt-1">
+                <div className="relative mt-2">
                   <Input
                     id="nickname"
                     value={nickname}
                     onChange={handleNicknameChange}
                     onBlur={() => nickname.trim() && validateNickname(nickname)}
-                    placeholder="GitHub Username"
+                    placeholder="e.g. octocat"
                     disabled={loading || checkingNickname}
                     className={nicknameError ? 'border-destructive' : ''}
+                    aria-invalid={!!nicknameError}
+                    aria-describedby={nicknameError ? 'nickname-error' : 'nickname-hint'}
                   />
                   {checkingNickname && (
-                    <Loader2 className="absolute right-3 top-1/2 size-5 -translate-y-1/2 animate-spin text-muted-foreground" />
+                    <Loader2
+                      className="absolute right-3 top-1/2 size-5 -translate-y-1/2 animate-spin text-muted-foreground"
+                      aria-hidden
+                    />
                   )}
                 </div>
-                <p className={cn('mt-1 text-sm', nicknameError ? 'text-destructive' : 'text-muted-foreground')}>
+                <p
+                  id={nicknameError ? 'nickname-error' : 'nickname-hint'}
+                  className={cn('mt-2 text-sm', nicknameError ? 'text-destructive' : 'text-muted-foreground')}
+                >
                   {nicknameError ||
-                    'Enter your GitHub username (not your profile name). Example: for https://github.com/Regyl, the username is "Regyl"'}
+                    'Enter your GitHub username (not your profile name). Example: for github.com/Regyl, the username is "Regyl"'}
                 </p>
               </div>
 
@@ -177,28 +189,33 @@ export function FeedPage() {
                   onChange={handleEmailChange}
                   placeholder="your.email@example.com"
                   disabled={loading}
-                  className="mt-1"
+                  className="mt-2"
+                  aria-invalid={!!emailError}
+                  aria-describedby={emailError ? 'email-error' : 'email-hint'}
                 />
-                <p className={cn('mt-1 text-sm', emailError ? 'text-destructive' : 'text-muted-foreground')}>
+                <p
+                  id={emailError ? 'email-error' : 'email-hint'}
+                  className={cn('mt-2 text-sm', emailError ? 'text-destructive' : 'text-muted-foreground')}
+                >
                   {emailError || "We'll notify you when your feed is ready"}
                 </p>
               </div>
 
-              <div className="rounded-lg border bg-muted/50 p-4">
-                <p className="text-xs text-muted-foreground">
-                  <strong>Privacy Note:</strong> Your email will be used only to notify you when your feed is ready. We promise no advertising or sharing your data with third parties.
+              <div className="rounded-lg border border-border bg-muted/30 p-4">
+                <p className="text-sm text-muted-foreground">
+                  <strong className="text-foreground">Privacy:</strong> Your email will be used only to notify you when your feed is ready. No advertising or sharing with third parties.
                 </p>
               </div>
 
               {error && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" role="alert">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
               {success && (
-                <Alert>
+                <Alert role="status">
                   <AlertDescription>
-                    Feed generation started successfully! You'll receive an email notification when it's ready.
+                    Feed generation started. You&apos;ll receive an email when it&apos;s ready.
                   </AlertDescription>
                 </Alert>
               )}
@@ -208,7 +225,7 @@ export function FeedPage() {
                 disabled={!isFormValid || loading}
                 className="w-full"
               >
-                <Send className="size-4" />
+                <Send className="size-4" aria-hidden />
                 {loading ? 'Generating...' : 'Generate Feed'}
               </Button>
             </form>
@@ -216,9 +233,11 @@ export function FeedPage() {
         </Card>
 
         <Card className="border">
-          <CardContent className="p-6">
-            <h2 className="mb-4 text-xl font-semibold">Processed Requests</h2>
-            {usersLoading && <p className="text-sm text-muted-foreground">Loading users...</p>}
+          <CardContent className="p-6 sm:p-8">
+            <h2 className="mb-6 text-xl font-semibold">Processed Requests</h2>
+            {usersLoading && (
+              <p className="text-sm text-muted-foreground">Loading users...</p>
+            )}
             {usersError && (
               <Alert variant="destructive" className="mb-4">
                 <AlertDescription>{usersError}</AlertDescription>
@@ -228,7 +247,7 @@ export function FeedPage() {
               <p className="text-sm text-muted-foreground">No users found yet.</p>
             )}
             {!usersLoading && !usersError && users.length > 0 && (
-              <ul className="divide-y">
+              <ul className="divide-y divide-border" role="list">
                 {users.map((userNickname, i) => {
                   if (!userNickname) return null;
                   const avatarUrl = getGitHubUserAvatar(userNickname);
@@ -237,10 +256,10 @@ export function FeedPage() {
                       <button
                         type="button"
                         onClick={() => navigate(`/feed/${userNickname}`)}
-                        className="flex w-full items-center gap-4 px-0 py-6 text-left hover:bg-accent/50"
+                        className="flex w-full items-center gap-4 px-0 py-5 text-left transition-colors hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
                       >
-                        <Avatar className="bg-primary">
-                          <AvatarImage src={avatarUrl || undefined} alt={userNickname} />
+                        <Avatar className="size-10 bg-primary">
+                          <AvatarImage src={avatarUrl || undefined} alt={`${userNickname} avatar`} />
                           <AvatarFallback>{userNickname.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <span className="font-medium">{userNickname}</span>

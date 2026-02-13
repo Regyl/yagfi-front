@@ -31,7 +31,7 @@ export function InfiniteScrollTrigger({
 
   if (!hasMore) {
     return (
-      <div className="py-16 text-center">
+      <div className="py-16 text-center" role="status" aria-live="polite">
         <p className="text-sm text-muted-foreground">No more issues to load</p>
       </div>
     );
@@ -40,9 +40,16 @@ export function InfiniteScrollTrigger({
   return (
     <div
       ref={triggerRef}
-      className="flex min-h-[100px] items-center justify-center py-16"
+      className="flex min-h-[120px] items-center justify-center py-16"
+      aria-live="polite"
+      aria-busy={loading}
     >
-      {loading && <Loader2 className="size-8 animate-spin text-muted-foreground" />}
+      {loading && (
+        <Loader2
+          className="size-8 animate-spin text-muted-foreground"
+          aria-hidden
+        />
+      )}
     </div>
   );
 }

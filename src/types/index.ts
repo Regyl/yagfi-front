@@ -34,10 +34,16 @@ export interface StarsFilter {
   operator: 'GREATER' | 'LESS';
 }
 
+export interface IssueLanguagesFilter {
+  values: string[];
+  operator: 'IN' | 'NOT_IN';
+}
+
 export interface IssuesFilter {
   languages?: LanguageFilter;
   licenses?: LicensesFilter;
   stars?: StarsFilter;
+  issueLanguages?: IssueLanguagesFilter;
 }
 
 export interface Order {

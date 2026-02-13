@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Loader2, Plus, RotateCcw, X} from 'lucide-react';
-import {LicensesFilter, StarsFilter} from '@/types';
+import {IssueLanguagesFilter, LicensesFilter, StarsFilter} from '@/types';
 import {LICENSES_OPERATORS, STARS_OPERATORS} from '@/shared/constants';
-import {useLanguages, useLicenses} from '@/features/hooks';
+import {useIssueLanguages, useLanguages, useLicenses} from '@/features/hooks';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Label} from '@/components/ui/label';
@@ -18,6 +18,10 @@ interface FiltersSectionProps {
   onLicensesChange: (licenses: string[]) => void;
   licensesOperator: LicensesFilter['operator'];
   onLicensesOperatorChange: (value: LicensesFilter['operator']) => void;
+  selectedIssueLanguages: string[];
+  onIssueLanguagesChange: (languages: string[]) => void;
+  issueLanguagesOperator: IssueLanguagesFilter['operator'];
+  onIssueLanguagesOperatorChange: (value: IssueLanguagesFilter['operator']) => void;
   starsFilter: {value: number; operator: StarsFilter['operator']} | null;
   onStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onStarsOperatorChange: (value: StarsFilter['operator']) => void;
@@ -25,6 +29,7 @@ interface FiltersSectionProps {
   onAddStarsFilter: () => void;
   onResetLanguages: () => void;
   onResetLicenses: () => void;
+  onResetIssueLanguages: () => void;
   onResetAll: () => void;
 }
 
@@ -35,6 +40,10 @@ export function FiltersSection({
   onLicensesChange,
   licensesOperator,
   onLicensesOperatorChange,
+  selectedIssueLanguages,
+  onIssueLanguagesChange,
+  issueLanguagesOperator,
+  onIssueLanguagesOperatorChange,
   starsFilter,
   onStarsValueChange,
   onStarsOperatorChange,
@@ -42,14 +51,18 @@ export function FiltersSection({
   onAddStarsFilter,
   onResetLanguages,
   onResetLicenses,
+  onResetIssueLanguages,
   onResetAll,
 }: FiltersSectionProps) {
   const {languages, loading} = useLanguages();
   const {licenses, loading: licensesLoading} = useLicenses();
+  const {issueLanguages, loading: issueLanguagesLoading} = useIssueLanguages();
   const [langOpen, setLangOpen] = useState(false);
   const [licensesOpen, setLicensesOpen] = useState(false);
+  const [issueLanguagesOpen, setIssueLanguagesOpen] = useState(false);
   const [filter, setFilter] = useState('');
   const [licensesFilter, setLicensesFilter] = useState('');
+  const [issueLanguagesFilter, setIssueLanguagesFilter] = useState('');
 
   const filtered = languages
     .filter((l) => l?.trim())
@@ -75,9 +88,22 @@ export function FiltersSection({
     }
   };
 
+  const filteredIssueLanguages = issueLanguages
+    .filter((l) => l?.trim())
+    .filter((l) => !issueLanguagesFilter || l.toLowerCase().includes(issueLanguagesFilter.toLowerCase()));
+
+  const toggleIssueLanguage = (lang: string) => {
+    if (selectedIssueLanguages.includes(lang)) {
+      onIssueLanguagesChange(selectedIssueLanguages.filter((x) => x !== lang));
+    } else {
+      onIssueLanguagesChange([...selectedIssueLanguages, lang]);
+    }
+  };
+
   const hasActiveFilters =
     selectedLanguages.length > 0 ||
     selectedLicenses.length > 0 ||
+    selectedIssueLanguages.length > 0 ||
     starsFilter !== null;
 
   return (
@@ -231,6 +257,92 @@ export function FiltersSection({
                             aria-label={`Select ${lic}`}
                           />
                           {lic}
+                        </label>
+                      ))
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="min-w-0 flex-1 py-4 sm:max-w-[360px]">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <Label htmlFor="issue-languages-trigger" className="text-sm font-medium">
+              Issue Languages
+            </Label>
+            {selectedIssueLanguages.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onResetIssueLanguages}
+                className="h-8 px-2 text-muted-foreground hover:text-destructive"
+                aria-label="Reset issue languages filter"
+              >
+                <X className="size-4" aria-hidden />
+              </Button>
+            )}
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2">
+              <Select value={issueLanguagesOperator} onValueChange={onIssueLanguagesOperatorChange}>
+                <SelectTrigger className="h-9 w-full sm:w-[120px]">
+                  <SelectValue placeholder="Operator" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LICENSES_OPERATORS.map((op) => (
+                    <SelectItem key={op.value} value={op.value}>
+                      {op.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Popover open={issueLanguagesOpen} onOpenChange={setIssueLanguagesOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="issue-languages-trigger"
+                    variant="outline"
+                    className="w-full justify-between font-normal"
+                    aria-expanded={issueLanguagesOpen}
+                    aria-haspopup="listbox"
+                  >
+                    {selectedIssueLanguages.length === 0
+                      ? 'All languages'
+                      : `${selectedIssueLanguages.length} selected`}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="min-w-[300px] w-[var(--radix-popover-trigger-width)] p-0">
+                  <div className="p-2">
+                    <Input
+                      placeholder="Filter issue languages..."
+                      value={issueLanguagesFilter}
+                      onChange={(e) => setIssueLanguagesFilter(e.target.value)}
+                      className="h-9"
+                      aria-label="Filter issue languages"
+                    />
+                  </div>
+                  <div
+                    className="max-h-[280px] overflow-y-auto p-2"
+                    role="listbox"
+                    aria-label="Issue language options"
+                  >
+                    {issueLanguagesLoading ? (
+                      <div className="flex items-center justify-center py-8">
+                        <Loader2 className="size-5 animate-spin text-muted-foreground" aria-hidden />
+                      </div>
+                    ) : (
+                      filteredIssueLanguages.map((lang) => (
+                        <label
+                          key={lang}
+                          className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-accent"
+                        >
+                          <Checkbox
+                            checked={selectedIssueLanguages.includes(lang)}
+                            onCheckedChange={() => toggleIssueLanguage(lang)}
+                            aria-label={`Select ${lang}`}
+                          />
+                          {lang}
                         </label>
                       ))
                     )}

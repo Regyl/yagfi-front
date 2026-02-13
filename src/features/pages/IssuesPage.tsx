@@ -23,6 +23,8 @@ export function IssuesPage() {
       filters.selectedLanguages,
       filters.selectedLicenses,
       filters.licensesOperator,
+      filters.selectedIssueLanguages,
+      filters.issueLanguagesOperator,
       filters.starsFilter,
       sorting.sortOrders
     );
@@ -30,6 +32,8 @@ export function IssuesPage() {
     filters.selectedLanguages,
     filters.selectedLicenses,
     filters.licensesOperator,
+    filters.selectedIssueLanguages,
+    filters.issueLanguagesOperator,
     filters.starsFilter,
     sorting.sortOrders,
   ]);
@@ -38,6 +42,8 @@ export function IssuesPage() {
     selectedLanguages: filters.selectedLanguages,
     selectedLicenses: filters.selectedLicenses,
     licensesOperator: filters.licensesOperator,
+    selectedIssueLanguages: filters.selectedIssueLanguages,
+    issueLanguagesOperator: filters.issueLanguagesOperator,
     starsFilter: filters.starsFilter,
     sortOrders: sorting.sortOrders,
   });
@@ -81,6 +87,10 @@ export function IssuesPage() {
             onLicensesChange={filters.handleLicenseChange}
             licensesOperator={filters.licensesOperator}
             onLicensesOperatorChange={filters.handleLicensesOperatorChange}
+            selectedIssueLanguages={filters.selectedIssueLanguages}
+            onIssueLanguagesChange={filters.handleIssueLanguagesChange}
+            issueLanguagesOperator={filters.issueLanguagesOperator}
+            onIssueLanguagesOperatorChange={filters.handleIssueLanguagesOperatorChange}
             starsFilter={filters.starsFilter}
             onStarsValueChange={filters.handleStarsValueChange}
             onStarsOperatorChange={filters.handleStarsOperatorChange}
@@ -88,6 +98,7 @@ export function IssuesPage() {
             onAddStarsFilter={filters.handleAddStarsFilter}
             onResetLanguages={filters.handleResetLanguages}
             onResetLicenses={filters.handleResetLicenses}
+            onResetIssueLanguages={filters.handleResetIssueLanguages}
             onResetAll={filters.handleResetAll}
           />
           <SortSection

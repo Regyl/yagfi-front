@@ -1,4 +1,4 @@
-import {LicensesFilter, Order, StarsFilter} from '@/types';
+import {IssueLanguagesFilter, LicensesFilter, Order, StarsFilter} from '@/types';
 import {DEFAULT_SORT_FIELD} from '../constants';
 
 /**
@@ -21,6 +21,16 @@ export function serializeLicenses(licenses: string[]): string | null {
 }
 
 export function deserializeLicenses(param: string | null): string[] {
+    if (!param) return [];
+    return param.split(',').filter(Boolean);
+}
+
+// Issue languages: comma-separated list + operator (issueLanguagesOp: IN | NOT_IN)
+export function serializeIssueLanguages(languages: string[]): string | null {
+    return languages.length > 0 ? languages.join(',') : null;
+}
+
+export function deserializeIssueLanguages(param: string | null): string[] {
     if (!param) return [];
     return param.split(',').filter(Boolean);
 }
@@ -83,6 +93,8 @@ export function readStateFromUrl(): {
     languages: string[];
     licenses: string[];
     licensesOperator: LicensesFilter['operator'];
+    issueLanguages: string[];
+    issueLanguagesOperator: IssueLanguagesFilter['operator'];
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
     sortOrders: Order[];
 } {
@@ -90,11 +102,16 @@ export function readStateFromUrl(): {
     const licensesOp = params.get('licensesOp');
     const validLicensesOp: LicensesFilter['operator'] =
         licensesOp === 'IN' || licensesOp === 'NOT_IN' ? licensesOp : 'IN';
+    const issueLanguagesOp = params.get('issueLanguagesOp');
+    const validIssueLanguagesOp: IssueLanguagesFilter['operator'] =
+        issueLanguagesOp === 'IN' || issueLanguagesOp === 'NOT_IN' ? issueLanguagesOp : 'IN';
 
     return {
         languages: deserializeLanguages(params.get('languages')),
         licenses: deserializeLicenses(params.get('licenses')),
         licensesOperator: validLicensesOp,
+        issueLanguages: deserializeIssueLanguages(params.get('issueLanguages')),
+        issueLanguagesOperator: validIssueLanguagesOp,
         starsFilter: deserializeStarsFilter(params.get('stars'), params.get('starsOp')),
         sortOrders: deserializeSortOrders(params.get('sort')),
     };
@@ -112,6 +129,8 @@ export function updateUrlParams(
     languages: string[],
     licenses: string[],
     licensesOperator: LicensesFilter['operator'],
+    issueLanguages: string[],
+    issueLanguagesOperator: IssueLanguagesFilter['operator'],
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null,
     sortOrders: Order[]
 ): void {
@@ -135,6 +154,16 @@ export function updateUrlParams(
     } else {
         params.delete('licenses');
         params.delete('licensesOp');
+    }
+
+    // Update issue languages filter
+    const issueLanguagesParam = serializeIssueLanguages(issueLanguages);
+    if (issueLanguagesParam) {
+        params.set('issueLanguages', issueLanguagesParam);
+        params.set('issueLanguagesOp', issueLanguagesOperator);
+    } else {
+        params.delete('issueLanguages');
+        params.delete('issueLanguagesOp');
     }
 
     // Update stars filter

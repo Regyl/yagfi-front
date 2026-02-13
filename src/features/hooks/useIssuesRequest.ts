@@ -6,6 +6,8 @@ interface UseIssuesRequestParams {
     selectedLanguages: string[];
     selectedLicenses: string[];
     licensesOperator: 'IN' | 'NOT_IN';
+    selectedIssueLanguages: string[];
+    issueLanguagesOperator: 'IN' | 'NOT_IN';
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
     sortOrders: { field: string; type: 'asc' | 'desc' }[];
 }
@@ -14,6 +16,8 @@ export function useIssuesRequest({
                                      selectedLanguages,
                                      selectedLicenses,
                                      licensesOperator,
+                                     selectedIssueLanguages,
+                                     issueLanguagesOperator,
                                      starsFilter,
                                      sortOrders,
                                  }: UseIssuesRequestParams): Omit<IssuesRequest, 'offset'> {
@@ -34,6 +38,13 @@ export function useIssuesRequest({
             };
         }
 
+        if (selectedIssueLanguages.length > 0) {
+            filter.issueLanguages = {
+                values: selectedIssueLanguages,
+                operator: issueLanguagesOperator,
+            };
+        }
+
         if (starsFilter && starsFilter.value !== null && starsFilter.value !== undefined) {
             filter.stars = {
                 value: starsFilter.value,
@@ -46,5 +57,5 @@ export function useIssuesRequest({
             filter: Object.keys(filter).length > 0 ? filter : undefined,
             orders: sortOrders.length > 0 ? sortOrders : undefined,
         };
-    }, [selectedLanguages, selectedLicenses, licensesOperator, starsFilter, sortOrders]);
+    }, [selectedLanguages, selectedLicenses, licensesOperator, selectedIssueLanguages, issueLanguagesOperator, starsFilter, sortOrders]);
 }

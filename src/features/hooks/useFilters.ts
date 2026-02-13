@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {LicensesFilter, StarsFilter} from '@/types';
+import {IssueLanguagesFilter, LicensesFilter, StarsFilter} from '@/types';
 import {DEFAULT_STARS_FILTER} from '@/shared/constants';
 import {getIsUpdatingUrl, onUrlUpdate, readStateFromUrl} from '@/shared/utils/urlParams';
 
@@ -7,16 +7,21 @@ export interface UseFiltersReturn {
     selectedLanguages: string[];
     selectedLicenses: string[];
     licensesOperator: LicensesFilter['operator'];
+    selectedIssueLanguages: string[];
+    issueLanguagesOperator: IssueLanguagesFilter['operator'];
     starsFilter: { value: number; operator: StarsFilter['operator'] } | null;
     handleLanguageChange: (languages: string[]) => void;
     handleLicenseChange: (licenses: string[]) => void;
     handleLicensesOperatorChange: (operator: LicensesFilter['operator']) => void;
+    handleIssueLanguagesChange: (languages: string[]) => void;
+    handleIssueLanguagesOperatorChange: (operator: IssueLanguagesFilter['operator']) => void;
     handleStarsValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleStarsOperatorChange: (operator: StarsFilter['operator']) => void;
     handleRemoveStarsFilter: () => void;
     handleAddStarsFilter: () => void;
     handleResetLanguages: () => void;
     handleResetLicenses: () => void;
+    handleResetIssueLanguages: () => void;
     handleResetAll: () => void;
 }
 
@@ -38,6 +43,7 @@ export function useFilters({
     const hasStarsInUrl = urlParams.has('stars') && urlParams.has('starsOp');
     const hasLanguagesInUrl = urlParams.has('languages');
     const hasLicensesInUrl = urlParams.has('licenses');
+    const hasIssueLanguagesInUrl = urlParams.has('issueLanguages');
 
     // For languages: use URL if present, otherwise use initial or empty array
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
@@ -50,6 +56,13 @@ export function useFilters({
     );
     const [licensesOperator, setLicensesOperator] = useState<LicensesFilter['operator']>(
         hasLicensesInUrl ? urlState.licensesOperator : urlState.licensesOperator
+    );
+
+    const [selectedIssueLanguages, setSelectedIssueLanguages] = useState<string[]>(
+        hasIssueLanguagesInUrl ? urlState.issueLanguages : urlState.issueLanguages
+    );
+    const [issueLanguagesOperator, setIssueLanguagesOperator] = useState<IssueLanguagesFilter['operator']>(
+        hasIssueLanguagesInUrl ? urlState.issueLanguagesOperator : urlState.issueLanguagesOperator
     );
 
     // For stars filter: if URL has stars params, use them (even if null - means filter was explicitly removed)
@@ -72,6 +85,8 @@ export function useFilters({
                 setSelectedLanguages(newUrlState.languages);
                 setSelectedLicenses(newUrlState.licenses);
                 setLicensesOperator(newUrlState.licensesOperator);
+                setSelectedIssueLanguages(newUrlState.issueLanguages);
+                setIssueLanguagesOperator(newUrlState.issueLanguagesOperator);
                 setStarsFilter(newUrlState.starsFilter);
             }
             lastUrlRef.current = currentUrl;
@@ -105,6 +120,14 @@ export function useFilters({
 
     const handleLicensesOperatorChange = useCallback((operator: LicensesFilter['operator']) => {
         setLicensesOperator(operator);
+    }, []);
+
+    const handleIssueLanguagesChange = useCallback((languages: string[]) => {
+        setSelectedIssueLanguages(languages);
+    }, []);
+
+    const handleIssueLanguagesOperatorChange = useCallback((operator: IssueLanguagesFilter['operator']) => {
+        setIssueLanguagesOperator(operator);
     }, []);
 
     const handleStarsValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -146,10 +169,17 @@ export function useFilters({
         setLicensesOperator('IN');
     }, []);
 
+    const handleResetIssueLanguages = useCallback(() => {
+        setSelectedIssueLanguages([]);
+        setIssueLanguagesOperator('IN');
+    }, []);
+
     const handleResetAll = useCallback(() => {
         setSelectedLanguages([]);
         setSelectedLicenses([]);
         setLicensesOperator('IN');
+        setSelectedIssueLanguages([]);
+        setIssueLanguagesOperator('IN');
         setStarsFilter(null);
     }, []);
 
@@ -157,16 +187,21 @@ export function useFilters({
         selectedLanguages,
         selectedLicenses,
         licensesOperator,
+        selectedIssueLanguages,
+        issueLanguagesOperator,
         starsFilter,
         handleLanguageChange,
         handleLicenseChange,
         handleLicensesOperatorChange,
+        handleIssueLanguagesChange,
+        handleIssueLanguagesOperatorChange,
         handleStarsValueChange,
         handleStarsOperatorChange,
         handleRemoveStarsFilter,
         handleAddStarsFilter,
         handleResetLanguages,
         handleResetLicenses,
+        handleResetIssueLanguages,
         handleResetAll,
     };
 }

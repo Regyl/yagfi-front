@@ -60,7 +60,6 @@ const ADVANTAGES = [
 export function HomePage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
       <section
         className="mx-auto w-full max-w-4xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8"
         aria-labelledby="hero-heading"
@@ -89,7 +88,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* What is YAGFI */}
       <section
         className="border-y border-border bg-muted/30 px-4 py-16 sm:px-6 lg:px-8"
         aria-labelledby="what-heading"
@@ -112,7 +110,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Key Features */}
       <section
         className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8"
         aria-labelledby="features-heading"
@@ -141,7 +138,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* How It Works */}
       <section
         className="border-y border-border bg-muted/30 px-4 py-16 sm:px-6 lg:px-8"
         aria-labelledby="how-heading"
@@ -169,7 +165,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Why YAGFI */}
       <section
         className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 lg:px-8"
         aria-labelledby="why-heading"
@@ -195,7 +190,6 @@ export function HomePage() {
         </ul>
       </section>
 
-      {/* CTA Section */}
       <section
         className="border-y border-border bg-muted/30 px-4 py-16 sm:px-6 lg:px-8"
         aria-labelledby="cta-heading"
@@ -216,7 +210,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Footer - minimal for landing, main Footer is in App */}
       <footer
         className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8"
         role="contentinfo"

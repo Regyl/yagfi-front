@@ -108,13 +108,13 @@ export function FiltersSection({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start">
         <Card className="min-w-0 flex-1 py-4 sm:max-w-[280px]">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex min-h-9 flex-row items-center justify-between space-y-0 pb-2">
             <Label htmlFor="languages-trigger" className="text-sm font-medium">
               Languages
             </Label>
-            {selectedLanguages.length > 0 && (
+            {selectedLanguages.length > 0 ? (
               <Button
                 variant="ghost"
                 size="sm"
@@ -124,6 +124,8 @@ export function FiltersSection({
               >
                 <X className="size-4" aria-hidden />
               </Button>
+            ) : (
+              <span className="h-8 w-8" aria-hidden />
             )}
           </CardHeader>
           <CardContent>
@@ -182,11 +184,11 @@ export function FiltersSection({
         </Card>
 
         <Card className="min-w-0 flex-1 py-4 sm:max-w-[320px]">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex min-h-9 flex-row items-center justify-between space-y-0 pb-2">
             <Label htmlFor="licenses-trigger" className="text-sm font-medium">
               Licenses
             </Label>
-            {selectedLicenses.length > 0 && (
+            {selectedLicenses.length > 0 ? (
               <Button
                 variant="ghost"
                 size="sm"
@@ -196,6 +198,8 @@ export function FiltersSection({
               >
                 <X className="size-4" aria-hidden />
               </Button>
+            ) : (
+              <span className="h-8 w-8" aria-hidden />
             )}
           </CardHeader>
           <CardContent>
@@ -267,12 +271,12 @@ export function FiltersSection({
           </CardContent>
         </Card>
 
-        <Card className="min-w-0 flex-1 py-4 sm:max-w-[360px]">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="min-w-0 flex-1 py-4 sm:max-w-[440px]">
+          <CardHeader className="flex min-h-9 flex-row items-center justify-between space-y-0 pb-2">
             <Label htmlFor="issue-languages-trigger" className="text-sm font-medium">
               Issue Languages
             </Label>
-            {selectedIssueLanguages.length > 0 && (
+            {selectedIssueLanguages.length > 0 ? (
               <Button
                 variant="ghost"
                 size="sm"
@@ -282,12 +286,14 @@ export function FiltersSection({
               >
                 <X className="size-4" aria-hidden />
               </Button>
+            ) : (
+              <span className="h-8 w-8" aria-hidden />
             )}
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-2">
               <Select value={issueLanguagesOperator} onValueChange={onIssueLanguagesOperatorChange}>
-                <SelectTrigger className="h-9 w-full sm:w-[120px]">
+                <SelectTrigger className="h-9 w-full sm:w-[200px]">
                   <SelectValue placeholder="Operator" />
                 </SelectTrigger>
                 <SelectContent>
@@ -303,12 +309,12 @@ export function FiltersSection({
                   <Button
                     id="issue-languages-trigger"
                     variant="outline"
-                    className="w-full justify-between font-normal"
+                    className="h-9 w-full justify-between font-normal sm:w-[200px]"
                     aria-expanded={issueLanguagesOpen}
                     aria-haspopup="listbox"
                   >
                     {selectedIssueLanguages.length === 0
-                      ? 'All languages'
+                      ? 'All issue languages'
                       : `${selectedIssueLanguages.length} selected`}
                   </Button>
                 </PopoverTrigger>
@@ -353,10 +359,10 @@ export function FiltersSection({
           </CardContent>
         </Card>
 
-        <Card className="min-w-0 flex-1 py-4 sm:max-w-[320px]">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="min-w-0 flex-1 py-4 sm:max-w-[440px]">
+          <CardHeader className="flex min-h-9 flex-row items-center justify-between space-y-0 pb-2">
             <Label className="text-sm font-medium">Stars</Label>
-            {starsFilter !== null && (
+            {starsFilter !== null ? (
               <Button
                 variant="ghost"
                 size="sm"
@@ -366,16 +372,18 @@ export function FiltersSection({
               >
                 <X className="size-4" aria-hidden />
               </Button>
+            ) : (
+              <span className="h-8 w-8" aria-hidden />
             )}
           </CardHeader>
           <CardContent>
             {starsFilter ? (
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                 <Select
                   value={starsFilter.operator}
                   onValueChange={onStarsOperatorChange}
                 >
-                  <SelectTrigger className="h-9 w-[160px] sm:w-[180px]">
+                  <SelectTrigger className="h-9 w-full sm:w-[200px]">
                     <SelectValue placeholder="Operator" />
                   </SelectTrigger>
                   <SelectContent>
@@ -392,7 +400,7 @@ export function FiltersSection({
                   placeholder="Stars"
                   value={starsFilter.value}
                   onChange={onStarsValueChange}
-                  className="h-9 w-[100px] sm:w-[120px]"
+                  className="h-9 w-full sm:w-[200px]"
                   aria-label="Stars value"
                 />
               </div>

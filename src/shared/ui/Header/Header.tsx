@@ -57,7 +57,11 @@ export function Header({mode, onToggleTheme}: HeaderProps) {
                   <span className="hidden md:inline">Synced {latestSyncTime}</span>
                 </span>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent
+                side="bottom"
+                sideOffset={8}
+                className="z-[1200]"
+              >
                 {syncEvents.map((e: SyncEvent) => (
                   <div key={e.source} className="mb-1 last:mb-0">
                     {e.source}: {formatDate(e.lastUpdateDttm)}

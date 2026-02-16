@@ -94,7 +94,7 @@ export function Header({mode, onToggleTheme}: HeaderProps) {
                 <span className="hidden sm:inline">GitHub</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[160px]">
+            <DropdownMenuContent align="end" side="bottom" sideOffset={8} className="z-[1200] min-w-[160px]">
               <DropdownMenuItem onClick={() => handleGithubClick(GITHUB_FRONTEND_REPO_URL)}>
                 <Globe className="size-4" aria-hidden />
                 Frontend

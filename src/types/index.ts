@@ -84,6 +84,13 @@ export interface FeedUser {
     created: string;
 }
 
+export interface FeedRepositoryItem {
+    sourceRepo: string;
+    dependencyUrl: string;
+    issueCnt: number;
+    stars: number;
+}
+
 // Runtime environment configuration (injected by entrypoint.sh in production)
 declare global {
     interface Window {

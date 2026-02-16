@@ -1,4 +1,11 @@
-import {FeedGenerateRequest, FeedGenerateResponse, IssuesRequest, IssuesResponse, SyncEvent} from '@/types';
+import {
+    FeedGenerateRequest,
+    FeedGenerateResponse,
+    FeedRepositoryItem,
+    IssuesRequest,
+    IssuesResponse,
+    SyncEvent
+} from '@/types';
 import {API_BASE_URL} from '@/shared/constants';
 import {getUtmSource} from '@/shared/utils/urlParams';
 
@@ -126,7 +133,7 @@ export async function fetchFeedUsers(): Promise<string[]> {
     return response.json();
 }
 
-export async function fetchFeedRepositories(nickname: string): Promise<{sourceRepo: string; count: number}[]> {
+export async function fetchFeedRepositories(nickname: string): Promise<FeedRepositoryItem[]> {
     const response = await fetch(`${API_BASE_URL}/feed/repositories?nickname=${encodeURIComponent(nickname)}`, {
         method: 'GET',
         headers: getRequestHeaders(),

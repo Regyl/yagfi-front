@@ -7,7 +7,9 @@ import {IssuesList} from '../components/IssuesList';
 import {Loader} from '@/shared/ui/Loader/Loader';
 import {Button} from '@/components/ui/button';
 import {Alert, AlertDescription} from '@/components/ui/alert';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {getRepoDisplayName} from '@/shared/utils/githubRepo';
+import {getGitHubUserAvatar} from '@/shared/utils/getGitHubUserAvatar';
 
 export function FeedIssuesPage() {
   const {nickname} = useParams<{nickname: string}>();
@@ -44,6 +46,8 @@ export function FeedIssuesPage() {
 
   if (!nickname) return null;
 
+  const avatarUrl = getGitHubUserAvatar(nickname);
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-6 flex items-center gap-4">
@@ -52,6 +56,10 @@ export function FeedIssuesPage() {
             <ArrowLeft className="size-4" aria-hidden />
           </Button>
         </Link>
+        <Avatar className="size-12 shrink-0 bg-primary">
+          <AvatarImage src={avatarUrl ?? undefined} alt={`${nickname} avatar`} />
+          <AvatarFallback>{nickname.charAt(0).toUpperCase()}</AvatarFallback>
+        </Avatar>
         <h1 className="text-3xl font-semibold tracking-tight">
           {sourceRepo
             ? `Issues from ${getRepoDisplayName(sourceRepo)}`

@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {ChevronDown, ChevronRight, ExternalLink, Loader2} from 'lucide-react';
+import {AlertCircle, ChevronDown, ChevronRight, ExternalLink, FolderGit2, Layers, Loader2} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {fetchFeedRepositories} from '@/api/issuesApi';
 import {FeedRepositoryItem} from '@/types';
@@ -241,33 +241,73 @@ export function FeedViewPage() {
       <div className="flex flex-col gap-8">
         <section aria-label="Overview">
           <h2 className="mb-4 text-xl font-semibold">Overview</h2>
-          <Card className="border">
-            <CardContent className="p-6">
-              <div className="flex flex-wrap gap-6">
-                <div>
-                  <span className="text-2xl font-bold text-primary">{groups.length}</span>
-                  <span className="ml-2 text-muted-foreground">repositories processed</span>
+          <div
+            className="relative overflow-hidden rounded-2xl border-0 shadow-xl shadow-primary/10 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/15"
+            style={{
+              background:
+                'linear-gradient(135deg, oklch(0.55 0.18 270 / 0.95) 0%, oklch(0.5 0.16 260 / 0.95) 35%, oklch(0.45 0.14 250 / 0.95) 70%, oklch(0.4 0.12 240 / 0.95) 100%)',
+              boxShadow:
+                '0 25px 50px -12px oklch(0.45 0.15 250 / 0.25), inset 0 1px 0 0 oklch(1 0 0 / 0.1)',
+            }}
+          >
+            {/* Subtle mesh gradient overlay */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-30"
+              style={{
+                background:
+                  'radial-gradient(ellipse 80% 50% at 50% -20%, oklch(0.9 0.05 250), transparent), radial-gradient(ellipse 60% 40% at 100% 100%, oklch(0.6 0.12 280), transparent)',
+              }}
+            />
+            <div className="relative p-8">
+              <div className="flex flex-wrap gap-8 sm:gap-12">
+                <div className="group flex items-center gap-4">
+                  <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                    <FolderGit2 className="size-7 text-white/95" aria-hidden />
+                  </div>
+                  <div>
+                    <span className="block text-3xl font-bold tracking-tight text-white drop-shadow-sm">
+                      {groups.length}
+                    </span>
+                    <span className="text-sm font-medium text-white/80">repositories processed</span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-2xl font-bold text-primary">{items.length}</span>
-                  <span className="ml-2 text-muted-foreground">project's dependencies</span>
+                <div className="group flex items-center gap-4">
+                  <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                    <Layers className="size-7 text-white/95" aria-hidden />
+                  </div>
+                  <div>
+                    <span className="block text-3xl font-bold tracking-tight text-white drop-shadow-sm">
+                      {items.length}
+                    </span>
+                    <span className="text-sm font-medium text-white/80">
+                      dependencies found
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-2xl font-bold text-primary">
-                    {items.reduce((a, i) => a + i.issueCnt, 0)}
-                  </span>
-                  <span className="ml-2 text-muted-foreground">total issues</span>
+                <div className="group flex items-center gap-4">
+                  <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                    <AlertCircle className="size-7 text-white/95" aria-hidden />
+                  </div>
+                  <div>
+                    <span className="block text-3xl font-bold tracking-tight text-white drop-shadow-sm">
+                      {items.reduce((a, i) => a + i.issueCnt, 0)}
+                    </span>
+                    <span className="text-sm font-medium text-white/80">total issues</span>
+                  </div>
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-8">
                 <Link to={`/feed/${nickname}/issues`}>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    size="sm"
+                    className="border-white/30 bg-white/20 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/30 hover:border-white/50"
+                  >
                     View all issues
                   </Button>
                 </Link>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </section>
 
         <section aria-label="Repositories by source">

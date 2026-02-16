@@ -78,12 +78,45 @@ export function deserializeSortOrders(param: string | null): Order[] {
     return orders.length > 0 ? orders : [{field: DEFAULT_SORT_FIELD, type: 'desc'}];
 }
 
+const UTM_SOURCE_STORAGE_KEY = 'yagfi_utm_source';
+
 /**
- * Reads utm_source from URL search params
+ * Persists utm_source from URL to sessionStorage when user first lands.
+ * Call this on app mount so UTM survives client-side navigation (e.g. Link to="/issues").
+ */
+export function initUtmSourcePersistence(): void {
+    const params = new URLSearchParams(window.location.search);
+    const utmSource = params.get('utm_source');
+    if (utmSource) {
+        try {
+            sessionStorage.setItem(UTM_SOURCE_STORAGE_KEY, utmSource);
+        } catch {
+            /* ignore */
+        }
+    }
+}
+
+/**
+ * Reads utm_source from URL search params or sessionStorage (fallback after client-side navigation).
  */
 export function getUtmSource(): string | null {
     const params = new URLSearchParams(window.location.search);
-    return params.get('utm_source');
+    let utmSource = params.get('utm_source');
+
+    if (utmSource) {
+        try {
+            sessionStorage.setItem(UTM_SOURCE_STORAGE_KEY, utmSource);
+        } catch {
+            /* ignore */
+        }
+        return utmSource;
+    }
+
+    try {
+        return sessionStorage.getItem(UTM_SOURCE_STORAGE_KEY);
+    } catch {
+        return null;
+    }
 }
 
 /**

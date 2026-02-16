@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {ArrowRight, Bug, CheckCircle2, Filter, Github, Sparkles, Tag, Zap,} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent} from '@/components/ui/card';
@@ -58,6 +58,9 @@ const ADVANTAGES = [
 ] as const;
 
 export function HomePage() {
+  const location = useLocation();
+  const search = location.search || undefined;
+
   return (
     <div className="flex flex-col">
       <section
@@ -77,13 +80,13 @@ export function HomePage() {
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button asChild size="lg" className="w-full sm:w-auto">
-            <Link to="/issues">
+            <Link to={{pathname: '/issues', search}}>
               Browse Issues
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-            <Link to="/feed">Personalized Feed</Link>
+            <Link to={{pathname: '/feed', search}}>Personalized Feed</Link>
           </Button>
         </div>
       </section>
@@ -202,7 +205,7 @@ export function HomePage() {
             Start browsing issues in seconds. No account required.
           </p>
           <Button asChild size="lg" className="mt-8">
-            <Link to="/issues">
+            <Link to={{pathname: '/issues', search}}>
               Get Started
               <ArrowRight className="size-4" aria-hidden />
             </Link>
@@ -219,14 +222,14 @@ export function HomePage() {
           aria-label="Footer navigation"
         >
           <Link
-            to="/issues"
+            to={{pathname: '/issues', search}}
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
             <Bug className="size-4" aria-hidden />
             Issues
           </Link>
           <Link
-            to="/feed"
+            to={{pathname: '/feed', search}}
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
             Feed

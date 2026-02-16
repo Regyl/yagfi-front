@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Route, Routes, useLocation} from 'react-router-dom';
+import {initUtmSourcePersistence} from '@/shared/utils/urlParams';
 import {Header} from '@/shared/ui/Header/Header';
 import {Sidebar} from '@/shared/ui/Sidebar/Sidebar';
 import {Footer} from '@/shared/ui/Footer/Footer';
@@ -47,6 +48,10 @@ function AppLayout({
 
 export default function App() {
   const [mode, setMode] = useState<'light' | 'dark'>('dark');
+
+  useEffect(() => {
+    initUtmSourcePersistence();
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;

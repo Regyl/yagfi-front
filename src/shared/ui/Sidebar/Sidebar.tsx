@@ -12,6 +12,7 @@ const menuItems = [
 
 export function Sidebar() {
   const location = useLocation();
+  const search = location.search || undefined;
 
   return (
     <aside
@@ -28,7 +29,7 @@ export function Sidebar() {
           return (
             <NavLink
               key={item.path}
-              to={item.path}
+              to={{pathname: item.path, search}}
               className={cn(
                 'flex flex-1 flex-col items-center justify-center gap-1 px-2 py-4 text-sm font-medium transition-colors sm:flex-row sm:flex-none sm:justify-start sm:gap-3 sm:rounded-lg sm:px-4 sm:py-3',
                 isSelected

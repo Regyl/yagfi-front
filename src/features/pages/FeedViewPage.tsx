@@ -6,8 +6,10 @@ import {FeedRepositoryItem} from '@/types';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent} from '@/components/ui/card';
 import {Alert, AlertDescription} from '@/components/ui/alert';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {getRepoDisplayName} from '@/shared/utils/githubRepo';
 import {getGitHubAvatar} from '@/shared/utils/getGitHubAvatar';
+import {getGitHubUserAvatar} from '@/shared/utils/getGitHubUserAvatar';
 import {cn} from '@/lib/utils';
 
 interface GroupedRepo {
@@ -222,11 +224,19 @@ export function FeedViewPage() {
     );
   }
 
+  const avatarUrl = nickname ? getGitHubUserAvatar(nickname) : null;
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="mb-8 text-3xl font-semibold tracking-tight">
-        Feed for {nickname}
-      </h1>
+      <div className="mb-8 flex items-center gap-4">
+        <Avatar className="size-12 shrink-0 bg-primary">
+          <AvatarImage src={avatarUrl ?? undefined} alt={`${nickname} avatar`} />
+          <AvatarFallback>{nickname?.charAt(0).toUpperCase() ?? '?'}</AvatarFallback>
+        </Avatar>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          Feed for {nickname}
+        </h1>
+      </div>
 
       <div className="flex flex-col gap-8">
         <section aria-label="Overview">

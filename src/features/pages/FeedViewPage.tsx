@@ -41,7 +41,7 @@ function groupAndSortRepos(items: FeedRepositoryItem[]): GroupedRepo[] {
     groups.push({
       sourceRepo,
       items: repoItems,
-      dependencyCount: byDep.size,
+      dependencyCount: repoItems.length,
       topDependencies,
     });
   }

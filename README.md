@@ -9,7 +9,7 @@ YAGFI - yet another good first issue
 </div>
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Website: [yagfi.com](http://yagfi.com)
@@ -28,6 +28,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/alexpipilas"><img src="https://avatars.githubusercontent.com/u/167879640?v=4?s=100" width="100px;" alt="alexpipilas"/><br /><sub><b>alexpipilas</b></sub></a><br /><a href="https://github.com/Regyl/yagfi-front/commits?author=alexpipilas" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/chandrasingh01"><img src="https://avatars.githubusercontent.com/u/190519898?v=4?s=100" width="100px;" alt="chandrasingh01"/><br /><sub><b>chandrasingh01</b></sub></a><br /><a href="https://github.com/Regyl/yagfi-front/commits?author=chandrasingh01" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

@@ -9,6 +9,7 @@ import {IssuesPage} from '@/features/pages/IssuesPage';
 import {FeedPage} from '@/features/pages/FeedPage';
 import {FeedViewPage} from '@/features/pages/FeedViewPage';
 import {FeedIssuesPage} from '@/features/pages/FeedIssuesPage';
+import {NotFoundPage} from '@/features/pages/NotFoundPage';
 import {TooltipProvider} from '@/components/ui/tooltip';
 
 function AppLayout({
@@ -37,6 +38,7 @@ function AppLayout({
               <Route path="/feed" element={<FeedPage />} />
               <Route path="/feed/:nickname" element={<FeedViewPage />} />
               <Route path="/feed/:nickname/issues" element={<FeedIssuesPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>
           {!isHome && <Footer />}

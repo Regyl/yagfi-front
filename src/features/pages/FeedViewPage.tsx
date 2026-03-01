@@ -1,22 +1,31 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {AlertCircle, ChevronDown, ChevronRight, ExternalLink, FolderGit2, Layers, Loader2} from 'lucide-react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
-import {fetchFeedRepositories} from '@/api/issuesApi';
-import {FeedRepositoryItem} from '@/types';
-import {Button} from '@/components/ui/button';
-import {Card, CardContent} from '@/components/ui/card';
-import {Alert, AlertDescription} from '@/components/ui/alert';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {getRepoDisplayName} from '@/shared/utils/githubRepo';
-import {getGitHubAvatar} from '@/shared/utils/getGitHubAvatar';
-import {getGitHubUserAvatar} from '@/shared/utils/getGitHubUserAvatar';
-import {cn} from '@/lib/utils';
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  AlertCircle,
+  ChevronDown,
+  ChevronRight,
+  ExternalLink,
+  FolderGit2,
+  Layers,
+  Loader2,
+} from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { fetchFeedRepositories } from "@/api/issuesApi";
+import { FeedRepositoryItem } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getRepoDisplayName } from "@/shared/utils/githubRepo";
+import { getGitHubAvatar } from "@/shared/utils/getGitHubAvatar";
+import { getGitHubUserAvatar } from "@/shared/utils/getGitHubUserAvatar";
+import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface GroupedRepo {
   sourceRepo: string;
   items: FeedRepositoryItem[];
   dependencyCount: number;
-  topDependencies: {url: string; stars: number}[];
+  topDependencies: { url: string; stars: number }[];
 }
 
 function groupAndSortRepos(items: FeedRepositoryItem[]): GroupedRepo[] {
@@ -35,7 +44,7 @@ function groupAndSortRepos(items: FeedRepositoryItem[]): GroupedRepo[] {
       if (item.stars > existing) byDep.set(item.dependencyUrl, item.stars);
     }
     const topDependencies = Array.from(byDep.entries())
-      .map(([url, stars]) => ({url, stars}))
+      .map(([url, stars]) => ({ url, stars }))
       .sort((a, b) => b.stars - a.stars)
       .slice(0, 5);
     groups.push({
@@ -55,7 +64,14 @@ function groupAndSortRepos(items: FeedRepositoryItem[]): GroupedRepo[] {
   return groups;
 }
 
-function RepoOverviewCard({group, nickname}: {group: GroupedRepo; nickname: string}) {
+function RepoOverviewCard({
+  group,
+  nickname,
+}: {
+  group: GroupedRepo;
+  nickname: string;
+}) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const displayName = getRepoDisplayName(group.sourceRepo);
 
@@ -63,14 +79,17 @@ function RepoOverviewCard({group, nickname}: {group: GroupedRepo; nickname: stri
     <div className="flex flex-col gap-2">
       <Card
         className={cn(
-          'cursor-pointer transition-colors hover:border-primary/50',
-          expanded && 'border-primary'
+          "cursor-pointer transition-colors hover:border-primary/50",
+          expanded && "border-primary",
         )}
         onClick={() => setExpanded((e) => !e)}
       >
         <CardContent className="p-4">
           <div className="flex min-w-0 items-start gap-3">
-            <span className="flex shrink-0 pt-0.5 text-muted-foreground" aria-hidden>
+            <span
+              className="flex shrink-0 pt-0.5 text-muted-foreground"
+              aria-hidden
+            >
               {expanded ? (
                 <ChevronDown className="size-4" />
               ) : (
@@ -89,22 +108,27 @@ function RepoOverviewCard({group, nickname}: {group: GroupedRepo; nickname: stri
                 <ExternalLink className="size-4 shrink-0" aria-hidden />
               </a>
               <div className="mt-2 flex flex-col gap-1.5 text-sm text-muted-foreground">
-                <span>{group.dependencyCount} dependencies</span>
+                <span>
+                  {group.dependencyCount} {t("repoOverviewCard.dependencies")}
+                </span>
                 {group.topDependencies.length > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs">Top:</span>
+                    <span className="text-xs">{t("repoOverviewCard.top")}</span>
                     {group.topDependencies.map((d) => {
                       const displayName = getRepoDisplayName(d.url);
                       const avatarUrl = getGitHubAvatar(displayName);
                       return (
-                        <span key={d.url} className="inline-flex items-center gap-1.5">
+                        <span
+                          key={d.url}
+                          className="inline-flex items-center gap-1.5"
+                        >
                           {avatarUrl && (
                             <img
                               src={avatarUrl}
                               alt=""
                               className="size-5 shrink-0 rounded-full border border-border object-cover"
                               onError={(e) => {
-                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.style.display = "none";
                               }}
                             />
                           )}
@@ -118,14 +142,15 @@ function RepoOverviewCard({group, nickname}: {group: GroupedRepo; nickname: stri
             </div>
             <div className="flex shrink-0 flex-col items-end gap-1">
               <span className="font-semibold text-primary">
-                {group.items.reduce((a, i) => a + i.issueCnt, 0)} issues
+                {group.items.reduce((a, i) => a + i.issueCnt, 0)}{" "}
+                {t("common.issues")}
               </span>
               <Link
                 to={`/feed/${nickname}/issues?sourceRepo=${encodeURIComponent(group.sourceRepo)}`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <Button variant="link" size="sm" className="h-auto p-0 text-xs">
-                  View issues
+                  {t("repoOverviewCard.viewIssues")}
                 </Button>
               </Link>
             </div>
@@ -153,7 +178,7 @@ function RepoOverviewCard({group, nickname}: {group: GroupedRepo; nickname: stri
                           alt=""
                           className="size-8 shrink-0 rounded-lg border border-border object-cover"
                           onError={(e) => {
-                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.style.display = "none";
                           }}
                         />
                       )}
@@ -162,7 +187,9 @@ function RepoOverviewCard({group, nickname}: {group: GroupedRepo; nickname: stri
                     </a>
                     <div className="flex items-center gap-3 text-sm">
                       <span>{item.stars} ★</span>
-                      <span className="text-muted-foreground">{item.issueCnt} issues</span>
+                      <span className="text-muted-foreground">
+                        {item.issueCnt} {t("common.issues")}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -176,8 +203,9 @@ function RepoOverviewCard({group, nickname}: {group: GroupedRepo; nickname: stri
 }
 
 export function FeedViewPage() {
-  const {nickname} = useParams<{nickname: string}>();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const { nickname } = useParams<{ nickname: string }>();
   const [items, setItems] = useState<FeedRepositoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -186,7 +214,7 @@ export function FeedViewPage() {
 
   useEffect(() => {
     if (!nickname) {
-      navigate('/feed');
+      navigate("/feed");
       return;
     }
     const loadData = async () => {
@@ -196,19 +224,22 @@ export function FeedViewPage() {
         const data = await fetchFeedRepositories(nickname);
         setItems(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load feed');
+        setError(err instanceof Error ? err.message : t("feedViewPage.error"));
       } finally {
         setLoading(false);
       }
     };
     loadData();
-  }, [nickname, navigate]);
+  }, [nickname, navigate, t]);
 
   if (loading) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex min-h-[400px] items-center justify-center">
-          <Loader2 className="size-12 animate-spin text-muted-foreground" aria-hidden />
+          <Loader2
+            className="size-12 animate-spin text-muted-foreground"
+            aria-hidden
+          />
         </div>
       </div>
     );
@@ -230,32 +261,38 @@ export function FeedViewPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8 flex items-center gap-4">
         <Avatar className="size-12 shrink-0 bg-primary">
-          <AvatarImage src={avatarUrl ?? undefined} alt={`${nickname} avatar`} />
-          <AvatarFallback>{nickname?.charAt(0).toUpperCase() ?? '?'}</AvatarFallback>
+          <AvatarImage
+            src={avatarUrl ?? undefined}
+            alt={`${nickname} avatar`}
+          />
+          <AvatarFallback>
+            {nickname?.charAt(0).toUpperCase() ?? "?"}
+          </AvatarFallback>
         </Avatar>
         <h1 className="text-3xl font-semibold tracking-tight">
-          Feed for {nickname}
+          {t("feedViewPage.title", { nickname })}
         </h1>
       </div>
 
       <div className="flex flex-col gap-8">
-        <section aria-label="Overview">
-          <h2 className="mb-4 text-xl font-semibold">Overview</h2>
+        <section aria-label={t("feedViewPage.overview")}>
+          <h2 className="mb-4 text-xl font-semibold">
+            {t("feedViewPage.overview")}
+          </h2>
           <div
             className="relative overflow-hidden rounded-2xl border-0 shadow-xl shadow-primary/10 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/15"
             style={{
               background:
-                'linear-gradient(135deg, oklch(0.55 0.18 270 / 0.95) 0%, oklch(0.5 0.16 260 / 0.95) 35%, oklch(0.45 0.14 250 / 0.95) 70%, oklch(0.4 0.12 240 / 0.95) 100%)',
+                "linear-gradient(135deg, oklch(0.55 0.18 270 / 0.95) 0%, oklch(0.5 0.16 260 / 0.95) 35%, oklch(0.45 0.14 250 / 0.95) 70%, oklch(0.4 0.12 240 / 0.95) 100%)",
               boxShadow:
-                '0 25px 50px -12px oklch(0.45 0.15 250 / 0.25), inset 0 1px 0 0 oklch(1 0 0 / 0.1)',
+                "0 25px 50px -12px oklch(0.45 0.15 250 / 0.25), inset 0 1px 0 0 oklch(1 0 0 / 0.1)",
             }}
           >
-            {/* Subtle mesh gradient overlay */}
             <div
               className="pointer-events-none absolute inset-0 opacity-30"
               style={{
                 background:
-                  'radial-gradient(ellipse 80% 50% at 50% -20%, oklch(0.9 0.05 250), transparent), radial-gradient(ellipse 60% 40% at 100% 100%, oklch(0.6 0.12 280), transparent)',
+                  "radial-gradient(ellipse 80% 50% at 50% -20%, oklch(0.9 0.05 250), transparent), radial-gradient(ellipse 60% 40% at 100% 100%, oklch(0.6 0.12 280), transparent)",
               }}
             />
             <div className="relative p-8">
@@ -268,7 +305,9 @@ export function FeedViewPage() {
                     <span className="block text-3xl font-bold tracking-tight text-white drop-shadow-sm">
                       {groups.length}
                     </span>
-                    <span className="text-sm font-medium text-white/80">repositories processed</span>
+                    <span className="text-sm font-medium text-white/80">
+                      {t("feedViewPage.repositoriesProcessed")}
+                    </span>
                   </div>
                 </div>
                 <div className="group flex items-center gap-4">
@@ -280,7 +319,7 @@ export function FeedViewPage() {
                       {items.length}
                     </span>
                     <span className="text-sm font-medium text-white/80">
-                      dependencies found
+                      {t("feedViewPage.dependenciesFound")}
                     </span>
                   </div>
                 </div>
@@ -292,7 +331,9 @@ export function FeedViewPage() {
                     <span className="block text-3xl font-bold tracking-tight text-white drop-shadow-sm">
                       {items.reduce((a, i) => a + i.issueCnt, 0)}
                     </span>
-                    <span className="text-sm font-medium text-white/80">total issues</span>
+                    <span className="text-sm font-medium text-white/80">
+                      {t("feedViewPage.totalIssues")}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -302,7 +343,7 @@ export function FeedViewPage() {
                     size="sm"
                     className="border-white/30 bg-white/20 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/30 hover:border-white/50"
                   >
-                    View all issues
+                    {t("feedViewPage.viewAllIssues")}
                   </Button>
                 </Link>
               </div>
@@ -310,16 +351,22 @@ export function FeedViewPage() {
           </div>
         </section>
 
-        <section aria-label="Repositories by source">
-          <h2 className="mb-4 text-xl font-semibold">Repositories</h2>
+        <section aria-label={t("feedViewPage.repositories")}>
+          <h2 className="mb-4 text-xl font-semibold">
+            {t("feedViewPage.repositories")}
+          </h2>
           {groups.length === 0 ? (
             <p className="py-12 text-center text-muted-foreground">
-              No repositories found yet.
+              {t("feedViewPage.noRepositoriesFound")}
             </p>
           ) : (
             <div className="flex flex-col gap-3">
               {groups.map((group) => (
-                <RepoOverviewCard key={group.sourceRepo} group={group} nickname={nickname!} />
+                <RepoOverviewCard
+                  key={group.sourceRepo}
+                  group={group}
+                  nickname={nickname!}
+                />
               ))}
             </div>
           )}

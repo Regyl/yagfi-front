@@ -1,33 +1,46 @@
-import React, {useState} from 'react';
-import {Github, Globe, Moon, RefreshCw, Server, Sun} from 'lucide-react';
-import {Link} from 'react-router-dom';
-import {GITHUB_BACKEND_REPO_URL, GITHUB_FRONTEND_REPO_URL} from '../../constants';
-import {useSyncStatus} from '@/features/hooks';
-import {formatDate} from '../../utils/formatDate';
-import {SyncEvent} from '@/types';
-import {Button} from '@/components/ui/button';
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from '@/components/ui/dropdown-menu';
-import {Tooltip, TooltipContent, TooltipTrigger} from '@/components/ui/tooltip';
+import React, { useState } from "react";
+import { Github, Globe, Moon, RefreshCw, Server, Sun } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  GITHUB_BACKEND_REPO_URL,
+  GITHUB_FRONTEND_REPO_URL,
+} from "../../constants";
+import { useSyncStatus } from "@/features/hooks";
+import { formatDate } from "../../utils/formatDate";
+import { SyncEvent } from "@/types";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import LanguageSwitcher from "@/features/components/LanguageSwitcher";
 
 interface HeaderProps {
-  mode: 'light' | 'dark';
+  mode: "light" | "dark";
   onToggleTheme: () => void;
 }
 
-export function Header({mode, onToggleTheme}: HeaderProps) {
-  const {syncEvents, loading} = useSyncStatus();
+export function Header({ mode, onToggleTheme }: HeaderProps) {
+  const { syncEvents, loading } = useSyncStatus();
   const [open, setOpen] = useState(false);
 
   const latestSyncTime = (() => {
     if (loading || syncEvents.length === 0) return null;
     const latest = syncEvents.reduce((a, b) =>
-      new Date(b.lastUpdateDttm) > new Date(a.lastUpdateDttm) ? b : a
+      new Date(b.lastUpdateDttm) > new Date(a.lastUpdateDttm) ? b : a,
     );
     return formatDate(latest.lastUpdateDttm);
   })();
 
   const handleGithubClick = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
     setOpen(false);
   };
 
@@ -54,14 +67,12 @@ export function Header({mode, onToggleTheme}: HeaderProps) {
                   aria-label={`Last synced ${latestSyncTime}`}
                 >
                   <RefreshCw className="size-4 shrink-0" aria-hidden />
-                  <span className="hidden md:inline">Synced {latestSyncTime}</span>
+                  <span className="hidden md:inline">
+                    Synced {latestSyncTime}
+                  </span>
                 </span>
               </TooltipTrigger>
-              <TooltipContent
-                side="bottom"
-                sideOffset={8}
-                className="z-[1200]"
-              >
+              <TooltipContent side="bottom" sideOffset={8} className="z-[1200]">
                 {syncEvents.map((e: SyncEvent) => (
                   <div key={e.source} className="mb-1 last:mb-0">
                     {e.source}: {formatDate(e.lastUpdateDttm)}
@@ -76,9 +87,15 @@ export function Header({mode, onToggleTheme}: HeaderProps) {
             size="icon"
             onClick={onToggleTheme}
             className="size-9 text-muted-foreground hover:text-foreground hover:bg-accent"
-            aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label={
+              mode === "dark" ? "Switch to light mode" : "Switch to dark mode"
+            }
           >
-            {mode === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            {mode === "dark" ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )}
           </Button>
 
           <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -94,17 +111,27 @@ export function Header({mode, onToggleTheme}: HeaderProps) {
                 <span className="hidden sm:inline">GitHub</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" side="bottom" sideOffset={8} className="z-[1200] min-w-[160px]">
-              <DropdownMenuItem onClick={() => handleGithubClick(GITHUB_FRONTEND_REPO_URL)}>
+            <DropdownMenuContent
+              align="end"
+              side="bottom"
+              sideOffset={8}
+              className="z-[1200] min-w-[160px]"
+            >
+              <DropdownMenuItem
+                onClick={() => handleGithubClick(GITHUB_FRONTEND_REPO_URL)}
+              >
                 <Globe className="size-4" aria-hidden />
                 Frontend
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleGithubClick(GITHUB_BACKEND_REPO_URL)}>
+              <DropdownMenuItem
+                onClick={() => handleGithubClick(GITHUB_BACKEND_REPO_URL)}
+              >
                 <Server className="size-4" aria-hidden />
                 Backend
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <LanguageSwitcher />
         </div>
       </div>
     </header>

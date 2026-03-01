@@ -1,0 +1,311 @@
+{
+  "language": "Language",
+  "english": "English",
+  "spanish": "Spanish",
+  "browseIssues": "Browse Issues",
+  "personalizedFeed": "Personalized Feed",
+
+  "hero": {
+    "title": "Find Your First Open Source Contribution",
+    "description": "YAGFI aggregates beginner-friendly issues from popular GitHub repositories. No endless searching — just browse, filter, and contribute.",
+    "browseIssues": "Browse Issues",
+    "personalizedFeed": "Personalized Feed"
+  },
+
+  "whatIs": {
+    "title": "What is YAGFI",
+    "description1": "Yet Another Good First Issue",
+    "description1_2": "— a free tool that helps developers find their first open source contribution. Instead of manually searching GitHub, YAGFI curates issues labeled",
+    "description1_3": "help wanted",
+    "description1_4": "and",
+    "description1_5": "good first issue",
+    "description1_6": "from repositories with significant community traction.",
+    "description2": "Built for students, career switchers, and anyone who wants to start contributing to open source without the overwhelm."
+  },
+
+  "features": {
+    "title": "Key Features",
+    "items": {
+      "curatedLabels": {
+        "title": "Curated Labels",
+        "description": "Only issues labeled help wanted and good first issue from popular repositories."
+      },
+      "smartFiltering": {
+        "title": "Smart Filtering",
+        "description": "Filter by programming language, repository stars, and sort by relevance."
+      },
+      "randomPicker": {
+        "title": "Random Picker",
+        "description": "Feeling lucky? Get a random issue that matches your preferences."
+      },
+      "personalFeed": {
+        "title": "Personal Feed",
+        "description": "Subscribe to a personalized feed of issues tailored to your interests."
+      }
+    }
+  },
+
+  "howItWorks": {
+    "title": "How It Works",
+    "steps": {
+      "browseOrFilter": {
+        "step": "1",
+        "title": "Browse or filter",
+        "description": "Find issues by language, stars, or use the random picker."
+      },
+      "pickAnIssue": {
+        "step": "2",
+        "title": "Pick an issue",
+        "description": "Choose something that matches your skills and interests."
+      },
+      "startContributing": {
+        "step": "3",
+        "title": "Start contributing",
+        "description": "Open the issue on GitHub and make your first contribution."
+      }
+    }
+  },
+
+  "whyYagfi": {
+    "title": "Why YAGFI",
+    "description": "Unlike generic issue trackers, YAGFI focuses on simplicity and effectiveness. One purpose: help you find your first contribution quickly.",
+    "advantages": [
+      "No signup required to browse",
+      "Focused on beginner-friendly contributions",
+      "Free and open source",
+      "Simple, distraction-free interface"
+    ]
+  },
+
+  "cta": {
+    "title": "Ready to contribute?",
+    "description": "Start browsing issues in seconds. No account required.",
+    "button": "Get Started"
+  },
+
+  "footer": {
+    "issues": "Issues",
+    "feed": "Feed",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "suggestLabel": "Suggest a Label",
+    "copyright": "© {{year}} YAGFI. Open source contributions welcome."
+  },
+
+  "issuesPage": {
+    "title": "Browse Issues",
+    "description": "Find beginner-friendly issues labeled help wanted and good first issue from popular GitHub repositories.",
+    "filters": {
+      "title": "Filters",
+      "languages": {
+        "title": "Languages",
+        "placeholder": "Select languages..."
+      },
+      "licenses": {
+        "title": "Licenses",
+        "placeholder": "Select licenses...",
+        "any": "Any license",
+        "all": "All licenses",
+        "none": "No license"
+      },
+      "issueLanguages": {
+        "title": "Issue Languages",
+        "placeholder": "Select issue languages..."
+      },
+      "stars": {
+        "title": "Stars",
+        "placeholder": "Minimum stars",
+        "greaterThan": "Greater than",
+        "lessThan": "Less than",
+        "equal": "Equal to",
+        "notEqual": "Not equal to"
+      },
+      "actions": {
+        "resetAll": "Reset all filters",
+        "addLanguage": "Add language",
+        "addLicense": "Add license",
+        "addIssueLanguage": "Add issue language",
+        "addStars": "Add stars filter"
+      }
+    },
+    "sort": {
+      "title": "Sort by",
+      "addSortField": "Add sort field",
+      "removeSortField": "Remove sort field",
+      "fields": {
+        "stars": "Stars",
+        "forks": "Forks",
+        "issues": "Issues",
+        "updated": "Updated",
+        "created": "Created"
+      },
+      "types": {
+        "asc": "Ascending",
+        "desc": "Descending"
+      }
+    },
+    "actions": {
+      "pickRandom": "Pick a random issue",
+      "loadingRandom": "Picking random issue..."
+    },
+    "list": {
+      "loadingMore": "Loading more issues...",
+      "noIssues": "No issues found. Try adjusting your filters."
+    },
+    "error": {
+      "title": "Error",
+      "message": "Failed to load issues: {{error}}"
+    }
+  },
+
+  "feedPage": {
+    "title": "Personalized Feed",
+    "description": "Get a curated feed of beginner-friendly issues delivered to your inbox. Subscribe once and receive weekly updates tailored to your GitHub activity.",
+    "supportedPackageManagers": "Supported Package Managers",
+    "githubUsername": "GitHub Username",
+    "usernamePlaceholder": "e.g. octocat",
+    "usernameHint": "Enter your GitHub username (not your profile name). Example: for github.com/Regyl, the username is \"Regyl\"",
+    "email": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "emailHint": "We'll notify you when your feed is ready",
+    "privacy": "Privacy Note:",
+    "privacyDescription": "We only use your email to send you the feed. Your data is not shared with third parties.",
+    "feedGenerationStarted": "Success! Your personalized feed is being generated. Check your email for updates.",
+    "processedRequests": "Recently Processed",
+    "loadingUsers": "Loading recent users...",
+    "noUsersFound": "No processed requests yet. Be the first!",
+    "noIssuesFound": "No issues found for this user.",
+    "showingIssues": "Showing {{count}} issues",
+    "errors": {
+      "nicknameRequired": "Nickname is required",
+      "userNotFound": "This GitHub username does not exist. Please check the username and try again.",
+      "verifyFailed": "Failed to verify GitHub username. Please try again.",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "generateFailed": "Failed to generate feed",
+      "loadUsersFailed": "Failed to load users"
+    },
+    "buttons": {
+      "generating": "Generating...",
+      "generateFeed": "Generate Feed"
+    }
+  },
+
+  "feedViewPage": {
+    "title": "Personalized Feed for {{nickname}}",
+    "description": "Your personalized feed of beginner-friendly issues from repositories you depend on.",
+    "viewAllIssues": "View all issues",
+    "loading": "Loading feed...",
+    "noIssues": "No issues found in your dependencies.",
+    "error": "Failed to load feed: {{error}}",
+    "overview": "Overview",
+    "repositories": "Repositories",
+    "repositoriesProcessed": "repositories processed",
+    "dependenciesFound": "dependencies found",
+    "totalIssues": "total issues",
+    "noRepositoriesFound": "No repositories found yet."
+  },
+
+  "feedIssuesPage": {
+    "backToFeed": "Back to feed",
+    "issuesFrom": "Issues from {{repo}}",
+    "issuesFor": "Issues for {{nickname}}",
+    "noIssuesFound": "No issues found.",
+    "showingIssues": "Showing {{count}} issues"
+  },
+
+  "repoOverviewCard": {
+    "dependencies": "dependencies",
+    "top": "Top:",
+    "viewIssues": "View issues"
+  },
+
+  "issueCard": {
+    "openInGitHub": "Open in GitHub",
+    "loading": "Loading...",
+    "noIssues": "No issues found.",
+    "error": "Failed to load issues: {{error}}"
+  },
+
+  "notFoundPage": {
+    "title": "404 - Page Not Found!",
+    "description": "Oops! The page you're looking for went on vacation and didn't leave a forwarding address.",
+    "description2": "Meanwhile, here's a confused cat wondering what you were looking for 🐱",
+    "goHome": "Go Home",
+    "browseIssues": "Browse Issues"
+  },
+
+  "filters": {
+    "title": "Filters",
+    "languages": "Languages",
+    "licenses": "Licenses",
+    "issueLanguages": "Issue Languages",
+    "stars": "Stars",
+    "actions": {
+      "resetAll": "Reset all filters",
+      "addLanguage": "Add language",
+      "addLicense": "Add license",
+      "addIssueLanguage": "Add issue language",
+      "addStars": "Add stars filter"
+    },
+    "starsPlaceholder": "Stars minimum",
+    "filterIssueLanguages": "Filter issue languages",
+    "filterLanguages": "Filter languages",
+    "filterLicenses": "Filter licenses",
+    "allIssueLanguages": "All issue languages",
+    "allLanguages": "All languages",
+    "allLicenses": "All licenses",
+    "allStars": "All stars",
+    "greaterThan": "Greater than",
+    "lessThan": "Less than",
+    "equal": "Equal to",
+    "notEqual": "Not equal to",
+    "issueLanguagesOperator": "Issue languages operator",
+    "starsOperator": "Stars operator",
+    "licensesOperator": "Licenses operator"
+  },
+
+  "sort": {
+    "title": "Sort by",
+    "addSortField": "Add sort field",
+    "removeSortField": "Remove sort field",
+    "fields": {
+      "stars": "Stars",
+      "forks": "Forks",
+      "issues": "Issues",
+      "updated": "Updated",
+      "created": "Created"
+    },
+    "types": {
+      "asc": "Ascending",
+      "desc": "Descending"
+    }
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "all": "All",
+    "none": "None",
+    "any": "Any",
+    "other": "Other",
+    "more": "More",
+    "less": "Less",
+    "equal": "Equal",
+    "notEqual": "Not equal",
+    "greaterThan": "Greater than",
+    "lessThan": "Less than"
+  }
+}

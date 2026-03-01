@@ -95,6 +95,7 @@
   "issuesPage": {
     "title": "Explorar Issues",
     "description": "Encuentra issues amigables para principiantes etiquetados como help wanted y good first issue de repositorios populares de GitHub.",
+    "addLabel": "Añadir etiqueta",
     "filters": {
       "title": "Filtros",
       "languages": {
@@ -260,6 +261,8 @@
     "lessThan": "Menor que",
     "equal": "Igual a",
     "notEqual": "No igual a",
+    "include": "Incluir",
+    "exclude": "Excluir",
     "issueLanguagesOperator": "Operador de lenguajes de issue",
     "starsOperator": "Operador de estrellas",
     "licensesOperator": "Operador de licencias"
@@ -267,6 +270,8 @@
 
   "sort": {
     "title": "Ordenar por",
+    "field": "Campo",
+    "order": "Orden",
     "addSortField": "Añadir campo de orden",
     "removeSortField": "Eliminar campo de orden",
     "fields": {
@@ -274,7 +279,11 @@
       "forks": "Forks",
       "issues": "Issues",
       "updated": "Actualizado",
-      "created": "Creado"
+      "created": "Creado",
+      "issueCreated": "Issue creado",
+      "issueUpdated": "Issue actualizado",
+      "repoCreated": "Repositorio creado",
+      "repoUpdated": "Repositorio actualizado"
     },
     "types": {
       "asc": "Ascendente",

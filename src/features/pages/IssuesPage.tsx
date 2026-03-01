@@ -134,7 +134,7 @@ export function IssuesPage() {
 
       {!loading && issues.length === 0 && (
         <p className="py-20 text-center text-muted-foreground">
-          {t("issuesPage.noIssues")}
+          {t("issuesPage.list.noIssues")}
         </p>
       )}
 

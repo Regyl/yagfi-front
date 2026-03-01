@@ -243,7 +243,7 @@ export function FiltersSection({
                 <SelectContent>
                   {LICENSES_OPERATORS.map((op) => (
                     <SelectItem key={op.value} value={op.value}>
-                      {op.label}
+                      {t(op.labelKey)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -345,7 +345,7 @@ export function FiltersSection({
                 <SelectContent>
                   {LICENSES_OPERATORS.map((op) => (
                     <SelectItem key={op.value} value={op.value}>
-                      {op.label}
+                      {t(op.labelKey)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -444,7 +444,7 @@ export function FiltersSection({
                   <SelectContent>
                     {STARS_OPERATORS.map((op) => (
                       <SelectItem key={op.value} value={op.value}>
-                        {op.label}
+                        {t(op.labelKey)}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -95,6 +95,7 @@
   "issuesPage": {
     "title": "Browse Issues",
     "description": "Find beginner-friendly issues labeled help wanted and good first issue from popular GitHub repositories.",
+    "addLabel": "Add label",
     "filters": {
       "title": "Filters",
       "languages": {
@@ -260,6 +261,8 @@
     "lessThan": "Less than",
     "equal": "Equal to",
     "notEqual": "Not equal to",
+    "include": "Include",
+    "exclude": "Exclude",
     "issueLanguagesOperator": "Issue languages operator",
     "starsOperator": "Stars operator",
     "licensesOperator": "Licenses operator"
@@ -267,6 +270,8 @@
 
   "sort": {
     "title": "Sort by",
+    "field": "Field",
+    "order": "Order",
     "addSortField": "Add sort field",
     "removeSortField": "Remove sort field",
     "fields": {
@@ -274,7 +279,11 @@
       "forks": "Forks",
       "issues": "Issues",
       "updated": "Updated",
-      "created": "Created"
+      "created": "Created",
+      "issueCreated": "Issue created",
+      "issueUpdated": "Issue updated",
+      "repoCreated": "Repository created",
+      "repoUpdated": "Repository updated"
     },
     "types": {
       "asc": "Ascending",

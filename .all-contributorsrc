@@ -24,6 +24,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "david-lozada",
+      "name": "David Lozada",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23347311?v=4",
+      "profile": "https://github.com/david-lozada",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

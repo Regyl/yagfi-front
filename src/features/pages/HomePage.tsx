@@ -1,65 +1,47 @@
-import React from 'react';
-import {Link, useLocation} from 'react-router-dom';
-import {ArrowRight, Bug, CheckCircle2, Filter, Github, Sparkles, Tag, Zap,} from 'lucide-react';
-import {Button} from '@/components/ui/button';
-import {Card, CardContent} from '@/components/ui/card';
-import {CONTRIBUTING_URL, GITHUB_BACKEND_REPO_URL, GITHUB_FRONTEND_REPO_URL,} from '@/shared/constants';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  ArrowRight,
+  Bug,
+  CheckCircle2,
+  Filter,
+  Github,
+  Sparkles,
+  Tag,
+  Zap,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  CONTRIBUTING_URL,
+  GITHUB_BACKEND_REPO_URL,
+  GITHUB_FRONTEND_REPO_URL,
+} from "@/shared/constants";
+import { useTranslation } from "react-i18next";
 
-const FEATURES = [
-  {
-    icon: Tag,
-    title: 'Curated Labels',
-    description:
-      'Only issues labeled help wanted and good first issue from popular repositories.',
-  },
-  {
-    icon: Filter,
-    title: 'Smart Filtering',
-    description:
-      'Filter by programming language, repository stars, and sort by relevance.',
-  },
-  {
-    icon: Zap,
-    title: 'Random Picker',
-    description:
-      'Feeling lucky? Get a random issue that matches your preferences.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Personal Feed',
-    description:
-      'Subscribe to a personalized feed of issues tailored to your interests.',
-  },
+const FEATURES_DATA = [
+  { icon: Tag, key: "curatedLabels" },
+  { icon: Filter, key: "smartFiltering" },
+  { icon: Zap, key: "randomPicker" },
+  { icon: Sparkles, key: "personalFeed" },
 ] as const;
 
-const STEPS = [
-  {
-    step: 1,
-    title: 'Browse or filter',
-    description: 'Find issues by language, stars, or use the random picker.',
-  },
-  {
-    step: 2,
-    title: 'Pick an issue',
-    description: 'Choose something that matches your skills and interests.',
-  },
-  {
-    step: 3,
-    title: 'Start contributing',
-    description: 'Open the issue on GitHub and make your first contribution.',
-  },
-] as const;
-
-const ADVANTAGES = [
-  'No signup required to browse',
-  'Focused on beginner-friendly contributions',
-  'Free and open source',
-  'Simple, distraction-free interface',
+const STEPS_DATA = [
+  { key: "browseOrFilter" },
+  { key: "pickAnIssue" },
+  { key: "startContributing" },
 ] as const;
 
 export function HomePage() {
   const location = useLocation();
+  const { t } = useTranslation();
   const search = location.search || undefined;
+
+  const ADVANTAGES_DATA =
+    (t("whyYagfi.advantages", {
+      returnObjects: true,
+      defaultValue: [],
+    }) as string[]) || [];
 
   return (
     <div className="flex flex-col">
@@ -71,22 +53,27 @@ export function HomePage() {
           id="hero-heading"
           className="bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-center text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl"
         >
-          Find Your First Open Source Contribution
+          {t("hero.title")}
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-center text-lg text-muted-foreground sm:text-xl">
-          YAGFI aggregates beginner-friendly issues from popular GitHub
-          repositories. No endless searching — just browse, filter, and
-          contribute.
+          {t("hero.description")}
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button asChild size="lg" className="w-full sm:w-auto">
-            <Link to={{pathname: '/issues', search}}>
-              Browse Issues
+            <Link to={{ pathname: "/issues", search }}>
+              {t("browseIssues")}
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-            <Link to={{pathname: '/feed', search}}>Personalized Feed</Link>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            <Link to={{ pathname: "/feed", search }}>
+              {t("personalizedFeed")}
+            </Link>
           </Button>
         </div>
       </section>
@@ -96,19 +83,22 @@ export function HomePage() {
         aria-labelledby="what-heading"
       >
         <div className="mx-auto max-w-3xl">
-          <h2 id="what-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            What is YAGFI
+          <h2
+            id="what-heading"
+            className="text-2xl font-semibold tracking-tight sm:text-3xl"
+          >
+            {t("whatIs.title")}
           </h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            <strong>Yet Another Good First Issue</strong> — a free tool that
-            helps developers find their first open source contribution. Instead
-            of manually searching GitHub, YAGFI curates issues labeled{' '}
-            <strong>help wanted</strong> and <strong>good first issue</strong>{' '}
-            from repositories with significant community traction.
+            <strong>{t("whatIs.description1")}</strong>{" "}
+            {t("whatIs.description1_2")}—
+            <strong>{t("whatIs.description1_3")}</strong>{" "}
+            {t("whatIs.description1_4")}{" "}
+            <strong>{t("whatIs.description1_5")}</strong>{" "}
+            {t("whatIs.description1_6")}
           </p>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            Built for students, career switchers, and anyone who wants to start
-            contributing to open source without the overwhelm.
+            {t("whatIs.description2")}
           </p>
         </div>
       </section>
@@ -117,13 +107,16 @@ export function HomePage() {
         className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8"
         aria-labelledby="features-heading"
       >
-        <h2 id="features-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Key Features
+        <h2
+          id="features-heading"
+          className="text-2xl font-semibold tracking-tight sm:text-3xl"
+        >
+          {t("features.title")}
         </h2>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map(({icon: Icon, title, description}) => (
+          {FEATURES_DATA.map(({ icon: Icon, key }) => (
             <Card
-              key={title}
+              key={key}
               className="border-border transition-colors duration-200 hover:border-primary/20"
             >
               <CardContent className="pt-6">
@@ -133,8 +126,12 @@ export function HomePage() {
                 >
                   <Icon className="size-5" />
                 </div>
-                <h3 className="font-semibold">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+                <h3 className="font-semibold">
+                  {t(`features.items.${key}.title`)}
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {t(`features.items.${key}.description`)}
+                </p>
               </CardContent>
             </Card>
           ))}
@@ -146,21 +143,28 @@ export function HomePage() {
         aria-labelledby="how-heading"
       >
         <div className="mx-auto max-w-3xl">
-          <h2 id="how-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            How It Works
+          <h2
+            id="how-heading"
+            className="text-2xl font-semibold tracking-tight sm:text-3xl"
+          >
+            {t("howItWorks.title")}
           </h2>
           <ol className="mt-10 space-y-8">
-            {STEPS.map(({step, title, description}) => (
-              <li key={step} className="flex gap-4">
+            {STEPS_DATA.map(({ key }) => (
+              <li key={key} className="flex gap-4">
                 <span
                   className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground"
                   aria-hidden
                 >
-                  {step}
+                  {t(`howItWorks.steps.${key}.step`)}
                 </span>
                 <div>
-                  <h3 className="font-semibold">{title}</h3>
-                  <p className="mt-1 text-muted-foreground">{description}</p>
+                  <h3 className="font-semibold">
+                    {t(`howItWorks.steps.${key}.title`)}
+                  </h3>
+                  <p className="mt-1 text-muted-foreground">
+                    {t(`howItWorks.steps.${key}.description`)}
+                  </p>
                 </div>
               </li>
             ))}
@@ -172,16 +176,17 @@ export function HomePage() {
         className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 lg:px-8"
         aria-labelledby="why-heading"
       >
-        <h2 id="why-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Why YAGFI
+        <h2
+          id="why-heading"
+          className="text-2xl font-semibold tracking-tight sm:text-3xl"
+        >
+          {t("whyYagfi.title")}
         </h2>
         <p className="mt-4 text-muted-foreground leading-relaxed">
-          Unlike generic issue trackers, YAGFI focuses on simplicity and
-          effectiveness. One purpose: help you find your first contribution
-          quickly.
+          {t("whyYagfi.description")}
         </p>
         <ul className="mt-8 space-y-4" role="list">
-          {ADVANTAGES.map((item) => (
+          {ADVANTAGES_DATA.map((item) => (
             <li key={item} className="flex items-start gap-3">
               <CheckCircle2
                 className="mt-0.5 size-5 shrink-0 text-primary"
@@ -198,15 +203,16 @@ export function HomePage() {
         aria-labelledby="cta-heading"
       >
         <div className="mx-auto max-w-2xl text-center">
-          <h2 id="cta-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Ready to contribute?
+          <h2
+            id="cta-heading"
+            className="text-2xl font-semibold tracking-tight sm:text-3xl"
+          >
+            {t("cta.title")}
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            Start browsing issues in seconds. No account required.
-          </p>
+          <p className="mt-4 text-muted-foreground">{t("cta.description")}</p>
           <Button asChild size="lg" className="mt-8">
-            <Link to={{pathname: '/issues', search}}>
-              Get Started
+            <Link to={{ pathname: "/issues", search }}>
+              {t("cta.button")}
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </Button>
@@ -222,17 +228,17 @@ export function HomePage() {
           aria-label="Footer navigation"
         >
           <Link
-            to={{pathname: '/issues', search}}
+            to={{ pathname: "/issues", search }}
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
             <Bug className="size-4" aria-hidden />
-            Issues
+            {t("footer.issues")}
           </Link>
           <Link
-            to={{pathname: '/feed', search}}
+            to={{ pathname: "/feed", search }}
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
-            Feed
+            {t("footer.feed")}
           </Link>
           <a
             href={GITHUB_FRONTEND_REPO_URL}
@@ -241,7 +247,7 @@ export function HomePage() {
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
             <Github className="size-4" aria-hidden />
-            Frontend
+            {t("footer.frontend")}
           </a>
           <a
             href={GITHUB_BACKEND_REPO_URL}
@@ -250,7 +256,7 @@ export function HomePage() {
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
             <Github className="size-4" aria-hidden />
-            Backend
+            {t("footer.backend")}
           </a>
           <a
             href={CONTRIBUTING_URL}
@@ -258,11 +264,11 @@ export function HomePage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
-            Suggest a Label
+            {t("footer.suggestLabel")}
           </a>
         </nav>
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} YAGFI. Open source contributions welcome.
+          © {new Date().getFullYear()} YAGFI. {t("footer.copyright")}
         </p>
       </footer>
     </div>

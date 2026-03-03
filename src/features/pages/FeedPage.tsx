@@ -1,29 +1,39 @@
-import React, {useEffect, useState} from 'react';
-import {Loader2, Send} from 'lucide-react';
-import {checkGitHubUserExists, fetchFeedUsers, generateFeed} from '@/api/issuesApi';
-import {getGitHubUserAvatar} from '@/shared/utils/getGitHubUserAvatar';
-import {useNavigate} from 'react-router-dom';
-import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {Card, CardContent} from '@/components/ui/card';
-import {Alert, AlertDescription} from '@/components/ui/alert';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {cn} from '@/lib/utils';
+import React, { useEffect, useState } from "react";
+import { Loader2, Send } from "lucide-react";
+import {
+  checkGitHubUserExists,
+  fetchFeedUsers,
+  generateFeed,
+} from "@/api/issuesApi";
+import { getGitHubUserAvatar } from "@/shared/utils/getGitHubUserAvatar";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const ICONS = [
-  {src: '/icons/npm.svg', alt: 'NPM', label: 'NPM'},
-  {src: '/icons/maven.svg', alt: 'Maven', label: 'Maven'},
-  {src: '/icons/github.svg', alt: 'Github Packages', label: 'Github Packages'},
-  {src: '/icons/rust.svg', alt: 'Cargo', label: 'Cargo'},
-  {src: '/icons/go.svg', alt: 'Go', label: 'Go (partially)'},
-  {src: '/icons/python.svg', alt: 'PyPi', label: 'PyPi'},
+  { src: "/icons/npm.svg", alt: "NPM", label: "NPM" },
+  { src: "/icons/maven.svg", alt: "Maven", label: "Maven" },
+  {
+    src: "/icons/github.svg",
+    alt: "Github Packages",
+    label: "Github Packages",
+  },
+  { src: "/icons/rust.svg", alt: "Cargo", label: "Cargo" },
+  { src: "/icons/go.svg", alt: "Go", label: "Go (partially)" },
+  { src: "/icons/python.svg", alt: "PyPi", label: "PyPi" },
 ];
 
 export function FeedPage() {
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
+  const { t } = useTranslation();
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -42,20 +52,26 @@ export function FeedPage() {
         const data = await fetchFeedUsers();
         setUsers(data);
       } catch (err) {
-        setUsersError(err instanceof Error ? err.message : 'Failed to load users');
+        setUsersError(
+          err instanceof Error
+            ? err.message
+            : t("feedPage.errors.loadUsersFailed"),
+        );
       } finally {
         setUsersLoading(false);
       }
     };
     loadUsers();
-  }, []);
+  }, [t]);
 
   const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
     setEmail(v);
-    setEmailError(v.trim() && !validateEmail(v) ? 'Please enter a valid email address' : null);
+    setEmailError(
+      v.trim() && !validateEmail(v) ? t("feedPage.errors.emailInvalid") : null,
+    );
   };
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,20 +81,20 @@ export function FeedPage() {
 
   const validateNickname = async (v: string): Promise<boolean> => {
     if (!v.trim()) {
-      setNicknameError('Nickname is required');
+      setNicknameError(t("feedPage.errors.nicknameRequired"));
       return false;
     }
     setCheckingNickname(true);
     try {
       const exists = await checkGitHubUserExists(v);
       if (!exists) {
-        setNicknameError('This GitHub username does not exist. Please check the username and try again.');
+        setNicknameError(t("feedPage.errors.userNotFound"));
         return false;
       }
       setNicknameError(null);
       return true;
     } catch {
-      setNicknameError('Failed to verify GitHub username. Please try again.');
+      setNicknameError(t("feedPage.errors.verifyFailed"));
       return false;
     } finally {
       setCheckingNickname(false);
@@ -90,11 +106,11 @@ export function FeedPage() {
     setError(null);
     setSuccess(false);
     if (!email.trim()) {
-      setEmailError('Email is required');
+      setEmailError(t("feedPage.errors.emailRequired"));
       return;
     }
     if (!validateEmail(email)) {
-      setEmailError('Please enter a valid email address');
+      setEmailError(t("feedPage.errors.emailInvalid"));
       return;
     }
     setEmailError(null);
@@ -102,23 +118,27 @@ export function FeedPage() {
 
     setLoading(true);
     try {
-      await generateFeed({nickname: nickname.trim(), email: email.trim()});
+      await generateFeed({ nickname: nickname.trim(), email: email.trim() });
       setSuccess(true);
-      setNickname('');
-      setEmail('');
+      setNickname("");
+      setEmail("");
       setEmailError(null);
       setNicknameError(null);
       setUsers(await fetchFeedUsers());
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to generate feed');
+      setError(
+        err instanceof Error
+          ? err.message
+          : t("feedPage.errors.generateFailed"),
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const isFormValid =
-    nickname.trim() !== '' &&
-    email.trim() !== '' &&
+    nickname.trim() !== "" &&
+    email.trim() !== "" &&
     !emailError &&
     !nicknameError &&
     !checkingNickname;
@@ -127,10 +147,10 @@ export function FeedPage() {
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
       <section className="mb-12" aria-labelledby="feed-heading">
         <h1 id="feed-heading" className="text-3xl font-semibold tracking-tight">
-          Generate Personalized Feed
+          {t("feedPage.title")}
         </h1>
         <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-          Create a personalized feed based on your preferences and repositories. We&apos;ll notify you by email when your feed is ready.
+          {t("feedPage.description")}
         </p>
       </section>
 
@@ -138,12 +158,16 @@ export function FeedPage() {
         <Card className="border">
           <CardContent className="p-6 sm:p-8">
             <div className="mb-8 rounded-lg border border-border bg-muted/30 p-4">
-              <h2 className="mb-3 text-sm font-medium">Supported Package Managers</h2>
+              <h2 className="mb-3 text-sm font-medium">
+                {t("feedPage.supportedPackageManagers")}
+              </h2>
               <ul className="flex flex-col gap-3" role="list">
-                {ICONS.map(({src, alt, label}) => (
+                {ICONS.map(({ src, alt, label }) => (
                   <li key={label} className="flex items-center gap-3">
                     <img src={src} alt="" className="size-5 object-contain" />
-                    <span className="text-sm text-muted-foreground">{label}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {label}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -151,18 +175,20 @@ export function FeedPage() {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div>
-                <Label htmlFor="nickname">GitHub Username</Label>
+                <Label htmlFor="nickname">{t("feedPage.githubUsername")}</Label>
                 <div className="relative mt-2">
                   <Input
                     id="nickname"
                     value={nickname}
                     onChange={handleNicknameChange}
                     onBlur={() => nickname.trim() && validateNickname(nickname)}
-                    placeholder="e.g. octocat"
+                    placeholder={t("feedPage.usernamePlaceholder")}
                     disabled={loading || checkingNickname}
-                    className={nicknameError ? 'border-destructive' : ''}
+                    className={nicknameError ? "border-destructive" : ""}
                     aria-invalid={!!nicknameError}
-                    aria-describedby={nicknameError ? 'nickname-error' : 'nickname-hint'}
+                    aria-describedby={
+                      nicknameError ? "nickname-error" : "nickname-hint"
+                    }
                   />
                   {checkingNickname && (
                     <Loader2
@@ -172,38 +198,48 @@ export function FeedPage() {
                   )}
                 </div>
                 <p
-                  id={nicknameError ? 'nickname-error' : 'nickname-hint'}
-                  className={cn('mt-2 text-sm', nicknameError ? 'text-destructive' : 'text-muted-foreground')}
+                  id={nicknameError ? "nickname-error" : "nickname-hint"}
+                  className={cn(
+                    "mt-2 text-sm",
+                    nicknameError
+                      ? "text-destructive"
+                      : "text-muted-foreground",
+                  )}
                 >
-                  {nicknameError ||
-                    'Enter your GitHub username (not your profile name). Example: for github.com/Regyl, the username is "Regyl"'}
+                  {nicknameError || t("feedPage.usernameHint")}
                 </p>
               </div>
 
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("feedPage.email")}</Label>
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={handleEmailChange}
-                  placeholder="your.email@example.com"
+                  placeholder={t("feedPage.emailPlaceholder")}
                   disabled={loading}
                   className="mt-2"
                   aria-invalid={!!emailError}
-                  aria-describedby={emailError ? 'email-error' : 'email-hint'}
+                  aria-describedby={emailError ? "email-error" : "email-hint"}
                 />
                 <p
-                  id={emailError ? 'email-error' : 'email-hint'}
-                  className={cn('mt-2 text-sm', emailError ? 'text-destructive' : 'text-muted-foreground')}
+                  id={emailError ? "email-error" : "email-hint"}
+                  className={cn(
+                    "mt-2 text-sm",
+                    emailError ? "text-destructive" : "text-muted-foreground",
+                  )}
                 >
-                  {emailError || "We'll notify you when your feed is ready"}
+                  {emailError || t("feedPage.emailHint")}
                 </p>
               </div>
 
               <div className="rounded-lg border border-border bg-muted/30 p-4">
                 <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">Privacy:</strong> Your email will be used only to notify you when your feed is ready. No advertising or sharing with third parties.
+                  <strong className="text-foreground">
+                    {t("feedPage.privacy")}
+                  </strong>{" "}
+                  {t("feedPage.privacyDescription")}
                 </p>
               </div>
 
@@ -215,7 +251,7 @@ export function FeedPage() {
               {success && (
                 <Alert role="status">
                   <AlertDescription>
-                    Feed generation started. You&apos;ll receive an email when it&apos;s ready.
+                    {t("feedPage.feedGenerationStarted")}
                   </AlertDescription>
                 </Alert>
               )}
@@ -226,7 +262,9 @@ export function FeedPage() {
                 className="w-full"
               >
                 <Send className="size-4" aria-hidden />
-                {loading ? 'Generating...' : 'Generate Feed'}
+                {loading
+                  ? t("feedPage.buttons.generating")
+                  : t("feedPage.buttons.generateFeed")}
               </Button>
             </form>
           </CardContent>
@@ -234,9 +272,13 @@ export function FeedPage() {
 
         <Card className="border">
           <CardContent className="p-6 sm:p-8">
-            <h2 className="mb-6 text-xl font-semibold">Processed Requests</h2>
+            <h2 className="mb-6 text-xl font-semibold">
+              {t("feedPage.processedRequests")}
+            </h2>
             {usersLoading && (
-              <p className="text-sm text-muted-foreground">Loading users...</p>
+              <p className="text-sm text-muted-foreground">
+                {t("feedPage.loadingUsers")}
+              </p>
             )}
             {usersError && (
               <Alert variant="destructive" className="mb-4">
@@ -244,7 +286,9 @@ export function FeedPage() {
               </Alert>
             )}
             {!usersLoading && !usersError && users.length === 0 && (
-              <p className="text-sm text-muted-foreground">No users found yet.</p>
+              <p className="text-sm text-muted-foreground">
+                {t("feedPage.noUsersFound")}
+              </p>
             )}
             {!usersLoading && !usersError && users.length > 0 && (
               <ul className="divide-y divide-border" role="list">
@@ -259,8 +303,13 @@ export function FeedPage() {
                         className="flex w-full items-center gap-4 px-0 py-5 text-left transition-colors hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
                       >
                         <Avatar className="size-10 bg-primary">
-                          <AvatarImage src={avatarUrl || undefined} alt={`${userNickname} avatar`} />
-                          <AvatarFallback>{userNickname.charAt(0).toUpperCase()}</AvatarFallback>
+                          <AvatarImage
+                            src={avatarUrl || undefined}
+                            alt={`${userNickname} avatar`}
+                          />
+                          <AvatarFallback>
+                            {userNickname.charAt(0).toUpperCase()}
+                          </AvatarFallback>
                         </Avatar>
                         <span className="font-medium">{userNickname}</span>
                       </button>

@@ -1,22 +1,24 @@
-import React, {useCallback, useEffect} from 'react';
-import {useInfiniteIssues} from '@/features/hooks/useInfiniteIssues';
-import {useFilters} from '@/features/hooks/useFilters';
-import {useSorting} from '@/features/hooks/useSorting';
-import {useRandomIssue} from '@/features/hooks/useRandomIssue';
-import {useIssuesRequest} from '@/features/hooks';
-import {IssuesList} from '../components/IssuesList';
-import {InfiniteScrollTrigger} from '../components/InfiniteScrollTrigger';
-import {FiltersSection} from '../components/FiltersSection';
-import {SortSection} from '../components/SortSection';
-import {ActionButtons} from '../components/ActionButtons';
-import {Loader} from '@/shared/ui/Loader/Loader';
-import {DEFAULT_STARS_FILTER} from '@/shared/constants';
-import {updateUrlParams} from '@/shared/utils/urlParams';
-import {Alert, AlertDescription} from '@/components/ui/alert';
+import React, { useCallback, useEffect } from "react";
+import { useInfiniteIssues } from "@/features/hooks/useInfiniteIssues";
+import { useFilters } from "@/features/hooks/useFilters";
+import { useSorting } from "@/features/hooks/useSorting";
+import { useRandomIssue } from "@/features/hooks/useRandomIssue";
+import { useIssuesRequest } from "@/features/hooks";
+import { IssuesList } from "../components/IssuesList";
+import { InfiniteScrollTrigger } from "../components/InfiniteScrollTrigger";
+import { FiltersSection } from "../components/FiltersSection";
+import { SortSection } from "../components/SortSection";
+import { ActionButtons } from "../components/ActionButtons";
+import { Loader } from "@/shared/ui/Loader/Loader";
+import { DEFAULT_STARS_FILTER } from "@/shared/constants";
+import { updateUrlParams } from "@/shared/utils/urlParams";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useTranslation } from "react-i18next";
 
 export function IssuesPage() {
-  const filters = useFilters({initialStarsFilter: DEFAULT_STARS_FILTER});
+  const filters = useFilters({ initialStarsFilter: DEFAULT_STARS_FILTER });
   const sorting = useSorting();
+  const { t } = useTranslation();
 
   useEffect(() => {
     updateUrlParams(
@@ -26,7 +28,7 @@ export function IssuesPage() {
       filters.selectedIssueLanguages,
       filters.issueLanguagesOperator,
       filters.starsFilter,
-      sorting.sortOrders
+      sorting.sortOrders,
     );
   }, [
     filters.selectedLanguages,
@@ -48,9 +50,9 @@ export function IssuesPage() {
     sortOrders: sorting.sortOrders,
   });
 
-  const {issues, loading, loadingMore, error, hasMore, loadMore} =
+  const { issues, loading, loadingMore, error, hasMore, loadMore } =
     useInfiniteIssues(baseRequest);
-  const {pickingRandom, pickRandom} = useRandomIssue();
+  const { pickingRandom, pickRandom } = useRandomIssue();
 
   const handleLoadMore = useCallback(() => {
     if (hasMore && !loadingMore) loadMore();
@@ -67,17 +69,19 @@ export function IssuesPage() {
           id="hero-heading"
           className="bg-gradient-to-r from-primary via-violet-600 to-primary bg-clip-text text-3xl font-semibold tracking-tight text-transparent sm:text-4xl"
         >
-          Find Your First Open Source Contribution
+          {t("issuesPage.title")}
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-          Browse beginner-friendly issues labeled <strong>help wanted</strong> and{' '}
-          <strong>good first issue</strong> from popular GitHub repositories.
+          {t("issuesPage.description")}
         </p>
       </section>
 
       <section className="mb-8" aria-label="Filters and actions">
         <div className="mb-6">
-          <ActionButtons pickingRandom={pickingRandom} onPickRandom={handlePickRandom} />
+          <ActionButtons
+            pickingRandom={pickingRandom}
+            onPickRandom={handlePickRandom}
+          />
         </div>
         <div className="mb-8 flex flex-col gap-8">
           <FiltersSection
@@ -90,7 +94,9 @@ export function IssuesPage() {
             selectedIssueLanguages={filters.selectedIssueLanguages}
             onIssueLanguagesChange={filters.handleIssueLanguagesChange}
             issueLanguagesOperator={filters.issueLanguagesOperator}
-            onIssueLanguagesOperatorChange={filters.handleIssueLanguagesOperatorChange}
+            onIssueLanguagesOperatorChange={
+              filters.handleIssueLanguagesOperatorChange
+            }
             starsFilter={filters.starsFilter}
             onStarsValueChange={filters.handleStarsValueChange}
             onStarsOperatorChange={filters.handleStarsOperatorChange}
@@ -120,13 +126,15 @@ export function IssuesPage() {
 
       {error && (
         <Alert variant="destructive" className="mb-8" role="alert">
-          <AlertDescription>Failed to load issues: {error.message}</AlertDescription>
+          <AlertDescription>
+            {t("issuesPage.error.message", { error: error.message })}
+          </AlertDescription>
         </Alert>
       )}
 
       {!loading && issues.length === 0 && (
         <p className="py-20 text-center text-muted-foreground">
-          No issues found. Try adjusting your filters.
+          {t("issuesPage.list.noIssues")}
         </p>
       )}
 

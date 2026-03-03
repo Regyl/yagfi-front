@@ -1,21 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import {ArrowLeft} from 'lucide-react';
-import {Link, useNavigate, useParams, useSearchParams} from 'react-router-dom';
-import {fetchFeedIssues, fetchFeedIssuesByNickname} from '@/api/issuesApi';
-import {Issue} from '@/types';
-import {IssuesList} from '../components/IssuesList';
-import {Loader} from '@/shared/ui/Loader/Loader';
-import {Button} from '@/components/ui/button';
-import {Alert, AlertDescription} from '@/components/ui/alert';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {getRepoDisplayName} from '@/shared/utils/githubRepo';
-import {getGitHubUserAvatar} from '@/shared/utils/getGitHubUserAvatar';
+import React, { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { fetchFeedIssues, fetchFeedIssuesByNickname } from "@/api/issuesApi";
+import { Issue } from "@/types";
+import { IssuesList } from "../components/IssuesList";
+import { Loader } from "@/shared/ui/Loader/Loader";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getRepoDisplayName } from "@/shared/utils/githubRepo";
+import { getGitHubUserAvatar } from "@/shared/utils/getGitHubUserAvatar";
+import { useTranslation } from "react-i18next";
 
 export function FeedIssuesPage() {
-  const {nickname} = useParams<{nickname: string}>();
-  const [searchParams] = useSearchParams();
+  const { nickname } = useParams<{ nickname: string }>();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const sourceRepo = searchParams.get('sourceRepo');
+  const [searchParams] = useSearchParams();
+  const sourceRepo = searchParams.get("sourceRepo");
 
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +30,7 @@ export function FeedIssuesPage() {
 
   useEffect(() => {
     if (!nickname) {
-      navigate('/feed');
+      navigate("/feed");
       return;
     }
     const load = async () => {
@@ -36,7 +43,7 @@ export function FeedIssuesPage() {
           : await fetchFeedIssuesByNickname(nickname);
         setIssues(res.issues);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load issues');
+        setError(err instanceof Error ? err.message : "Failed to load issues");
       } finally {
         setLoading(false);
       }
@@ -57,7 +64,10 @@ export function FeedIssuesPage() {
           </Button>
         </Link>
         <Avatar className="size-12 shrink-0 bg-primary">
-          <AvatarImage src={avatarUrl ?? undefined} alt={`${nickname} avatar`} />
+          <AvatarImage
+            src={avatarUrl ?? undefined}
+            alt={`${nickname} avatar`}
+          />
           <AvatarFallback>{nickname.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <h1 className="text-3xl font-semibold tracking-tight">
@@ -75,13 +85,13 @@ export function FeedIssuesPage() {
       )}
       {!loading && !error && issues.length === 0 && (
         <p className="py-12 text-center text-muted-foreground">
-          No issues found.
+          {t("feedPage.noIssuesFound")}
         </p>
       )}
       {!loading && !error && issues.length > 0 && (
         <>
           <p className="mb-4 text-sm text-muted-foreground">
-            Showing {issues.length} issues
+            {t("feedPage.showingIssues", { count: issues.length })}
           </p>
           <IssuesList issues={issues} />
         </>

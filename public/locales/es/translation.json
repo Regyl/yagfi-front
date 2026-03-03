@@ -1,0 +1,320 @@
+{
+  "language": "Idioma",
+  "english": "Inglés",
+  "spanish": "Español",
+  "browseIssues": "Explorar Issues",
+  "personalizedFeed": "Feed Personalizado",
+
+  "hero": {
+    "title": "Encuentra Tu Primera Contribución Open Source",
+    "description": "YAGFI agrega issues amigables para principiantes de repositorios populares de GitHub. Sin búsquedas interminables, solo explora, filtra y contribuye.",
+    "browseIssues": "Explorar Issues",
+    "personalizedFeed": "Feed Personalizado"
+  },
+
+  "whatIs": {
+    "title": "Qué es YAGFI",
+    "description1": "Yet Another Good First Issue",
+    "description1_2": "— una herramienta gratuita que ayuda a desarrolladores a encontrar su primera contribución open source. En lugar de buscar manualmente en GitHub, YAGFI cura issues etiquetados como",
+    "description1_3": "help wanted",
+    "description1_4": "y",
+    "description1_5": "good first issue",
+    "description1_6": "de repositorios con tracción significativa en la comunidad.",
+    "description2": "Construido para estudiantes, cambiadores de carrera y cualquiera que quiera empezar a contribuir a open source sin sentirse abrumado."
+  },
+
+  "features": {
+    "title": "Características Principales",
+    "items": {
+      "curatedLabels": {
+        "title": "Etiquetas Curadas",
+        "description": "Solo issues etiquetados como help wanted y good first issue de repositorios populares."
+      },
+      "smartFiltering": {
+        "title": "Filtrado Inteligente",
+        "description": "Filtra por lenguaje de programación, estrellas del repositorio y ordena por relevancia."
+      },
+      "randomPicker": {
+        "title": "Selector Aleatorio",
+        "description": "¿Te sientes con suerte? Obtén un issue aleatorio que coincida con tus preferencias."
+      },
+      "personalFeed": {
+        "title": "Feed Personal",
+        "description": "Suscríbete a un feed personalizado de issues adaptados a tus intereses."
+      }
+    }
+  },
+
+  "howItWorks": {
+    "title": "Cómo Funciona",
+    "steps": {
+      "browseOrFilter": {
+        "step": "1",
+        "title": "Explora o filtra",
+        "description": "Encuentra issues por lenguaje, estrellas o usa el selector aleatorio."
+      },
+      "pickAnIssue": {
+        "step": "2",
+        "title": "Elige un issue",
+        "description": "Elige algo que coincida con tus habilidades e intereses."
+      },
+      "startContributing": {
+        "step": "3",
+        "title": "Empieza a contribuir",
+        "description": "Abre el issue en GitHub y haz tu primera contribución."
+      }
+    }
+  },
+
+  "whyYagfi": {
+    "title": "Por Qué YAGFI",
+    "description": "A diferencia de los rastreadores de issues genéricos, YAGFI se centra en la simplicidad y efectividad. Un propósito: ayudarte a encontrar tu primera contribución rápidamente.",
+    "advantages": [
+      "No se requiere registro para explorar",
+      "Enfocado en contribuciones amigables para principiantes",
+      "Gratuito y open source",
+      "Interfaz simple y sin distracciones"
+    ]
+  },
+
+  "cta": {
+    "title": "¿Listo para contribuir?",
+    "description": "Empieza a explorar issues en segundos. No se requiere cuenta.",
+    "button": "Empezar"
+  },
+
+  "footer": {
+    "issues": "Issues",
+    "feed": "Feed",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "suggestLabel": "Sugerir una Etiqueta",
+    "copyright": "© {{year}} YAGFI. Contribuciones open source bienvenidas."
+  },
+
+  "issuesPage": {
+    "title": "Explorar Issues",
+    "description": "Encuentra issues amigables para principiantes etiquetados como help wanted y good first issue de repositorios populares de GitHub.",
+    "addLabel": "Añadir etiqueta",
+    "filters": {
+      "title": "Filtros",
+      "languages": {
+        "title": "Lenguajes",
+        "placeholder": "Seleccionar lenguajes..."
+      },
+      "licenses": {
+        "title": "Licencias",
+        "placeholder": "Seleccionar licencias...",
+        "any": "Cualquier licencia",
+        "all": "Todas las licencias",
+        "none": "Sin licencia"
+      },
+      "issueLanguages": {
+        "title": "Lenguajes de Issue",
+        "placeholder": "Seleccionar lenguajes de issue..."
+      },
+      "stars": {
+        "title": "Estrellas",
+        "placeholder": "Estrellas mínimas",
+        "greaterThan": "Mayor que",
+        "lessThan": "Menor que",
+        "equal": "Igual a",
+        "notEqual": "No igual a"
+      },
+      "actions": {
+        "resetAll": "Restablecer todos los filtros",
+        "addLanguage": "Añadir lenguaje",
+        "addLicense": "Añadir licencia",
+        "addIssueLanguage": "Añadir lenguaje de issue",
+        "addStars": "Añadir filtro de estrellas"
+      }
+    },
+    "sort": {
+      "title": "Ordenar por",
+      "addSortField": "Añadir campo de orden",
+      "removeSortField": "Eliminar campo de orden",
+      "fields": {
+        "stars": "Estrellas",
+        "forks": "Forks",
+        "issues": "Issues",
+        "updated": "Actualizado",
+        "created": "Creado"
+      },
+      "types": {
+        "asc": "Ascendente",
+        "desc": "Descendente"
+      }
+    },
+    "actions": {
+      "pickRandom": "Elegir un issue aleatorio",
+      "loadingRandom": "Eligiendo issue aleatorio..."
+    },
+    "list": {
+      "loadingMore": "Cargando más issues...",
+      "noIssues": "No se encontraron issues. Intenta ajustar tus filtros."
+    },
+    "error": {
+      "title": "Error",
+      "message": "Error al cargar issues: {{error}}"
+    }
+  },
+
+  "feedPage": {
+    "title": "Feed Personalizado",
+    "description": "Obtén un feed curado de issues amigables para principiantes entregado a tu bandeja de entrada. Suscríbete una vez y recibe actualizaciones semanales adaptadas a tu actividad de GitHub.",
+    "supportedPackageManagers": "Gestores de Paquetes Soportados",
+    "githubUsername": "Nombre de Usuario de GitHub",
+    "usernamePlaceholder": "ej. octocat",
+    "usernameHint": "Ingresa tu nombre de usuario de GitHub (no tu nombre de perfil). Ejemplo: para github.com/Regyl, el usuario es \"Regyl\"",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "tu.email@ejemplo.com",
+    "emailHint": "Te notificaremos cuando tu feed esté listo",
+    "privacy": "Nota de Privacidad:",
+    "privacyDescription": "Solo usamos tu correo para enviarte el feed. Tus datos no se comparten con terceros.",
+    "feedGenerationStarted": "¡Éxito! Tu feed personalizado se está generando. Revisa tu correo para actualizaciones.",
+    "processedRequests": "Procesados Recientemente",
+    "loadingUsers": "Cargando usuarios recientes...",
+    "noUsersFound": "Aún no hay solicitudes procesadas. ¡Sé el primero!",
+    "noIssuesFound": "No se encontraron issues para este usuario.",
+    "showingIssues": "Mostrando {{count}} issues",
+    "errors": {
+      "nicknameRequired": "El nombre de usuario es obligatorio",
+      "userNotFound": "Este nombre de usuario de GitHub no existe. Por favor verifica e intenta de nuevo.",
+      "verifyFailed": "Error al verificar el nombre de usuario de GitHub. Por favor intenta de nuevo.",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "emailInvalid": "Por favor ingresa una dirección de correo válida",
+      "generateFailed": "Error al generar el feed",
+      "loadUsersFailed": "Error al cargar usuarios"
+    },
+    "buttons": {
+      "generating": "Generando...",
+      "generateFeed": "Generar Feed"
+    }
+  },
+
+  "feedViewPage": {
+    "title": "Feed Personalizado para {{nickname}}",
+    "description": "Tu feed personalizado de issues amigables para principiantes de repositorios de los que dependes.",
+    "viewAllIssues": "Ver todos los issues",
+    "loading": "Cargando feed...",
+    "noIssues": "No se encontraron issues en tus dependencias.",
+    "error": "Error al cargar el feed: {{error}}",
+    "overview": "Resumen",
+    "repositories": "Repositorios",
+    "repositoriesProcessed": "repositorios procesados",
+    "dependenciesFound": "dependencias encontradas",
+    "totalIssues": "issues totales",
+    "noRepositoriesFound": "Aún no se encontraron repositorios."
+  },
+
+  "feedIssuesPage": {
+    "backToFeed": "Volver al feed",
+    "issuesFrom": "Issues de {{repo}}",
+    "issuesFor": "Issues para {{nickname}}",
+    "noIssuesFound": "No se encontraron issues.",
+    "showingIssues": "Mostrando {{count}} issues"
+  },
+
+  "repoOverviewCard": {
+    "dependencies": "dependencias",
+    "top": "Top:",
+    "viewIssues": "Ver issues"
+  },
+
+  "issueCard": {
+    "openInGitHub": "Abrir en GitHub",
+    "loading": "Cargando...",
+    "noIssues": "No se encontraron issues.",
+    "error": "Error al cargar issues: {{error}}"
+  },
+
+  "notFoundPage": {
+    "title": "404 - ¡Página No Encontrada!",
+    "description": "¡Ups! La página que buscas se fue de vacaciones y no dejó una dirección de reenvío.",
+    "description2": "Mientras tanto, aquí hay un gato confundido preguntándose qué estabas buscando 🐱",
+    "goHome": "Ir al Inicio",
+    "browseIssues": "Explorar Issues"
+  },
+
+  "filters": {
+    "title": "Filtros",
+    "languages": "Lenguajes",
+    "licenses": "Licencias",
+    "issueLanguages": "Lenguajes de Issue",
+    "stars": "Estrellas",
+    "actions": {
+      "resetAll": "Restablecer todos los filtros",
+      "addLanguage": "Añadir lenguaje",
+      "addLicense": "Añadir licencia",
+      "addIssueLanguage": "Añadir lenguaje de issue",
+      "addStars": "Añadir filtro de estrellas"
+    },
+    "starsPlaceholder": "Estrellas mínimas",
+    "filterIssueLanguages": "Filtrar lenguajes de issue",
+    "filterLanguages": "Filtrar lenguajes",
+    "filterLicenses": "Filtrar licencias",
+    "allIssueLanguages": "Todos los lenguajes de issue",
+    "allLanguages": "Todos los lenguajes",
+    "allLicenses": "Todas las licencias",
+    "allStars": "Todas las estrellas",
+    "greaterThan": "Mayor que",
+    "lessThan": "Menor que",
+    "equal": "Igual a",
+    "notEqual": "No igual a",
+    "include": "Incluir",
+    "exclude": "Excluir",
+    "issueLanguagesOperator": "Operador de lenguajes de issue",
+    "starsOperator": "Operador de estrellas",
+    "licensesOperator": "Operador de licencias"
+  },
+
+  "sort": {
+    "title": "Ordenar por",
+    "field": "Campo",
+    "order": "Orden",
+    "addSortField": "Añadir campo de orden",
+    "removeSortField": "Eliminar campo de orden",
+    "fields": {
+      "stars": "Estrellas",
+      "forks": "Forks",
+      "issues": "Issues",
+      "updated": "Actualizado",
+      "created": "Creado",
+      "issueCreated": "Issue creado",
+      "issueUpdated": "Issue actualizado",
+      "repoCreated": "Repositorio creado",
+      "repoUpdated": "Repositorio actualizado"
+    },
+    "types": {
+      "asc": "Ascendente",
+      "desc": "Descendente"
+    }
+  },
+
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "submit": "Enviar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "ascending": "Ascendente",
+    "descending": "Descendente",
+    "all": "Todos",
+    "none": "Ninguno",
+    "any": "Cualquiera",
+    "other": "Otro",
+    "more": "Más",
+    "less": "Menos",
+    "equal": "Igual",
+    "notEqual": "No igual",
+    "greaterThan": "Mayor que",
+    "lessThan": "Menor que"
+  }
+}
